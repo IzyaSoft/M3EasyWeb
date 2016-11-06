@@ -1,7 +1,11 @@
 ﻿
+// LED SETTINGS
 #define LED_PORT_NUMBER 2
 #define LED_PORT_MASK 0x000000FF
 
+// ADC SETTINGS
+#define ADC_CHANNEL_5 5
+#define ADC_CLOCK_DIVIDER 4
 
 const unsigned char GetResponse[] =              // 1st thing our server sends to a client
 {

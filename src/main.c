@@ -47,15 +47,8 @@ int main()
 {
     SystemInit();                                      /* setup core clocks */
     SysTick_Config(100000000 / 100);               /* Generate interrupt every 10 ms */
-    LPC_GPIO0->FIODIR |= 1 << 21;
-    LPC_GPIO0->FIOPIN |= 1 << 21;                  /* P2.0 defined as Output (LED) */
     ConfigureLedPort(LED_PORT_NUMBER, LED_PORT_MASK, ledsValue);
-    LPC_PINCON->PINSEL3 |=  (3ul << 30);                   /* P1.31 is AD0.5 */
-    LPC_SC->PCONP |= (1 << 12);                   /* Enable power to ADC block */
-    LPC_ADC->ADCR = (1<< 5) |                  /* select AD0.5 pin */
-                    (4<< 8) |                  /* ADC clock is 25MHz/5 */
-                    (1<<21);                   /* enable ADC */
-
+    ConfigureAdc(ADC_CHANNEL_5, ADC_CLOCK_DIVIDER);
     TCPLowLevelInit();
 
 /*
@@ -147,19 +140,6 @@ void HTTPServer(void)
     else HTTPStatus &= ~HTTP_SEND_PAGE;               // reset help-flag if not connected
 }
 
-// samples and returns the AD-converter value of channel 2
-
-unsigned int GetAD7Val(void)
-{
-    unsigned int val;
-
-    LPC_ADC->ADCR |=  (1<<24);                     /* start conversion */
-    while (!(LPC_ADC->ADGDR & (1UL<<31)));         /* Wait for Conversion end */
-    val = ((LPC_ADC->ADGDR >> 4) & 0xFFF);         /* read converted value */
-    LPC_ADC->ADCR &= ~(7<<24);                     /* stop conversion */
-    return(val);                                   /* result of A/D process */
-}
-
 // searches the TX-buffer for special strings and replaces them
 // with dynamic values (AD-converter results)
 
@@ -182,7 +162,8 @@ void InsertDynamicValues(void)
                 {
                     case '8' :                                 // "AD8%"?
                     {
-                        adcValue = GetAD7Val();                  // get AD value
+                        adcValue = GetAdcValue(ADC_CHANNEL_5);
+                        //GetAD7Val();                  // get AD value
                         sprintf(NewKey, "0x%03X", adcValue);       // insert AD converter value
                         memcpy(Key, NewKey, 5);
                         break;
