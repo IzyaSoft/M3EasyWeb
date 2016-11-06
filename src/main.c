@@ -20,7 +20,7 @@
 
 #define extern            // Keil: Line added for modular project management
 
-#include "easyweb.h"
+#include "main.h"
 
 #include "type.h"
 #include "EMAC.h"         // Keil: *.c -> *.h    // ethernet packet driver
