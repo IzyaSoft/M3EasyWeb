@@ -82,8 +82,8 @@
   </Components>
   <Files>
     <File name="src/lpc17xx_lib/include/lpc_types.h" path="src/lpc17xx_lib/include/lpc_types.h" type="1"/>
-    <File name="src/cmsis_boot/LPC17xx.h" path="src/cmsis_boot/LPC17xx.h" type="1"/>
     <File name="src/cmsis/core_cmInstr.h" path="src/cmsis/core_cmInstr.h" type="1"/>
+    <File name="src/cmsis_boot/LPC17xx.h" path="src/cmsis_boot/LPC17xx.h" type="1"/>
     <File name="src/cmsis_boot" path="" type="2"/>
     <File name="src/cmsis/core_cm3.h" path="src/cmsis/core_cm3.h" type="1"/>
     <File name="src/cmsis" path="" type="2"/>
@@ -93,21 +93,21 @@
     <File name="src/EMAC.c" path="src/EMAC.c" type="1"/>
     <File name="src/tcpip.h" path="src/tcpip.h" type="1"/>
     <File name="src/lpc17xx_lib/include" path="" type="2"/>
+    <File name="src/cmsis_boot/startup" path="" type="2"/>
     <File name="src/lpc17xx_lib" path="" type="2"/>
     <File name="src/cmsis_boot/system_LPC17xx.c" path="src/cmsis_boot/system_LPC17xx.c" type="1"/>
-    <File name="src/cmsis_boot/startup" path="" type="2"/>
     <File name="src/lpc17xx_lib/include/lpc17xx_nvic.h" path="src/lpc17xx_lib/include/lpc17xx_nvic.h" type="1"/>
     <File name="src/lpc17xx_lib/include/lpc17xx_clkpwr.h" path="src/lpc17xx_lib/include/lpc17xx_clkpwr.h" type="1"/>
-    <File name="src/cmsis_boot/startup/startup_LPC17xx.c" path="src/cmsis_boot/startup/startup_LPC17xx.c" type="1"/>
     <File name="src/easyweb.h" path="src/easyweb.h" type="1"/>
+    <File name="src/cmsis_boot/startup/startup_LPC17xx.c" path="src/cmsis_boot/startup/startup_LPC17xx.c" type="1"/>
     <File name="src/lpc17xx_lib/source/lpc17xx_nvic.c" path="src/lpc17xx_lib/source/lpc17xx_nvic.c" type="1"/>
     <File name="src/EMAC.h" path="src/EMAC.h" type="1"/>
     <File name="src/cmsis_boot/system_LPC17xx.h" path="src/cmsis_boot/system_LPC17xx.h" type="1"/>
     <File name="src/easyweb.c" path="src/easyweb.c" type="1"/>
-    <File name="src/lpc17xx_lib/include/lpc17xx_pinsel.h" path="src/lpc17xx_lib/include/lpc17xx_pinsel.h" type="1"/>
+    <File name="src/lpc17xx_lib/source/lpc17xx_clkpwr.c" path="src/lpc17xx_lib/source/lpc17xx_clkpwr.c" type="1"/>
     <File name="src/lpc17xx_lib/include/lpc17xx_gpio.h" path="src/lpc17xx_lib/include/lpc17xx_gpio.h" type="1"/>
     <File name="src/lpc17xx_lib/source/lpc17xx_libcfg_default.c" path="src/lpc17xx_lib/source/lpc17xx_libcfg_default.c" type="1"/>
-    <File name="src/lpc17xx_lib/source/lpc17xx_clkpwr.c" path="src/lpc17xx_lib/source/lpc17xx_clkpwr.c" type="1"/>
+    <File name="src/lpc17xx_lib/include/lpc17xx_pinsel.h" path="src/lpc17xx_lib/include/lpc17xx_pinsel.h" type="1"/>
     <File name="src/lpc17xx_lib/source/lpc17xx_pinsel.c" path="src/lpc17xx_lib/source/lpc17xx_pinsel.c" type="1"/>
     <File name="src/webpage.h" path="src/webpage.h" type="1"/>
     <File name="src/tcpip.c" path="src/tcpip.c" type="1"/>
