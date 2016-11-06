@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "driverConfig.h"
+#include "hal.h"
 #include "LPC17xx.h"
 
 #define extern        // WTF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -16,21 +18,29 @@
 
 unsigned int pagecounter = 100;
 unsigned int adcValue = 0;
+unsigned char ledsValue = 0xAA;
 
 extern void TCPClockHandler(void);
 
 volatile DWORD TimeTick  = 0;
 
 /* SysTick interrupt happens every 10 ms */
+
+static void UpdateLeds()
+{
+    ledsValue = 0xFF - ledsValue;
+    SetLedsValue(LED_PORT_NUMBER, ledsValue);
+}
+
 void SysTick_Handler (void)
 {
     TimeTick++;
     if (TimeTick >= 20)
     {
+    	UpdateLeds();
         TimeTick = 0;
-        LPC_GPIO2->FIOPIN ^= 1 << 0;
         TCPClockHandler();
-  }  
+    }
 }
 
 int main()
@@ -38,8 +48,8 @@ int main()
     SystemInit();                                      /* setup core clocks */
     SysTick_Config(100000000 / 100);               /* Generate interrupt every 10 ms */
     LPC_GPIO0->FIODIR |= 1 << 21;
-    LPC_GPIO0->FIOPIN |= 1 << 21;
-    LPC_GPIO2->FIODIR |= 1 << 0;                    /* P2.0 defined as Output (LED) */
+    LPC_GPIO0->FIOPIN |= 1 << 21;                  /* P2.0 defined as Output (LED) */
+    ConfigureLedPort(LED_PORT_NUMBER, LED_PORT_MASK, ledsValue);
     LPC_PINCON->PINSEL3 |=  (3ul << 30);                   /* P1.31 is AD0.5 */
     LPC_SC->PCONP |= (1 << 12);                   /* Enable power to ADC block */
     LPC_ADC->ADCR = (1<< 5) |                  /* select AD0.5 pin */
