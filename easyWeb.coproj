@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Project version="2G - 1.7.8" name="easyWeb">
+  <Target name="easyWeb" isCurrent="1">
+    <Device manufacturerId="7" manufacturerName="NXP" chipId="165" chipName="LPC1768" boardId="51" boardName="LandTiger v2.0"/>
+    <BuildOption>
+      <Compile>
+        <Option name="OptimizationLevel" value="0"/>
+        <Option name="UseFPU" value="0"/>
+        <Option name="UserEditCompiler" value=""/>
+        <Option name="SupportCPlusplus" value="0"/>
+        <Includepaths>
+          <Includepath path="."/>
+        </Includepaths>
+        <DefinedSymbols>
+          <Define name="LPC1768"/>
+        </DefinedSymbols>
+      </Compile>
+      <Link useDefault="0">
+        <Option name="DiscardUnusedSection" value="0"/>
+        <Option name="UserEditLinkder" value=""/>
+        <Option name="UseMemoryLayout" value="1"/>
+        <Option name="nostartfiles" value="1"/>
+        <Option name="LTO" value="0"/>
+        <Option name="IsNewStartupCode" value="1"/>
+        <Option name="Library" value="Not use C Library"/>
+        <LinkedLibraries>
+          <Libset dir="" libs="c"/>
+          <Libset dir="" libs="g"/>
+          <Libset dir="" libs="m"/>
+          <Libset dir="" libs="nosys"/>
+          <Libset dir="" libs="gcc"/>
+        </LinkedLibraries>
+        <MemoryAreas debugInFlashNotRAM="1">
+          <Memory name="IROM1" type="ReadOnly" size="0x00080000" startValue="0x00000000"/>
+          <Memory name="IRAM1" type="ReadWrite" size="0x00008000" startValue="0x10000000"/>
+          <Memory name="IROM2" type="ReadOnly" size="" startValue=""/>
+          <Memory name="IRAM2" type="ReadWrite" size="0x00008000" startValue="0x2007C000"/>
+        </MemoryAreas>
+        <LocateLinkFile path="c:/coocox/coide/configuration/programdata/easyweb/arm-gcc-link.ld" type="0"/>
+      </Link>
+      <Output>
+        <Option name="OutputFileType" value="0"/>
+        <Option name="Path" value="./"/>
+        <Option name="Name" value="easyWeb"/>
+        <Option name="HEX" value="1"/>
+        <Option name="BIN" value="1"/>
+      </Output>
+      <User>
+        <UserRun name="Run#1" type="Before" checked="0" value=""/>
+        <UserRun name="Run#1" type="After" checked="0" value=""/>
+      </User>
+    </BuildOption>
+    <DebugOption>
+      <Option name="org.coocox.codebugger.gdbjtag.core.adapter" value="J-Link"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.debugMode" value="SWD"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.clockDiv" value="1M"/>
+      <Option name="org.coocox.codebugger.gdbjtag.corerunToMain" value="1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.jlinkgdbserver" value="C:\Program Files (x86)\SEGGER\JLink_V610g\JLinkGDBServerCL.exe"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.userDefineGDBScript" value=""/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.targetEndianess" value="0"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.jlinkResetMode" value="Type 0: Normal"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.resetMode" value="SYSRESETREQ"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.ifSemihost" value="0"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.ifCacheRom" value="1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.ipAddress" value="127.0.0.1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.portNumber" value="2331"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.autoDownload" value="1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.verify" value="1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.downloadFuction" value="Erase Effected"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.defaultAlgorithm" value="LPC17xx_512.elf"/>
+    </DebugOption>
+    <ExcludeFile/>
+  </Target>
+  <Components path="./">
+    <Component id="50" name="CMSIS core" path="" type="2"/>
+    <Component id="253" name="CMSIS_boot" path="" type="2"/>
+    <Component id="254" name="Common_Header" path="" type="2"/>
+    <Component id="255" name="CLKPWR" path="" type="2"/>
+    <Component id="256" name="NVIC" path="" type="2"/>
+    <Component id="257" name="GPIO" path="" type="2"/>
+    <Component id="258" name="PINSEL" path="" type="2"/>
+  </Components>
+  <Files>
+    <File name="lpc17xx_lib/include/lpc17xx_pinsel.h" path="lpc17xx_lib/include/lpc17xx_pinsel.h" type="1"/>
+    <File name="tcpip.c" path="tcpip.c" type="1"/>
+    <File name="cmsis/core_cmInstr.h" path="cmsis/core_cmInstr.h" type="1"/>
+    <File name="lpc17xx_lib/include/lpc17xx_libcfg_default.h" path="lpc17xx_lib/include/lpc17xx_libcfg_default.h" type="1"/>
+    <File name="easyweb.c" path="easyweb.c" type="1"/>
+    <File name="lpc17xx_lib/include/lpc17xx_nvic.h" path="lpc17xx_lib/include/lpc17xx_nvic.h" type="1"/>
+    <File name="lpc17xx_lib/source/lpc17xx_libcfg_default.c" path="lpc17xx_lib/source/lpc17xx_libcfg_default.c" type="1"/>
+    <File name="cmsis/core_cm3.h" path="cmsis/core_cm3.h" type="1"/>
+    <File name="cmsis_boot" path="" type="2"/>
+    <File name="lpc17xx_lib/source/lpc17xx_clkpwr.c" path="lpc17xx_lib/source/lpc17xx_clkpwr.c" type="1"/>
+    <File name="EMAC.h" path="EMAC.h" type="1"/>
+    <File name="cmsis_boot/system_LPC17xx.c" path="cmsis_boot/system_LPC17xx.c" type="1"/>
+    <File name="lpc17xx_lib/include/lpc17xx_gpio.h" path="lpc17xx_lib/include/lpc17xx_gpio.h" type="1"/>
+    <File name="cmsis_boot/startup" path="" type="2"/>
+    <File name="cmsis/core_cmFunc.h" path="cmsis/core_cmFunc.h" type="1"/>
+    <File name="cmsis_boot/LPC17xx.h" path="cmsis_boot/LPC17xx.h" type="1"/>
+    <File name="webpage.h" path="webpage.h" type="1"/>
+    <File name="lpc17xx_lib" path="" type="2"/>
+    <File name="cmsis" path="" type="2"/>
+    <File name="lpc17xx_lib/source/lpc17xx_nvic.c" path="lpc17xx_lib/source/lpc17xx_nvic.c" type="1"/>
+    <File name="lpc17xx_lib/source/lpc17xx_pinsel.c" path="lpc17xx_lib/source/lpc17xx_pinsel.c" type="1"/>
+    <File name="cmsis_boot/system_LPC17xx.h" path="cmsis_boot/system_LPC17xx.h" type="1"/>
+    <File name="type.h" path="type.h" type="1"/>
+    <File name="cmsis_boot/startup/startup_LPC17xx.c" path="cmsis_boot/startup/startup_LPC17xx.c" type="1"/>
+    <File name="easyweb.h" path="easyweb.h" type="1"/>
+    <File name="lpc17xx_lib/source" path="" type="2"/>
+    <File name="lpc17xx_lib/include" path="" type="2"/>
+    <File name="tcpip.h" path="tcpip.h" type="1"/>
+    <File name="lpc17xx_lib/source/lpc17xx_gpio.c" path="lpc17xx_lib/source/lpc17xx_gpio.c" type="1"/>
+    <File name="lpc17xx_lib/include/lpc_types.h" path="lpc17xx_lib/include/lpc_types.h" type="1"/>
+    <File name="lpc17xx_lib/include/lpc17xx_clkpwr.h" path="lpc17xx_lib/include/lpc17xx_clkpwr.h" type="1"/>
+    <File name="EMAC.c" path="EMAC.c" type="1"/>
+  </Files>
+</Project>
