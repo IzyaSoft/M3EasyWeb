@@ -1,4 +1,4 @@
-/***********************************************************************//**
+﻿/***********************************************************************//**
  * @file		lpc17xx_pinsel.c
  * @brief		Contains all functions support for Pin connect block firmware
  * 				library on LPC17xx

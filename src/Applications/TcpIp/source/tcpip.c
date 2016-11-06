@@ -1,18 +1,4 @@
-/******************************************************************
- *****                                                        *****
- *****  Name: tcpip.c                                         *****
- *****  Ver.: 1.0                                             *****
- *****  Date: 07/05/2001                                      *****
- *****  Auth: Andreas Dannenberg                              *****
- *****        HTWK Leipzig                                    *****
- *****        university of applied sciences                  *****
- *****        Germany                                         *****
- *****  Func: implements the TCP/IP-stack and provides a      *****
- *****        simple API to the user                          *****
- *****                                                        *****
- ******************************************************************/
-
-#include "tcpip.h"
+﻿#include "tcpip.h"
 #include "EMAC.h"         // Keil: Line added
 #include <string.h>       // Keil: Line added
 #include "LPC17xx.h"     // Keil: Register definition file for LPC17xx

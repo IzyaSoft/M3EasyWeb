@@ -1,13 +1,4 @@
-/*----------------------------------------------------------------------------
- *      LPC2378 Ethernet Definitions
- *----------------------------------------------------------------------------
- *      Name:    EMAC.H
- *      Purpose: Philips LPC2378 EMAC hardware definitions
- *----------------------------------------------------------------------------
- *      Copyright (c) 2006 KEIL - An ARM Company. All rights reserved.
- *---------------------------------------------------------------------------*/
-
-#ifndef __EMAC_H
+﻿#ifndef __EMAC_H
 #define __EMAC_H
 
 #define MYMAC_1         0x1E            /* our ethernet (MAC) address        */

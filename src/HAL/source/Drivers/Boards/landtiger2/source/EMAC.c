@@ -1,21 +1,4 @@
-/******************************************************************
- *****                                                        *****
- *****  Name: cs8900.c                                        *****
- *****  Ver.: 1.0                                             *****
- *****  Date: 07/05/2001                                      *****
- *****  Auth: Andreas Dannenberg                              *****
- *****        HTWK Leipzig                                    *****
- *****        university of applied sciences                  *****
- *****        Germany                                         *****
- *****  Func: ethernet packet-driver for use with LAN-        *****
- *****        controller CS8900 from Crystal/Cirrus Logic     *****
- *****                                                        *****
- *****  Keil: Module modified for use with Philips            *****
- *****        LPC2378 EMAC Ethernet controller                *****
- *****                                                        *****
- ******************************************************************/
-
-#include "EMAC.h"
+﻿#include "EMAC.h"
 #include "tcpip.h"
 #include "LPC17xx.h"
 

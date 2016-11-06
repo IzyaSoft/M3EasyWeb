@@ -1,4 +1,4 @@
-/***********************************************************************//**
+﻿/***********************************************************************//**
  * @file		lpc17xx_pinsel.h
  * @brief		Contains all macro definitions and function prototypes
  * 				support for Pin connect block firmware library on LPC17xx

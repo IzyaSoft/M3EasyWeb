@@ -1,4 +1,4 @@
-/***********************************************************************//**
+﻿/***********************************************************************//**
  * @file		lpc17xx_libcfg_default.c
  * @brief		Library configuration source file (default),
  * 				used to build library without examples.

@@ -1,17 +1,4 @@
-/******************************************************************
- *****                                                        *****
- *****  Name: tcpip.h                                         *****
- *****  Ver.: 1.0                                             *****
- *****  Date: 07/05/2001                                      *****
- *****  Auth: Andreas Dannenberg                              *****
- *****        HTWK Leipzig                                    *****
- *****        university of applied sciences                  *****
- *****        Germany                                         *****
- *****  Func: header-file for tcpip.c                         *****
- *****                                                        *****
- ******************************************************************/
-
-#ifndef __TCPIP_H
+﻿#ifndef __TCPIP_H
 #define __TCPIP_H
 
 // easyWEB-stack definitions

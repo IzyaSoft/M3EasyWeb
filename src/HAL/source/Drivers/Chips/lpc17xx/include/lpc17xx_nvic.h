@@ -1,4 +1,4 @@
-/***********************************************************************//**
+﻿/***********************************************************************//**
  * @file		lpc17xx_nvic.h
  * @brief		Contains all macro definitions and function prototypes
  * 				support for Nesting Vectored Interrupt firmware library

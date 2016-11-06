@@ -1,4 +1,4 @@
-const unsigned char WebSide[] = {
+﻿const unsigned char WebSide[] = {
 "<html>\r\n"
 "<head>\r\n"
 "<meta http-equiv=\"refresh\" content=\"5\">\r\n"

@@ -1,4 +1,4 @@
-/***********************************************************************//**
+﻿/***********************************************************************//**
  * @file		lpc17xx_clkpwr.c
  * @brief		Contains all functions support for Clock and Power Control
  * 				firmware library on LPC17xx

@@ -1,18 +1,4 @@
-/******************************************************************
- *****                                                        *****
- *****  Name: easyweb.c                                       *****
- *****  Ver.: 1.0                                             *****
- *****  Date: 07/05/2001                                      *****
- *****  Auth: Andreas Dannenberg                              *****
- *****        HTWK Leipzig                                    *****
- *****        university of applied sciences                  *****
- *****        Germany                                         *****
- *****  Func: implements a dynamic HTTP-server by using       *****
- *****        the easyWEB-API                                 *****
- *****                                                        *****
- ******************************************************************/
-
-#include <stdlib.h>
+ï»¿#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -56,7 +42,7 @@ int main(void)
   SystemInit();                                      /* setup core clocks */
   SysTick_Config(100000000/100);               /* Generate interrupt every 10 ms */
 
-  LPC_GPIO0->FIODIR   |= 1 << 21;					// ÉèÖÃLEDÓÐÐ§
+  LPC_GPIO0->FIODIR   |= 1 << 21;					// Ð™Ð¸Ð¦Ð“LEDÐ£Ð Ð Â§
   LPC_GPIO0->FIOPIN	  |= 1 << 21;
 
   LPC_GPIO2->FIODIR   |= 1 << 0;                    /* P2.0 defined as Output (LED) */

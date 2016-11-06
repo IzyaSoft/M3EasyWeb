@@ -1,4 +1,4 @@
-/**************************************************************************//**
+﻿/**************************************************************************//**
  * @file     system_LPC17xx.c
  * @brief    CMSIS Cortex-M3 Device Peripheral Access Layer Source File
  *           for the NXP LPC17xx Device Series

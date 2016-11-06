@@ -1,4 +1,4 @@
-/***********************************************************************//**
+﻿/***********************************************************************//**
  * @file		lpc17xx_gpio.c
  * @brief		Contains all functions support for GPIO firmware library on LPC17xx
  * @version		2.0

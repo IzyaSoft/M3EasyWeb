@@ -1,4 +1,4 @@
-/***********************************************************************//**
+﻿/***********************************************************************//**
  * @file		lpc_types.h
  * @brief		Contains the NXP ABL typedefs for C standard types.
  *     			It is intended to be used in ISO C conforming development

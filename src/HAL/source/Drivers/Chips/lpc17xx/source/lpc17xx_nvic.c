@@ -1,4 +1,4 @@
-/***********************************************************************//**
+﻿/***********************************************************************//**
  * @file		lpc17xx_nvic.c
  * @brief		Contains all expansion functions support for
  * 				NVIC firmware library on LPC17xx. The main
