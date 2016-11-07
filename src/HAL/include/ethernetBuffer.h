@@ -5,7 +5,7 @@
 
 struct EthernetBuffer
 {
-    uint32_t* _buffer;
+    unsigned char* _buffer;
     uint32_t _bufferCapacity;
     uint32_t _storedBytes;
 };

@@ -16,62 +16,18 @@
 <part id="0"/>
 <part id="1"/>
 <part id="2"/>
-<part id="4"/>
-<part id="3"/>
 </presentation>
 </folder>
 </info>
 </editorArea>
-<editor id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" partName="main.c" path="E:/uetm/commutator/M3EasyWeb/src/main.c" title="main.c" tooltip="E:/uetm/commutator/M3EasyWeb/src/main.c" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/easyWeb/src/main.c"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="465" selectionTopPixel="0"/>
-</editor>
-<editor id="org.eclipse.cdt.ui.editor.CEditor" name="driverConfig.h" partName="driverConfig.h" path="E:/uetm/commutator/M3EasyWeb/src/driverConfig.h" title="driverConfig.h" tooltip="E:/uetm/commutator/M3EasyWeb/src/driverConfig.h" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/easyWeb/src/driverConfig.h"/>
-<editorState selectionHorizontalPixel="0" selectionLength="10" selectionOffset="142" selectionTopPixel="0"/>
-</editor>
-<editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="hal.h" partName="hal.h" path="E:/uetm/commutator/M3EasyWeb/src/HAL/include/hal.h" title="hal.h" tooltip="E:/uetm/commutator/M3EasyWeb/src/HAL/include/hal.h" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/easyWeb/src/HAL/include/hal.h"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="199" selectionTopPixel="0"/>
-</editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="LPC17xx.h" partName="LPC17xx.h" path="E:/uetm/commutator/M3EasyWeb/src/HAL/source/Drivers/Chips/lpc17xx/include/LPC17xx.h" title="LPC17xx.h" tooltip="E:/uetm/commutator/M3EasyWeb/src/HAL/source/Drivers/Chips/lpc17xx/include/LPC17xx.h" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/easyWeb/src/HAL/source/Chips/lpc17xx/include/LPC17xx.h"/>
 <editorState selectionHorizontalPixel="0" selectionLength="6" selectionOffset="10522" selectionTopPixel="3061"/>
 </editor>
-<editor id="org.eclipse.cdt.ui.editor.CEditor" name="ledDriver.c" partName="ledDriver.c" path="E:/uetm/commutator/M3EasyWeb/src/HAL/source/Drivers/Boards/landtiger2/source/ledDriver.c" title="ledDriver.c" tooltip="E:/uetm/commutator/M3EasyWeb/src/HAL/source/Drivers/Boards/landtiger2/source/ledDriver.c" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/easyWeb/src/HAL/source/Drivers/Boards/LandTiger2/source/ledDriver.c"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="7" selectionTopPixel="0"/>
-</editor>
 </editors>
 <views>
 <view id="org.coocox.builder.ui.views.ProjectView" partName="Project">
-<viewState CommonNavigator.LINKING_ENABLED="0" horizontalPosition="0" org.eclipse.ui.navigator.resources.workingSets.showTopLevelWorkingSets="0" verticalPosition="20">
-<expanded>
-<element path="/easyWeb"/>
-<element path="/easyWeb/src"/>
-<element path="/easyWeb/src/Applications"/>
-<element path="/easyWeb/src/Applications/Http"/>
-<element path="/easyWeb/src/Applications/TcpIp"/>
-<element path="/easyWeb/src/Applications/TcpIp/include"/>
-<element path="/easyWeb/src/Applications/TcpIp/source"/>
-<element path="/easyWeb/src/BusinessLogic"/>
-<element path="/easyWeb/src/BusinessLogic/data"/>
-<element path="/easyWeb/src/BusinessLogic/data/include"/>
-<element path="/easyWeb/src/HAL"/>
-<element path="/easyWeb/src/HAL/include"/>
-<element path="/easyWeb/src/HAL/source"/>
-<element path="/easyWeb/src/HAL/source/Chips"/>
-<element path="/easyWeb/src/HAL/source/Chips/lpc17xx"/>
-<element path="/easyWeb/src/HAL/source/Chips/lpc17xx/include"/>
-<element path="/easyWeb/src/HAL/source/Drivers"/>
-<element path="/easyWeb/src/HAL/source/Drivers/Boards"/>
-<element path="/easyWeb/src/HAL/source/Drivers/Boards/LandTiger2"/>
-<element path="/easyWeb/src/HAL/source/Drivers/Boards/LandTiger2/source"/>
-</expanded>
-<selection>
-<element path="/easyWeb/src/driverConfig.h"/>
-</selection>
-</viewState>
+<viewState CommonNavigator.LINKING_ENABLED="0" horizontalPosition="0" org.eclipse.ui.navigator.resources.workingSets.showTopLevelWorkingSets="0" verticalPosition="0"/>
 </view>
 <view id="org.coocox.component.ui.ComponentView" partName="Components">
 <viewState/>
@@ -95,7 +51,7 @@
 <viewState/>
 </view>
 </views>
-<perspectives activePart="org.eclipse.cdt.ui.editor.CEditor" activePerspective="org.coocox.builder.perspective.CoBuilder">
+<perspectives activePart="org.coocox.builder.ui.views.ProjectView" activePerspective="org.coocox.builder.perspective.CoBuilder">
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="org.coocox.builder.ui.PerspectiveCoBuilder" id="org.coocox.builder.perspective.CoBuilder" label="CooCox CoBuilder"/>
 <alwaysOnActionSet id="org.coocox.component.ui.actionSet"/>
@@ -290,164 +246,162 @@
 <workingSets/>
 <navigationHistory>
 <editors>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/main.c"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/main.h"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/Applications/TcpIp/include/tcpip.h"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/HAL/source/Chips/lpc17xx/include/LPC17xx.h"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/driverConfig.h"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/Applications/TcpIp/source/tcpip.c"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/HAL/source/Drivers/Boards/LandTiger2/source/EMAC.c"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/HAL/include/hal.h"/>
-<editor factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="C:\Program Files (x86)\GNU Tools ARM Embedded\5.4 2016q2\arm-none-eabi\include\sys\_stdint.h" project="easyWeb"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/HAL/source/Drivers/Boards/LandTiger2/source/ledDriver.c"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/HAL/source/Drivers/Boards/LandTiger2/source/ethernetDriver.c"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/Applications/TcpIp/include/arp.h"/>
 </editors>
-<item historyLabel="LPC17xx.h" index="3">
-<position info="not_deleted" x="35084" y="0"/>
+<item historyLabel="hal.h" index="3">
+<position info="not_deleted" x="992" y="136"/>
 </item>
-<item historyLabel="LPC17xx.h" index="3">
-<position info="not_deleted" x="10648" y="0"/>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="1516" y="0"/>
 </item>
-<item historyLabel="driverConfig.h" index="4">
-<position info="not_deleted" x="285" y="0"/>
+<item historyLabel="arp.h" index="5">
+<position info="not_deleted" x="78" y="0"/>
 </item>
-<item historyLabel="hal.h" index="5">
-<position info="not_deleted" x="275" y="0"/>
+<item historyLabel="arp.h" index="5">
+<position info="not_deleted" x="76" y="0"/>
 </item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="1048" y="0"/>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="1516" y="0"/>
 </item>
-<item historyLabel="LPC17xx.h" index="3">
-<position info="not_deleted" x="9953" y="6"/>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="5338" y="0"/>
 </item>
-<item historyLabel="driverConfig.h" index="4">
-<position info="not_deleted" x="285" y="0"/>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="4726" y="0"/>
 </item>
-<item historyLabel="hal.h" index="5">
-<position info="not_deleted" x="142" y="0"/>
+<item historyLabel="EMAC.c" index="2">
+<position info="not_deleted" x="7321" y="428"/>
 </item>
-<item historyLabel="_stdint.h" index="6">
+<item historyLabel="ethernetDriver.c" index="4">
+<position info="not_deleted" x="7836" y="0"/>
+</item>
+<item historyLabel="EMAC.c" index="2">
+<position info="not_deleted" x="7638" y="0"/>
+</item>
+<item historyLabel="tcpip.h" index="0">
+<position info="not_deleted" x="11152" y="0"/>
+</item>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="181" y="0"/>
+</item>
+<item historyLabel="tcpip.h" index="0">
+<position info="not_deleted" x="11152" y="0"/>
+</item>
+<item historyLabel="tcpip.h" index="0">
+<position info="not_deleted" x="533" y="0"/>
+</item>
+<item historyLabel="ethernetDriver.c" index="4">
+<position info="not_deleted" x="7836" y="0"/>
+</item>
+<item historyLabel="arp.h" index="5">
+<position info="not_deleted" x="76" y="0"/>
+</item>
+<item historyLabel="tcpip.h" index="0">
+<position info="not_deleted" x="533" y="0"/>
+</item>
+<item historyLabel="hal.h" index="3">
+<position info="not_deleted" x="1118" y="0"/>
+</item>
+<item historyLabel="ethernetDriver.c" index="4">
+<position info="not_deleted" x="2842" y="0"/>
+</item>
+<item historyLabel="hal.h" index="3">
+<position info="not_deleted" x="13" y="85"/>
+</item>
+<item historyLabel="ethernetDriver.c" index="4">
+<position info="not_deleted" x="2842" y="0"/>
+</item>
+<item historyLabel="ethernetDriver.c" index="4">
+<position info="not_deleted" x="2757" y="24"/>
+</item>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="996" y="0"/>
+</item>
+<item historyLabel="tcpip.h" index="0">
+<position info="not_deleted" x="111" y="27"/>
+</item>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="996" y="0"/>
+</item>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="1501" y="0"/>
+</item>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="1293" y="0"/>
+</item>
+<item historyLabel="tcpip.h" index="0">
+<position info="not_deleted" x="111" y="27"/>
+</item>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="1293" y="0"/>
+</item>
+<item historyLabel="tcpip.h" index="0">
+<position info="not_deleted" x="68" y="18"/>
+</item>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="1293" y="0"/>
+</item>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="1501" y="0"/>
+</item>
+<item historyLabel="arp.h" index="5">
+<position info="not_deleted" x="78" y="0"/>
+</item>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="1501" y="0"/>
+</item>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="5415" y="0"/>
+</item>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="10805" y="17"/>
+</item>
+<item historyLabel="tcpip.h" index="0">
+<position info="not_deleted" x="68" y="18"/>
+</item>
+<item historyLabel="tcpip.h" index="0">
+<position info="not_deleted" x="407" y="126"/>
+</item>
+<item historyLabel="hal.h" index="3">
+<position info="not_deleted" x="173" y="0"/>
+</item>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="10805" y="17"/>
+</item>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="1702" y="0"/>
+</item>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="1747" y="0"/>
+</item>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="1767" y="0"/>
+</item>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="1501" y="0"/>
+</item>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="1489" y="0"/>
+</item>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="5372" y="0"/>
+</item>
+<item historyLabel="tcpip.c" index="1">
+<position info="not_deleted" x="9765" y="24"/>
+</item>
+<item historyLabel="arp.h" index="5">
+<position info="not_deleted" x="66" y="0"/>
+</item>
+<item historyLabel="tcpip.h" index="0">
+<position info="not_deleted" x="407" y="126"/>
+</item>
+<item active="true" historyLabel="tcpip.h" index="0">
 <position/>
-</item>
-<item historyLabel="hal.h" index="5">
-<position info="not_deleted" x="191" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="216" y="0"/>
-</item>
-<item historyLabel="hal.h" index="5">
-<position info="not_deleted" x="28" y="0"/>
-</item>
-<item historyLabel="ledDriver.c" index="7">
-<position info="not_deleted" x="669" y="0"/>
-</item>
-<item historyLabel="tcpip.h" index="2">
-<position info="not_deleted" x="10137" y="0"/>
-</item>
-<item historyLabel="driverConfig.h" index="4">
-<position info="not_deleted" x="285" y="0"/>
-</item>
-<item historyLabel="ledDriver.c" index="7">
-<position info="not_deleted" x="679" y="0"/>
-</item>
-<item historyLabel="driverConfig.h" index="4">
-<position info="not_deleted" x="166" y="19"/>
-</item>
-<item historyLabel="ledDriver.c" index="7">
-<position info="not_deleted" x="34" y="0"/>
-</item>
-<item historyLabel="hal.h" index="5">
-<position info="not_deleted" x="87" y="180"/>
-</item>
-<item historyLabel="ledDriver.c" index="7">
-<position info="not_deleted" x="679" y="0"/>
-</item>
-<item historyLabel="main.h" index="1">
-<position info="not_deleted" x="823" y="0"/>
-</item>
-<item historyLabel="ledDriver.c" index="7">
-<position info="not_deleted" x="679" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="216" y="0"/>
-</item>
-<item historyLabel="ledDriver.c" index="7">
-<position info="not_deleted" x="679" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="216" y="0"/>
-</item>
-<item historyLabel="driverConfig.h" index="4">
-<position info="not_deleted" x="166" y="19"/>
-</item>
-<item historyLabel="ledDriver.c" index="7">
-<position info="not_deleted" x="650" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="1034" y="17"/>
-</item>
-<item historyLabel="ledDriver.c" index="7">
-<position info="not_deleted" x="180" y="0"/>
-</item>
-<item historyLabel="_stdint.h" index="6">
-<position info="not_deleted" x="1024" y="8"/>
-</item>
-<item historyLabel="ledDriver.c" index="7">
-<position info="not_deleted" x="180" y="0"/>
-</item>
-<item historyLabel="ledDriver.c" index="7">
-<position info="not_deleted" x="358" y="0"/>
-</item>
-<item historyLabel="driverConfig.h" index="4">
-<position info="not_deleted" x="303" y="0"/>
-</item>
-<item historyLabel="hal.h" index="5">
-<position info="not_deleted" x="277" y="0"/>
-</item>
-<item historyLabel="ledDriver.c" index="7">
-<position info="not_deleted" x="634" y="0"/>
-</item>
-<item historyLabel="LPC17xx.h" index="3">
-<position info="not_deleted" x="10522" y="6"/>
-</item>
-<item historyLabel="ledDriver.c" index="7">
-<position info="not_deleted" x="100" y="16"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="1034" y="17"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="685" y="0"/>
-</item>
-<item historyLabel="hal.h" index="5">
-<position info="not_deleted" x="204" y="12"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="732" y="0"/>
-</item>
-<item historyLabel="ledDriver.c" index="7">
-<position info="not_deleted" x="17" y="0"/>
-</item>
-<item historyLabel="driverConfig.h" index="4">
-<position info="not_deleted" x="293" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="465" y="0"/>
-</item>
-<item historyLabel="ledDriver.c" index="7">
-<position info="not_deleted" x="365" y="0"/>
-</item>
-<item historyLabel="hal.h" index="5">
-<position info="not_deleted" x="204" y="12"/>
-</item>
-<item historyLabel="driverConfig.h" index="4">
-<position info="not_deleted" x="142" y="10"/>
-</item>
-<item historyLabel="LPC17xx.h" index="3">
-<position info="not_deleted" x="10522" y="6"/>
-</item>
-<item historyLabel="ledDriver.c" index="7">
-<position info="not_deleted" x="7" y="0"/>
-</item>
-<item active="true" historyLabel="hal.h" index="5">
-<position info="not_deleted" x="204" y="12"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -456,50 +410,50 @@
 <actionBarAdvisor/>
 </window>
 <mruList>
-<file factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="_stdint.h" tooltip="C:\Program Files (x86)\GNU Tools ARM Embedded\5.4 2016q2\arm-none-eabi\include\sys\_stdint.h">
-<persistable path="C:\Program Files (x86)\GNU Tools ARM Embedded\5.4 2016q2\arm-none-eabi\include\sys\_stdint.h" project="easyWeb"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="arp.h" tooltip="easyWeb/src/Applications/TcpIp/include/arp.h">
+<persistable path="/easyWeb/src/Applications/TcpIp/include/arp.h"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="ledDriver.c" tooltip="easyWeb/src/HAL/source/Drivers/Boards/LandTiger2/source/ledDriver.c">
-<persistable path="/easyWeb/src/HAL/source/Drivers/Boards/LandTiger2/source/ledDriver.c"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="EMAC.c" tooltip="easyWeb/src/HAL/source/Drivers/Boards/LandTiger2/source/EMAC.c">
+<persistable path="/easyWeb/src/HAL/source/Drivers/Boards/LandTiger2/source/EMAC.c"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="LPC17xx.h" tooltip="easyWeb/src/HAL/source/Chips/lpc17xx/include/LPC17xx.h">
-<persistable path="/easyWeb/src/HAL/source/Chips/lpc17xx/include/LPC17xx.h"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="system_LPC17xx.c" tooltip="easyWeb/src/HAL/source/Drivers/Chips/lpc17xx/source/system_LPC17xx.c">
+<persistable path="/easyWeb/src/HAL/source/Drivers/Chips/lpc17xx/source/system_LPC17xx.c"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="hal.h" tooltip="easyWeb/src/HAL/include/hal.h">
-<persistable path="/easyWeb/src/HAL/include/hal.h"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="networkManager.c" tooltip="easyWeb/src/BusinessLogic/managers/source/networkManager.c">
+<persistable path="/easyWeb/src/BusinessLogic/managers/source/networkManager.c"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="driverConfig.h" tooltip="easyWeb/src/driverConfig.h">
-<persistable path="/easyWeb/src/driverConfig.h"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="networkManager.h" tooltip="easyWeb/src/BusinessLogic/managers/include/networkManager.h">
+<persistable path="/easyWeb/src/BusinessLogic/managers/include/networkManager.h"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="tcpip.h" tooltip="easyWeb/src/Applications/TcpIp/include/tcpip.h">
-<persistable path="/easyWeb/src/Applications/TcpIp/include/tcpip.h"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="type.h" tooltip="easyWeb/src/BusinessLogic/data/include/type.h">
+<persistable path="/easyWeb/src/BusinessLogic/data/include/type.h"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="networkConfiguration.h" tooltip="easyWeb/src/BusinessLogic/data/include/networkConfiguration.h">
+<persistable path="/easyWeb/src/BusinessLogic/data/include/networkConfiguration.h"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="tcpip.c" tooltip="easyWeb/src/Applications/TcpIp/source/tcpip.c">
 <persistable path="/easyWeb/src/Applications/TcpIp/source/tcpip.c"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="main.h" tooltip="easyWeb/src/main.h">
-<persistable path="/easyWeb/src/main.h"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="tcpip.h" tooltip="easyWeb/src/Applications/TcpIp/include/tcpip.h">
+<persistable path="/easyWeb/src/Applications/TcpIp/include/tcpip.h"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" tooltip="easyWeb/src/main.c">
-<persistable path="/easyWeb/src/main.c"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="ethernetBuffer.h" tooltip="easyWeb/src/HAL/include/ethernetBuffer.h">
+<persistable path="/easyWeb/src/HAL/include/ethernetBuffer.h"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="tcpip.c" tooltip="easyWeb/src/tcpip.c">
-<persistable path="/easyWeb/src/tcpip.c"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="ethernetConfiguration.h" tooltip="easyWeb/src/HAL/include/ethernetConfiguration.h">
+<persistable path="/easyWeb/src/HAL/include/ethernetConfiguration.h"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="easyweb.c" tooltip="easyWeb/src/easyweb.c">
-<persistable path="/easyWeb/src/easyweb.c"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="ethernetDriver.h" tooltip="easyWeb/src/HAL/source/Drivers/Boards/LandTiger2/include/ethernetDriver.h">
+<persistable path="/easyWeb/src/HAL/source/Drivers/Boards/LandTiger2/include/ethernetDriver.h"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="webpage.h" tooltip="easyWeb/webpage.h">
-<persistable path="/easyWeb/webpage.h"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="ethernetDriver.c" tooltip="easyWeb/src/HAL/source/Drivers/Boards/LandTiger2/source/ethernetDriver.c">
+<persistable path="/easyWeb/src/HAL/source/Drivers/Boards/LandTiger2/source/ethernetDriver.c"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="tcpip.h" tooltip="easyWeb/tcpip.h">
-<persistable path="/easyWeb/tcpip.h"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="lpc_types.h" tooltip="easyWeb/src/HAL/source/Drivers/Chips/lpc17xx/include/lpc_types.h">
+<persistable path="/easyWeb/src/HAL/source/Drivers/Chips/lpc17xx/include/lpc_types.h"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="system_LPC17xx.c" tooltip="m3webbackbone/portable/lpc17xx/system_LPC17xx.c">
-<persistable path="/m3webbackbone/portable/lpc17xx/system_LPC17xx.c"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="configurationManager.c" tooltip="m3webbackbone/businesslogic/managers/configurationManager.c">
-<persistable path="/m3webbackbone/businesslogic/managers/configurationManager.c"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="hal.h" tooltip="easyWeb/src/HAL/include/hal.h">
+<persistable path="/easyWeb/src/HAL/include/hal.h"/>
 </file>
 </mruList>
 </workbench>

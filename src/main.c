@@ -4,6 +4,7 @@
 
 #include "driverConfig.h"
 #include "hal.h"
+#include "networkManager.h"
 #include "LPC17xx.h"
 
 #define extern        // WTF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -15,6 +16,9 @@
 #include "tcpip.h"
 
 #include "webpage.h"
+
+
+extern struct NetworkConfiguration networkConfiguration;
 
 unsigned int pagecounter = 100;
 unsigned int adcValue = 0;
@@ -45,11 +49,21 @@ void SysTick_Handler (void)
 
 int main()
 {
-    SystemInit();                                      /* setup core clocks */
-    SysTick_Config(100000000 / 100);               /* Generate interrupt every 10 ms */
+    // Clocks initialization
+    SystemInit();                                      // setup core clocks
+    SysTick_Config(SystemCoreClock / 100);               // Generate interrupt every 10 ms
+    // Modules configuration
     ConfigureLedPort(LED_PORT_NUMBER, LED_PORT_MASK, ledsValue);
     ConfigureAdc(ADC_CHANNEL_5, ADC_CLOCK_DIVIDER);
-    TCPLowLevelInit();
+    // TCPLowLevelInit();
+
+    // Networks
+    struct EthernetConfiguration ethernetConfiguration;
+    GetNetworkConfiguration(&networkConfiguration);
+    ethernetConfiguration._macAddress = networkConfiguration._macAddress;
+    ethernetConfiguration._useAutoNegotiation = 1;
+
+    InitializeNetwork(&ethernetConfiguration);
 
 /*
   *(unsigned char *)RemoteIP = 24;               // uncomment those lines to get the
@@ -75,7 +89,7 @@ int main()
     {
         if (!(SocketStatus & SOCK_ACTIVE))
             TCPPassiveOpen();   // listen for incoming TCP-connection
-        DoNetworkStuff();                                      // handle network and easyWEB-stack
+        DoNetworkStuff();                                  // handle network and easyWEB-stack
                                                            // events
         HTTPServer();
     }

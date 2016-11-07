@@ -29,6 +29,8 @@
     void Read(struct EthernetBuffer* readBuffer);
     void Write(struct EthernetBuffer* bufferToWrite);
     uint32_t GetPhyStatus(uint32_t parameter);
+    unsigned char CheckIsDataAvailable();
+    uint32_t CheckAvailableDataSize();
 #endif
 
 #endif

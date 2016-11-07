@@ -1,4 +1,74 @@
 ﻿#include "tcpip.h"
+#include "arp.h"
+#include "networkConfiguration.h"
+
+extern struct NetworkConfiguration networkConfiguration;
+
+void InitializeNetwork(struct EthernetConfiguration* ethernetConfiguration)
+{
+    InitializeEthrernet(ethernetConfiguration);
+    //todo: umv: incapsulate tcp state
+    TransmitControl = 0;
+    TCPFlags = 0;
+    TCPStateMachine = CLOSED;
+    SocketStatus = 0;
+}
+
+// Network Packet Routing
+void HandleNetworkEvents()
+{
+    if(CheckIsDataAvailable())
+    {
+        uint32_t dataSize = CheckAvailableDataSize();
+        unsigned char* localBuffer[MAX_LOCAL_BUFFER_SIZE_LIMIT];  // todo: umv possibly do malloc + free
+        struct EthernetBuffer rxBuffer;
+
+        if(dataSize <= MAX_LOCAL_BUFFER_SIZE_LIMIT)
+        {
+            // local buffer usage
+            rxBuffer._buffer = localBuffer;
+            rxBuffer._bufferCapacity = MAX_LOCAL_BUFFER_SIZE_LIMIT;
+        }
+        else
+        {
+            rxBuffer._buffer = ethernetBuffer;
+            rxBuffer._bufferCapacity = MAX_ETH_FRAME_SIZE;
+        }
+
+        Read(&ethernetBuffer);
+        if(CheckIsPacketBrodcast)
+        {
+            // possibly arp or some other broadcast messages
+            HandleBrodcastPacket(&ethernetBuffer);
+        }
+        else
+        {
+            //icmp and others
+        }
+
+    }
+}
+
+unsigned char CheckIsPacketBrodcast(struct EthernetBuffer* buffer)
+{
+    for(unsigned char counter = 0; counter < MAC_ADDRESS_LENGTH; counter++)
+        if(buffer->_buffer[counter] != 0xFF)
+        	return 0;
+    return 1;
+}
+
+void HandleBrodcastPacket(struct EthernetBuffer* buffer)
+{
+    unsigned short* etherType = buffer->_buffer[ETHERNET_ETHERTYPE_INDEX];
+    if(*etherType == ARP_ETHERTYPE)
+    {
+        BuildArpReply(buffer, networkConfiguration._macAddress, networkConfiguration._ipAddress);
+        Write(buffer);
+    }
+}
+
+// EASY WEB AWFUL DESIGN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 #include "EMAC.h"         // Keil: Line added
 #include <string.h>       // Keil: Line added
 #include "LPC17xx.h"     // Keil: Register definition file for LPC17xx
@@ -11,6 +81,7 @@ const unsigned char MyMAC[6] =   // "M1-M2-M3-M4-M5-M6"
 
 // easyWEB-API function
 // initalizes the LAN-controller, reset flags, starts timer-ISR
+
 
 void TCPLowLevelInit(void)
 {

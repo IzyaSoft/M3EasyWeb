@@ -1,6 +1,18 @@
 ﻿#ifndef __TCPIP_H
 #define __TCPIP_H
 
+#include "hal.h"
+#include "ethernet.h"
+#define MAX_LOCAL_BUFFER_SIZE_LIMIT                   127
+
+extern unsigned char* ethernetBuffer[MAX_ETH_FRAME_SIZE];
+
+
+void InitializeNetwork(struct EthernetConfiguration* ethernetConfiguration);
+void HandleNetworkEvents();
+unsigned char CheckIsPacketBrodcast(struct EthernetBuffer* buffer);
+void HandleBrodcastPacket(struct EthernetBuffer* buffer);
+
 // easyWEB-stack definitions
 #define MYIP_1               192                 // our internet protocol (IP) address
 #define MYIP_2               168
@@ -219,6 +231,14 @@ extern unsigned char TCPFlags;
 #define TCP_TIMER_RUNNING              0x04
 #define TIMER_TYPE_RETRY               0x08
 #define TCP_CLOSE_REQUESTED            0x10
+
+
+
+
+
+
+
+
 
 // prototypes
 void DoNetworkStuff(void);
