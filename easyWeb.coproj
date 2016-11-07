@@ -81,11 +81,11 @@
     <Component id="258" name="PINSEL" path="" type="2"/>
   </Components>
   <Files>
-    <File name="src/HAL" path="" type="2"/>
     <File name="src/Applications/Http/NestedResources/webpage.h" path="src/Applications/Http/NestedResources/webpage.h" type="1"/>
+    <File name="src/HAL" path="" type="2"/>
     <File name="src/Applications/TcpIp" path="" type="2"/>
-    <File name="src/HAL/source/Drivers/Chips/lpc17xx/source/startup_LPC17xx.c" path="src/HAL/source/Drivers/Chips/lpc17xx/source/startup_LPC17xx.c" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_pinsel.h" path="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_pinsel.h" type="1"/>
+    <File name="src/HAL/source/Drivers/Chips/lpc17xx/source/startup_LPC17xx.c" path="src/HAL/source/Drivers/Chips/lpc17xx/source/startup_LPC17xx.c" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/common/cmsis/include/core_cmInstr.h" path="src/HAL/source/Drivers/Chips/common/cmsis/include/core_cmInstr.h" type="1"/>
     <File name="src/HAL/source/Drivers/Boards/LandTiger2/source" path="" type="2"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_nvic.h" path="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_nvic.h" type="1"/>
@@ -102,13 +102,13 @@
     <File name="src/Applications/TcpIp/source/tcpip.c" path="src/Applications/TcpIp/source/tcpip.c" type="1"/>
     <File name="src/HAL/source/Drivers/Boards/LandTiger2/include/EMAC.h" path="src/HAL/source/Drivers/Boards/landtiger2/include/EMAC.h" type="1"/>
     <File name="src/HAL/source/Drivers/Boards/LandTiger2/include/ethernetDriver.h" path="src/HAL/source/Drivers/Boards/landtiger2/include/ethernetDriver.h" type="1"/>
-    <File name="src/BusinessLogic/data" path="" type="2"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_gpio.c" path="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_gpio.c" type="1"/>
+    <File name="src/BusinessLogic/data" path="" type="2"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_nvic.c" path="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_nvic.c" type="1"/>
     <File name="src/HAL/source/Drivers/Chips" path="" type="2"/>
     <File name="src/HAL/source/Drivers/Chips/common/cmsis/include" path="" type="2"/>
-    <File name="src/HAL/source/Drivers/Chips/lpc17xx/source/system_LPC17xx.c" path="src/HAL/source/Drivers/Chips/lpc17xx/source/system_LPC17xx.c" type="1"/>
     <File name="src/Applications/Http/NestedResources" path="" type="2"/>
+    <File name="src/HAL/source/Drivers/Chips/lpc17xx/source/system_LPC17xx.c" path="src/HAL/source/Drivers/Chips/lpc17xx/source/system_LPC17xx.c" type="1"/>
     <File name="src/Applications/Http" path="" type="2"/>
     <File name="src/main.c" path="src/main.c" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_clkpwr.h" path="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_clkpwr.h" type="1"/>
@@ -127,6 +127,7 @@
     <File name="src/HAL/source/Drivers/Boards/LandTiger2/source/ethernetDriver.c" path="src/HAL/source/Drivers/Boards/landtiger2/source/ethernetDriver.c" type="1"/>
     <File name="src/Applications/TcpIp/include" path="" type="2"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_clkpwr.c" path="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_clkpwr.c" type="1"/>
+    <File name="src/HAL/include/ethernetBuffer.h" path="src/HAL/include/ethernetBuffer.h" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/source" path="" type="2"/>
     <File name="src/HAL/include" path="" type="2"/>
     <File name="src/HAL/source/Drivers/Boards/LandTiger2/source/EMAC.c" path="src/HAL/source/Drivers/Boards/landtiger2/source/EMAC.c" type="1"/>
@@ -136,6 +137,7 @@
     <File name="src/BusinessLogic" path="" type="2"/>
     <File name="src/main.h" path="src/main.h" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_gpio.h" path="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_gpio.h" type="1"/>
+    <File name="src/HAL/include/ethernetConfiguration.h" path="src/HAL/include/ethernetConfiguration.h" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx" path="" type="2"/>
     <File name="src/HAL/source/Drivers/Boards/LandTiger2/source/adcDriver.c" path="src/HAL/source/Drivers/Boards/landtiger2/source/adcDriver.c" type="1"/>
   </Files>

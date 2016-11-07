@@ -2,7 +2,11 @@
 #define HAL_H
 
 #include <stdint.h>
+// defined drivers
 #include "driverConfig.h"
+// types
+#include "ethernetConfiguration.h"
+#include "ethernetBuffer.h"
 
 // LED DRIVER API
 #ifdef USE_GPIO_LED_DRIVER
@@ -21,9 +25,9 @@
 
 // ETHERNET DRIVER API
 #ifdef USE_ETHERNET_DRIVER
-    unsigned char InitializeEthrernet();
-    void Read();
-    void Write();
+    unsigned char InitializeEthrernet(struct EthernetConfiguration* configuration);
+    void Read(struct EthernetBuffer* readBuffer);
+    void Write(struct EthernetBuffer* bufferToWrite);
     uint32_t GetPhyStatus(uint32_t parameter);
 #endif
 

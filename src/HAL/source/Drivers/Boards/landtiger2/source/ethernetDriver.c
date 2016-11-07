@@ -59,6 +59,13 @@
         LPC_EMAC->RxConsumeIndex  = 0;
     }
 
+    static uint32_t GetReceivedDataSize()
+    {
+        uint32_t dmaBufferIndex;
+        dmaBufferIndex = LPC_EMAC->RxConsumeIndex;
+        return (RX_STAT_INFO(dmaBufferIndex) & RINFO_SIZE);
+    }
+
     void TxDescriptorInit ()
     {
         for (uint32_t i = 0; i < NUM_TX_FRAG; i++)
@@ -77,7 +84,7 @@
       LPC_EMAC->TxProduceIndex  = 0;
     }
 
-    unsigned char InitializeEthrernet()
+    unsigned char InitializeEthrernet(struct EthernetConfiguration* configuration)
     {
         // Initializes the EMAC ethernet controller
         uint32_t regv, tout, id1, id2;
@@ -157,7 +164,7 @@
         //if(!(regv & 0x0001))
             //return 0;
 
-        // todo: umv : settings for spedd mode & duplex from parameter
+        // todo: umv : settings for speed mode & channel mode from parameter
 
         /* Configure Full/Half Duplex mode. */
         if (regv & 0x0004)
@@ -182,9 +189,9 @@
         }
 
         /* Set the Ethernet MAC Address registers */
-        //LPC_EMAC->SA0 = (emacConfig->pbEMAC_Addr[0] << 8) | emacConfig->pbEMAC_Addr[1];
-        //LPC_EMAC->SA1 = (emacConfig->pbEMAC_Addr[2] << 8) | emacConfig->pbEMAC_Addr[3];
-        //LPC_EMAC->SA2 = (emacConfig->pbEMAC_Addr[4] << 8) | emacConfig->pbEMAC_Addr[5];
+        LPC_EMAC->SA0 = (configuration->_macAddress[0] << 8) | configuration->_macAddress[1];
+        LPC_EMAC->SA1 = (configuration->_macAddress[2] << 8) | configuration->_macAddress[3];
+        LPC_EMAC->SA2 = (configuration->_macAddress[4] << 8) | configuration->_macAddress[5];
 
         /* Initialize Tx and Rx DMA Descriptors */
         RxDescriptorInit();
@@ -205,20 +212,52 @@
         return 1;
     }
 
-    void Read()
+    void Read(struct EthernetBuffer* readBuffer)
     {
+        uint32_t dmaBufferIndex;
+        uint32_t length;
+        unsigned char* *destination;
+        unsigned char* *source;
 
+        dmaBufferIndex = LPC_EMAC->RxConsumeIndex;
+        destination = (unsigned char*) readBuffer->_buffer;
+        source = (unsigned char*) RX_BUF(dmaBufferIndex);
+
+        length = (GetReceivedDataSize() - 3) >> 2;
+        readBuffer->_storedBytes = length;
+
+        if (readBuffer->_buffer != 0)
+        {
+            while(length -- > 0)
+                *destination++ = *source++;
+        }
     }
 
-    void Write()
+    void Write(struct EthernetBuffer* bufferToWrite)
     {
+        uint32_t dmaBufferIndex;
+        unsigned char* source;
+        unsigned char* destination;
 
+        dmaBufferIndex = LPC_EMAC->TxProduceIndex;
+        source = (unsigned char*)bufferToWrite->_buffer;
+        destination  = (unsigned char*)TX_BUF(dmaBufferIndex);
+        TX_DESC_CTRL(dmaBufferIndex) = bufferToWrite->_storedBytes | TCTRL_LAST | TCTRL_CRC;
+
+        for(uint32_t ethOctet = 0; ethOctet < bufferToWrite->_storedBytes; ethOctet++)
+            *destination++ = *source++;
+
+        dmaBufferIndex = LPC_EMAC->TxProduceIndex;
+        if (++dmaBufferIndex == NUM_TX_FRAG)
+        dmaBufferIndex = 0;
+        LPC_EMAC->TxProduceIndex = dmaBufferIndex;
     }
 
     uint32_t GetPhyStatus(uint32_t parameter)
     {
-    	return 0;
+        return 0;
     }
+
 #endif
 
 #endif
