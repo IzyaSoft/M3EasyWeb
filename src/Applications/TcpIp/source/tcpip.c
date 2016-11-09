@@ -38,12 +38,12 @@ void HandleNetworkEvents()
         Read(&rxBuffer);
 
         //MakeMcuBytesOrder(rxBuffer._buffer, rxBuffer._storedBytes);
-        printf("Packet received: ");
+        printf("Incoming Packet: ");
         printStringHexSymbols(rxBuffer._buffer, rxBuffer._storedBytes, 6);
-        if(CheckIsPacketBrodcast)
+        if(CheckIsPacketBrodcast(&rxBuffer))
         {
             // possibly arp or some other broadcast messages
-            HandleBrodcastPacket(rxBuffer._buffer);
+            HandleBrodcastPacket(&rxBuffer);
         }
         else
         {
@@ -63,25 +63,27 @@ unsigned char CheckIsPacketBrodcast(struct EthernetBuffer* buffer)
 
 void HandleBrodcastPacket(struct EthernetBuffer* buffer)
 {
-    unsigned short etherType = buffer->_buffer[ETHERNET_ETHERTYPE_INDEX];
-    if(etherType == SWAPBYTES(ARP_ETHERTYPE))
+    unsigned short etherType = GetEtherType(buffer);
+    if(etherType == ARP_ETHERTYPE)
     {
         BuildArpReply(buffer, networkConfiguration._macAddress, networkConfiguration._ipAddress);
+        printf("Outgoing Packet: ");
+        printStringHexSymbols(buffer->_buffer, buffer->_storedBytes, 6);
         Write(buffer);
     }
 }
 
 void HandleIndividualAddressPacket(struct EthernetBuffer* buffer)
 {
-    unsigned short etherType = buffer->_buffer[ETHERNET_ETHERTYPE_INDEX];
+	unsigned short etherType = GetEtherType(buffer);
     SWAPBYTES(etherType);
     if(etherType == ARP_ETHERTYPE)
     {
         // check operation == reply
         if(*(unsigned short *)&buffer->_buffer[ARP_OPCODE_INDEX] == ARP_REPLY_OPERATION)
         {
-            memcpy(arpCache, buffer->_buffer[ARP_SENDER_MAC_INDEX], MAC_ADDRESS_LENGTH);
-            //todo: ???
+        	//todo: umv: make arp table ip, MAC, counter
+            memcpy(arpCache, &buffer->_buffer[ARP_SENDER_MAC_INDEX], MAC_ADDRESS_LENGTH);
         }
     }
 
@@ -89,6 +91,11 @@ void HandleIndividualAddressPacket(struct EthernetBuffer* buffer)
     {
 
     }
+}
+
+unsigned short GetEtherType(struct EthernetBuffer* buffer)
+{
+    return ((unsigned short)(buffer->_buffer[ETHERNET_ETHERTYPE_INDEX]) << 8) + buffer->_buffer[ETHERNET_ETHERTYPE_INDEX + 1];
 }
 
 // EASY WEB AWFUL DESIGN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

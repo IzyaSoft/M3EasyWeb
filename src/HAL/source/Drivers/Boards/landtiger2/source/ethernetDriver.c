@@ -269,7 +269,7 @@
 
         dmaBufferIndex = LPC_EMAC->TxProduceIndex;
         source = bufferToWrite->_buffer;
-        destination  = (unsigned char*)TX_BUF(dmaBufferIndex);
+        destination  = (unsigned char*)TX_DESC_PACKET(dmaBufferIndex);
         TX_DESC_CTRL(dmaBufferIndex) = bufferToWrite->_storedBytes | TCTRL_LAST | TCTRL_CRC;
 
         for(uint32_t ethOctet = 0; ethOctet < bufferToWrite->_storedBytes; ethOctet++)

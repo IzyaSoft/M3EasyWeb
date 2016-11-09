@@ -81,11 +81,11 @@
     <Component id="258" name="PINSEL" path="" type="2"/>
   </Components>
   <Files>
-    <File name="src/HAL" path="" type="2"/>
     <File name="src/Applications/Http/NestedResources/webpage.h" path="src/Applications/Http/NestedResources/webpage.h" type="1"/>
+    <File name="src/HAL" path="" type="2"/>
     <File name="src/Applications/TcpIp" path="" type="2"/>
-    <File name="src/HAL/source/Drivers/Chips/lpc17xx/source/startup_LPC17xx.c" path="src/HAL/source/Drivers/Chips/lpc17xx/source/startup_LPC17xx.c" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_pinsel.h" path="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_pinsel.h" type="1"/>
+    <File name="src/HAL/source/Drivers/Chips/lpc17xx/source/startup_LPC17xx.c" path="src/HAL/source/Drivers/Chips/lpc17xx/source/startup_LPC17xx.c" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/common/cmsis/include/core_cmInstr.h" path="src/HAL/source/Drivers/Chips/common/cmsis/include/core_cmInstr.h" type="1"/>
     <File name="src/HAL/source/Drivers/Boards/LandTiger2/source" path="" type="2"/>
     <File name="src/debugTools/semihosting.h" path="src/debugTools/semihosting/semihosting.h" type="1"/>
@@ -125,8 +125,8 @@
     <File name="src/Applications/TcpIp/source" path="" type="2"/>
     <File name="src/debugTools/diagnostic.c" path="src/debugTools/hardFault/diagnostic.c" type="1"/>
     <File name="src/debugTools/diagnostic.h" path="src/debugTools/hardFault/diagnostic.h" type="1"/>
-    <File name="src/HAL/source/Drivers/Chips/lpc17xx/include/system_LPC17xx.h" path="src/HAL/source/Drivers/Chips/lpc17xx/include/system_LPC17xx.h" type="1"/>
     <File name="src/BusinessLogic/managers/source/networkManager.c" path="src/BusinessLogic/managers/source/networkManager.c" type="1"/>
+    <File name="src/HAL/source/Drivers/Chips/lpc17xx/include/system_LPC17xx.h" path="src/HAL/source/Drivers/Chips/lpc17xx/include/system_LPC17xx.h" type="1"/>
     <File name="src/Applications" path="" type="2"/>
     <File name="src/HAL/source/Drivers/Chips/common/cmsis/include/core_cmFunc.h" path="src/HAL/source/Drivers/Chips/common/cmsis/include/core_cmFunc.h" type="1"/>
     <File name="src/driverConfig.h" path="src/driverConfig.h" type="1"/>
@@ -148,8 +148,8 @@
     <File name="src/HAL/include" path="" type="2"/>
     <File name="src/HAL/source/Drivers/Boards/LandTiger2/source/EMAC.c" path="src/HAL/source/Drivers/Boards/landtiger2/source/EMAC.c" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/common/cmsis" path="" type="2"/>
-    <File name="src/HAL/source/Drivers/Boards/LandTiger2" path="" type="2"/>
     <File name="src/BusinessLogic/managers/source" path="" type="2"/>
+    <File name="src/HAL/source/Drivers/Boards/LandTiger2" path="" type="2"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc_types.h" path="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc_types.h" type="1"/>
     <File name="src/BusinessLogic" path="" type="2"/>
     <File name="src/main.h" path="src/main.h" type="1"/>

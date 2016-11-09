@@ -12,6 +12,7 @@ void HandleNetworkEvents();
 unsigned char CheckIsPacketBrodcast(struct EthernetBuffer* buffer);
 void HandleBrodcastPacket(struct EthernetBuffer* buffer);
 void HandleIndividualAddressPacket(struct EthernetBuffer* buffer);
+unsigned short GetEtherType(struct EthernetBuffer* buffer);
 
 // easyWEB-stack definitions
 #define MYIP_1               192                 // our internet protocol (IP) address

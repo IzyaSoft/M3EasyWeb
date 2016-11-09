@@ -3,11 +3,11 @@
 static void SwapByteOrderImpl(unsigned char* buffer, uint32_t length)
 {
     unsigned char swap;
-    for(uint32_t counter = 0; counter < length; counter += 2)
+    for(uint32_t counter = 0; counter < length; counter++)
     {
         swap = buffer[counter];
         buffer[counter] = buffer[counter + 1];
-        buffer[counter] = swap;
+        buffer[counter + 1] = swap;
     }
 }
 
