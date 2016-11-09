@@ -1,17 +1,17 @@
 ﻿#include "tcpip.h"
 #include "arp.h"
 #include "networkConfiguration.h"
+#include "networkUtils.h"
+#include "debugPrintFunctions.h"
 
 extern struct NetworkConfiguration networkConfiguration;
 
+extern unsigned char* arpCache[6];
+
+//todo: umv: make proper arp cache
 void InitializeNetwork(struct EthernetConfiguration* ethernetConfiguration)
 {
     InitializeEthrernet(ethernetConfiguration);
-    //todo: umv: incapsulate tcp state
-    TransmitControl = 0;
-    TCPFlags = 0;
-    TCPStateMachine = CLOSED;
-    SocketStatus = 0;
 }
 
 // Network Packet Routing
@@ -20,7 +20,7 @@ void HandleNetworkEvents()
     if(CheckIsDataAvailable())
     {
         uint32_t dataSize = CheckAvailableDataSize();
-        unsigned char* localBuffer[MAX_LOCAL_BUFFER_SIZE_LIMIT];  // todo: umv possibly do malloc + free
+        unsigned char localBuffer[MAX_LOCAL_BUFFER_SIZE_LIMIT] = {};  // todo: umv possibly do malloc + free
         struct EthernetBuffer rxBuffer;
 
         if(dataSize <= MAX_LOCAL_BUFFER_SIZE_LIMIT)
@@ -35,11 +35,15 @@ void HandleNetworkEvents()
             rxBuffer._bufferCapacity = MAX_ETH_FRAME_SIZE;
         }
 
-        Read(&ethernetBuffer);
+        Read(&rxBuffer);
+
+        //MakeMcuBytesOrder(rxBuffer._buffer, rxBuffer._storedBytes);
+        printf("Packet received: ");
+        printStringHexSymbols(rxBuffer._buffer, rxBuffer._storedBytes, 6);
         if(CheckIsPacketBrodcast)
         {
             // possibly arp or some other broadcast messages
-            HandleBrodcastPacket(&ethernetBuffer);
+            HandleBrodcastPacket(rxBuffer._buffer);
         }
         else
         {
@@ -59,11 +63,31 @@ unsigned char CheckIsPacketBrodcast(struct EthernetBuffer* buffer)
 
 void HandleBrodcastPacket(struct EthernetBuffer* buffer)
 {
-    unsigned short* etherType = buffer->_buffer[ETHERNET_ETHERTYPE_INDEX];
-    if(*etherType == ARP_ETHERTYPE)
+    unsigned short etherType = buffer->_buffer[ETHERNET_ETHERTYPE_INDEX];
+    if(etherType == SWAPBYTES(ARP_ETHERTYPE))
     {
         BuildArpReply(buffer, networkConfiguration._macAddress, networkConfiguration._ipAddress);
         Write(buffer);
+    }
+}
+
+void HandleIndividualAddressPacket(struct EthernetBuffer* buffer)
+{
+    unsigned short etherType = buffer->_buffer[ETHERNET_ETHERTYPE_INDEX];
+    SWAPBYTES(etherType);
+    if(etherType == ARP_ETHERTYPE)
+    {
+        // check operation == reply
+        if(*(unsigned short *)&buffer->_buffer[ARP_OPCODE_INDEX] == ARP_REPLY_OPERATION)
+        {
+            memcpy(arpCache, buffer->_buffer[ARP_SENDER_MAC_INDEX], MAC_ADDRESS_LENGTH);
+            //todo: ???
+        }
+    }
+
+    else if(etherType == IP_ETHERTYPE)
+    {
+
     }
 }
 

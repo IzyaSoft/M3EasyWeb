@@ -1,5 +1,6 @@
 #include "arp.h"
 #include "ethernet.h"
+#include "networkUtils.h"
 
 void BuildArpReply(struct EthernetBuffer* buffer, unsigned char* macAddress, unsigned char* ipAddress)
 {
@@ -12,23 +13,20 @@ void BuildArpReply(struct EthernetBuffer* buffer, unsigned char* macAddress, uns
     // Ethernet
     memcpy(buffer->_buffer[ETHERNET_DESTINATION_ADDRESS_INDEX], destinationMac, MAC_ADDRESS_LENGTH);
     memcpy(buffer->_buffer[ETHERNET_SOURCE_ADDRESS_INDEX], buffer->_buffer[ARP_SENDER_MAC_INDEX], MAC_ADDRESS_LENGTH);
-
-    memcpy(buffer->_buffer[ETHERNET_SOURCE_ADDRESS_INDEX], buffer->_buffer[ARP_SENDER_MAC_INDEX], MAC_ADDRESS_LENGTH);
+    //todo: umv: wtf??? find more logic scheme
+    *(unsigned short *)&buffer->_buffer[ETHERNET_ETHERTYPE_INDEX] = ARP_ETHERTYPE;
     // ARP
-    /*memcpy(&TxFrame2[ETH_DA_OFS], &RecdFrameMAC, 6);
-    memcpy(&TxFrame2[ETH_SA_OFS], &MyMAC, 6);
-    *(unsigned short *)&TxFrame2[ETH_TYPE_OFS] = SWAPB(FRAME_ARP);
+    *(unsigned short *)&buffer->_buffer[ARP_HARDWARE_ADDRESS_TYPE_INDEX] = HARDWARE_ETH10;
+    *(unsigned short *)&buffer->_buffer[ARP_PROTOCOL_INDEX] = IP_ETHERTYPE;
+    *(unsigned short *)&buffer->_buffer[ARP_HLEN_PLEN_INDEX] = IPV4_HLEN_PLEN;
+    *(unsigned short *)&buffer->_buffer[ARP_OPCODE_INDEX] = ARP_REPLY_OPERATION;
+    memcpy(buffer->_buffer[ARP_SENDER_MAC_INDEX], macAddress, MAC_ADDRESS_LENGTH);
+    memcpy(buffer->_buffer[ARP_SENDER_IP_INDEX], ipAddress, IPV4_LENGTH);
+    memcpy(buffer->_buffer[ARP_TARGET_MAC_INDEX], destinationMac, MAC_ADDRESS_LENGTH);
+    memcpy(buffer->_buffer[ARP_TARGET_IP_INDEX], destinatioIpAddress, IPV4_LENGTH);
+    // Set length in bytes
+    buffer->_storedBytes = ETHERNET_HEADER_SIZE + ARP_PACKET_SIZE;
 
-    // ARP
-    *(unsigned short *)&TxFrame2[ARP_HARDW_OFS] = SWAPB(HARDW_ETH10);
-    *(unsigned short *)&TxFrame2[ARP_PROT_OFS] = SWAPB(FRAME_IP);
-    *(unsigned short *)&TxFrame2[ARP_HLEN_PLEN_OFS] = SWAPB(IP_HLEN_PLEN);
-    *(unsigned short *)&TxFrame2[ARP_OPCODE_OFS] = SWAPB(OP_ARP_ANSWER);
-    memcpy(&TxFrame2[ARP_SENDER_HA_OFS], &MyMAC, 6);
-    memcpy(&TxFrame2[ARP_SENDER_IP_OFS], &MyIP, 4);
-    memcpy(&TxFrame2[ARP_TARGET_HA_OFS], &RecdFrameMAC, 6);,
-    memcpy(&TxFrame2[ARP_TARGET_IP_OFS], &RecdFrameIP, 4);
-
-    TxFrame2Size = ETH_HEADER_SIZE + ARP_FRAME_SIZE;
-    TransmitControl |= SEND_FRAME2;*/
+    // change bytes order
+    MakeNetworkBytesOrder(buffer->_buffer, buffer->_storedBytes);
 }

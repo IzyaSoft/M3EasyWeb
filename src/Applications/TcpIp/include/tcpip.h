@@ -5,13 +5,13 @@
 #include "ethernet.h"
 #define MAX_LOCAL_BUFFER_SIZE_LIMIT                   127
 
-extern unsigned char* ethernetBuffer[MAX_ETH_FRAME_SIZE];
-
+extern unsigned char ethernetBuffer[MAX_ETH_FRAME_SIZE];
 
 void InitializeNetwork(struct EthernetConfiguration* ethernetConfiguration);
 void HandleNetworkEvents();
 unsigned char CheckIsPacketBrodcast(struct EthernetBuffer* buffer);
 void HandleBrodcastPacket(struct EthernetBuffer* buffer);
+void HandleIndividualAddressPacket(struct EthernetBuffer* buffer);
 
 // easyWEB-stack definitions
 #define MYIP_1               192                 // our internet protocol (IP) address

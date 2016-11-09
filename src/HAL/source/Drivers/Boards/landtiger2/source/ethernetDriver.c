@@ -87,7 +87,7 @@
 
     static uint32_t BeginReadFrame()
     {
-        return (GetReceivedDataSize() - 3) >> 2;
+        return (GetReceivedDataSize() - 3);// >> 2;
     }
 
     static void EndReadFrame()
@@ -102,7 +102,7 @@
 
     uint32_t CheckAvailableDataSize()
     {
-    	return (GetReceivedDataSize() - 3) >> 2;
+    	return (GetReceivedDataSize() - 3);// >> 2;
     }
 
     unsigned char InitializeEthrernet(struct EthernetConfiguration* configuration)
@@ -237,23 +237,28 @@
     {
         uint32_t dmaBufferIndex;
         uint32_t length;
-        unsigned char* *destination;
-        unsigned char* *source;
+        unsigned char* destination;
+        unsigned char* source;
+        unsigned char* ptr;
 
         dmaBufferIndex = LPC_EMAC->RxConsumeIndex;
         destination = readBuffer->_buffer;
-        source = (unsigned char*) RX_BUF(dmaBufferIndex);
+        source = (unsigned char*)RX_DESC_PACKET(dmaBufferIndex);
 
         length = BeginReadFrame();
         readBuffer->_storedBytes = length;
 
-        if (readBuffer->_buffer != 0)
-        {
+        //if (readBuffer->_buffer != 0)
+        //{
             while(length -- > 0)
+            {
+            	//ptr = source;
                 *destination++ = *source++;
-        }
+                //printf(" %x ", *destination);
+            }
+        //}
 
-        EndReadFrame();
+        //EndReadFrame();
     }
 
     void Write(struct EthernetBuffer* bufferToWrite)
