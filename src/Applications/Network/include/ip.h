@@ -29,5 +29,7 @@
 
 unsigned short GetIpFrameSize(struct EthernetBuffer* buffer);
 unsigned short GetChecksumForNonTcpPackets(void *address, unsigned short count);
+void InsertIpHeader(struct EthernetBuffer* buffer, unsigned short packetSize, unsigned short packetId, unsigned short packetFlags, unsigned short ttl,
+                    unsigned char* sourceIpAddress, unsigned char* destinationIpAddress);
 
 #endif
