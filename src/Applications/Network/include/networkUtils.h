@@ -2,9 +2,11 @@
 #define NETWORK_UTILS_H
 
 #include <stdint.h>
+#include "ethernetBuffer.h"
 
-//void MakeNetworkBytesOrder(unsigned char* buffer, uint32_t length);
-//void MakeMcuBytesOrder(unsigned char* buffer, uint32_t length);
 void WriteWordAsBigEndian(unsigned char *address, unsigned short data);
+
+unsigned short GetWord(struct EthernetBuffer* buffer, uint32_t index);
+void SetWord(unsigned short word, struct EthernetBuffer* buffer, uint32_t position);
 
 #endif

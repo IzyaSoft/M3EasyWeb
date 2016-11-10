@@ -29,11 +29,6 @@ static void ReadData(struct EthernetBuffer* rxBuffer, unsigned char debugPrintEn
     }
 }
 
-static unsigned short GetWord(struct EthernetBuffer* buffer, uint32_t index)
-{
-    return ((unsigned short) buffer->_buffer[index] << 8) + buffer->_buffer[index + 1];
-}
-
 //todo: umv: make proper arp cache
 void InitializeNetwork(struct EthernetConfiguration* ethernetConfiguration)
 {
@@ -87,7 +82,7 @@ void HandleBrodcastPacket(struct EthernetBuffer* buffer)
     unsigned short etherType = GetEtherType(buffer);
     if(etherType == ARP_ETHERTYPE)
     {
-        BuildArpReply(buffer, networkConfiguration._macAddress, networkConfiguration._ipAddress);
+        BuildArpReply(buffer);
         WriteData(buffer, 0);
     }
 }
@@ -97,18 +92,15 @@ void HandleIndividualAddressPacket(struct EthernetBuffer* buffer)
     unsigned short etherType = GetEtherType(buffer);
     if(etherType == ARP_ETHERTYPE)
     {
-        // check operation == reply
-        if(*(unsigned short *)&buffer->_buffer[ARP_OPCODE_INDEX] == ARP_REPLY_OPERATION)
+        if(GetWord(buffer, ARP_OPCODE_INDEX) == ARP_REPLY_OPERATION)
         {
             //todo: umv: make arp table ip, MAC, counter
             memcpy(arpCache, &buffer->_buffer[ARP_SENDER_MAC_INDEX], MAC_ADDRESS_LENGTH);
-            printf("arp reply received!\r\n");
         }
     }
 
     if(etherType == IP_ETHERTYPE)
     {
-    	//printf("ip version: %d", GetWord(buffer, ETHERNET_PAYLOAD_INDEX));
         if((GetWord(buffer, ETHERNET_PAYLOAD_INDEX) & 0xFF00) == IPV4_VERSION)
         {
             if(! (GetWord(buffer, IP_PACKET_FLAGS_INDEX) & (IP_FLAG_MOREFRAG | IP_FRAGOFS_MASK)))
@@ -117,9 +109,6 @@ void HandleIndividualAddressPacket(struct EthernetBuffer* buffer)
                 {
                     case ICMP_PROTOCOL:
                          BuildIcmpPacket(buffer);
-                         Write(buffer);
-                         unsigned char queryAddr[4] ={192, 168, 200, 10};
-                         BuildArpRequest(buffer, networkConfiguration._macAddress, networkConfiguration._ipAddress, queryAddr, networkConfiguration._gateway, networkConfiguration._netmask);
                          Write(buffer);
                          break;
                     case TCP_PROTOCOL:
@@ -130,11 +119,6 @@ void HandleIndividualAddressPacket(struct EthernetBuffer* buffer)
             }
         }
     }
-}
-
-unsigned short GetEtherType(struct EthernetBuffer* buffer)
-{
-    return GetWord(buffer, ETHERNET_ETHERTYPE_INDEX);
 }
 
 // EASY WEB AWFUL DESIGN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

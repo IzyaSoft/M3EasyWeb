@@ -2,6 +2,7 @@
 #define ETHERNET_H
 
 #include "ethernetBuffer.h"
+#include "networkUtils.h"
 
 #define MAX_ETH_FRAME_SIZE                              1536
 #define MAC_ADDRESS_LENGTH                              6
@@ -24,5 +25,6 @@
 #define SWAPBYTES(word)                                 ((unsigned short)((word) << 8) | ((word) >> 8)) // convert little <-> big endian
 
 void InsertEthernetHeader(struct EthernetBuffer* buffer, unsigned char* sourceMac, unsigned char* destinationMac, unsigned short etherType);
+unsigned short GetEtherType(struct EthernetBuffer* buffer);
 
 #endif
