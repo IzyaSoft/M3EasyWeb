@@ -100,6 +100,11 @@
         LPC_EMAC->RxConsumeIndex = dmaBufferIndex;
     }
 
+    static unsigned char IsReadyForTransmit()
+    {
+        return 1;
+    }
+
     uint32_t CheckAvailableDataSize()
     {
     	return (GetReceivedDataSize() - 3);// >> 2;
@@ -144,7 +149,7 @@
         /* Wait for hardware reset to end. */
         for (tout = 0; tout < 0x100000; tout++)
         {
-            regv = read_PHY(PHY_REG_BMCR);
+            regv = ReadPhy(PHY_REG_BMCR);
             if (!(regv & 0x8000))
                 break;    /* Reset complete */
         }
@@ -165,7 +170,7 @@
             /* Wait to complete Auto_Negotiation. */
             for (tout = 0; tout <0x100000; tout++)
             {
-                regv = read_PHY(PHY_REG_BMSR);
+                regv = ReadPhy(PHY_REG_BMSR);
                 if (regv & 0x0020)
                     break; /* Autonegotiation Complete. */
             }
@@ -177,7 +182,7 @@
         /* Check the link status. */
         for (tout = 0; tout < 0x10000; tout++)
         {
-            regv = read_PHY(PHY_REG_STS);
+            regv = ReadPhy(PHY_REG_STS);
             if (regv & 0x0001)
                 break;/* Link is on. */
         }
@@ -239,7 +244,6 @@
         uint32_t length;
         unsigned char* destination;
         unsigned char* source;
-        unsigned char* ptr;
 
         dmaBufferIndex = LPC_EMAC->RxConsumeIndex;
         destination = readBuffer->_buffer;
@@ -248,17 +252,11 @@
         length = BeginReadFrame();
         readBuffer->_storedBytes = length;
 
-        //if (readBuffer->_buffer != 0)
-        //{
+        if (readBuffer->_buffer != 0)
             while(length -- > 0)
-            {
-            	//ptr = source;
                 *destination++ = *source++;
-                //printf(" %x ", *destination);
-            }
-        //}
 
-        //EndReadFrame();
+        EndReadFrame();
     }
 
     void Write(struct EthernetBuffer* bufferToWrite)
@@ -267,10 +265,13 @@
         unsigned char* source;
         unsigned char* destination;
 
+        //while(!IsReadyForTransmit());
+
+
         dmaBufferIndex = LPC_EMAC->TxProduceIndex;
         source = bufferToWrite->_buffer;
         destination  = (unsigned char*)TX_DESC_PACKET(dmaBufferIndex);
-        TX_DESC_CTRL(dmaBufferIndex) = bufferToWrite->_storedBytes | TCTRL_LAST | TCTRL_CRC;
+        TX_DESC_CTRL(dmaBufferIndex) = bufferToWrite->_storedBytes | TCTRL_LAST;
 
         for(uint32_t ethOctet = 0; ethOctet < bufferToWrite->_storedBytes; ethOctet++)
             *destination++ = *source++;

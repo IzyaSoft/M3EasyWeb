@@ -17,5 +17,7 @@
 #define ETHERNET_HEADER_SIZE                            14
 #define ARP_PACKET_SIZE                                 28
 
+#define IPV4_VERSION                                    0x4500     // 5 - FOR IP HEADER SIZE
+
 #define SWAPBYTES(word)                                 ((unsigned short)((word) << 8) | ((word) >> 8)) // convert little <-> big endian
 #endif

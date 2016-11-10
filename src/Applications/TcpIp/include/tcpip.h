@@ -66,7 +66,7 @@ unsigned short GetEtherType(struct EthernetBuffer* buffer);
 #define IP_SOURCE_OFS        ETH_DATA_OFS + 12   // Source Address (32 Bit)
 #define IP_DESTINATION_OFS   ETH_DATA_OFS + 16   // Destination Address (32 Bit)
 #define IP_DATA_OFS          ETH_DATA_OFS + 20   // Frame Data (if no options)
-#define IP_HEADER_SIZE       20                  // w/o options
+//#define IP_HEADER_SIZE       20                  // w/o options
 
 #define IP_VER_IHL           0x4500              // IPv4, Header Length = 5x32 bit
 #define IP_TOS_D             0x0010              // TOS low delay
@@ -212,7 +212,7 @@ extern unsigned short RecdIPFrameLength;         // 16 bit IP packet length
 
 // the next 3 buffers must be word-aligned!
 // (here the 'RecdIPFrameLength' above does that)
-extern unsigned short _TxFrame1[(ETH_HEADER_SIZE + IP_HEADER_SIZE + TCP_HEADER_SIZE + MAX_TCP_TX_DATA_SIZE)/2];
+extern unsigned short _TxFrame1[(ETH_HEADER_SIZE + 20 + TCP_HEADER_SIZE + MAX_TCP_TX_DATA_SIZE)/2];
 extern unsigned short _TxFrame2[(ETH_HEADER_SIZE + MAX_ETH_TX_DATA_SIZE)/2];
 extern unsigned short _RxTCPBuffer[MAX_TCP_RX_DATA_SIZE/2]; // space for incoming TCP-data
 #define TxFrame1      ((unsigned char *)_TxFrame1)
@@ -307,7 +307,7 @@ extern unsigned char SocketStatus;
 #define SOCK_ERR_ETHERNET              0x50      // network interface error (timeout)
 
 // easyWEB-API buffer-pointers
-#define TCP_TX_BUF      ((unsigned char *)TxFrame1 + ETH_HEADER_SIZE + IP_HEADER_SIZE + TCP_HEADER_SIZE)
+#define TCP_TX_BUF      ((unsigned char *)TxFrame1 + ETH_HEADER_SIZE + 20 + TCP_HEADER_SIZE)
 #define TCP_RX_BUF      ((unsigned char *)RxTCPBuffer)
 
 #endif

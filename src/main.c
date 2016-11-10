@@ -87,7 +87,8 @@ int main()
   
     while (1)                                      // repeat forever
     {
-    	HandleNetworkEvents();
+        HandleNetworkEvents();
+    	//DoNetworkStuff();
         /*if (!(SocketStatus & SOCK_ACTIVE))
             TCPPassiveOpen();   // listen for incoming TCP-connection
         DoNetworkStuff();                                  // handle network and easyWEB-stack

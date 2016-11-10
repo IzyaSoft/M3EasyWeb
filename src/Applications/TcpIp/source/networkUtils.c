@@ -1,6 +1,6 @@
 #include "networkUtils.h"
 
-static void SwapByteOrderImpl(unsigned char* buffer, uint32_t length)
+/*static void SwapByteOrderImpl(unsigned char* buffer, uint32_t length)
 {
     unsigned char swap;
     for(uint32_t counter = 0; counter < length; counter++)
@@ -19,4 +19,10 @@ void MakeNetworkBytesOrder(unsigned char* buffer, uint32_t length)
 void MakeMcuBytesOrder(unsigned char* buffer, uint32_t length)
 {
     SwapByteOrderImpl(buffer, length);
+}*/
+
+void WriteWordAsBigEndian(unsigned char *address, unsigned short data)
+{
+    *address++ = data >> 8;
+    *address = (char)data;
 }

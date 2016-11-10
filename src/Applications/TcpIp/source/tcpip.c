@@ -1,12 +1,13 @@
 ﻿#include "tcpip.h"
 #include "arp.h"
+#include "ip.h"
 #include "networkConfiguration.h"
 #include "networkUtils.h"
 #include "debugPrintFunctions.h"
 
 extern struct NetworkConfiguration networkConfiguration;
 
-extern unsigned char* arpCache[6];
+unsigned char* arpCache[6];
 
 //todo: umv: make proper arp cache
 void InitializeNetwork(struct EthernetConfiguration* ethernetConfiguration)
@@ -37,9 +38,8 @@ void HandleNetworkEvents()
 
         Read(&rxBuffer);
 
-        //MakeMcuBytesOrder(rxBuffer._buffer, rxBuffer._storedBytes);
-        printf("Incoming Packet: ");
-        printStringHexSymbols(rxBuffer._buffer, rxBuffer._storedBytes, 6);
+        //printf("Incoming Packet: ");
+        //printStringHexSymbols(rxBuffer._buffer, rxBuffer._storedBytes, 6);
         if(CheckIsPacketBrodcast(&rxBuffer))
         {
             // possibly arp or some other broadcast messages
@@ -47,7 +47,7 @@ void HandleNetworkEvents()
         }
         else
         {
-            //icmp and others
+            HandleIndividualAddressPacket(&rxBuffer);
         }
 
     }
@@ -57,7 +57,7 @@ unsigned char CheckIsPacketBrodcast(struct EthernetBuffer* buffer)
 {
     for(unsigned char counter = 0; counter < MAC_ADDRESS_LENGTH; counter++)
         if(buffer->_buffer[counter] != 0xFF)
-        	return 0;
+            return 0;
     return 1;
 }
 
@@ -67,29 +67,44 @@ void HandleBrodcastPacket(struct EthernetBuffer* buffer)
     if(etherType == ARP_ETHERTYPE)
     {
         BuildArpReply(buffer, networkConfiguration._macAddress, networkConfiguration._ipAddress);
-        printf("Outgoing Packet: ");
-        printStringHexSymbols(buffer->_buffer, buffer->_storedBytes, 6);
+        //printf("Outgoing Packet: ");
+        //printStringHexSymbols(buffer->_buffer, buffer->_storedBytes, 6);
         Write(buffer);
     }
 }
 
 void HandleIndividualAddressPacket(struct EthernetBuffer* buffer)
 {
-	unsigned short etherType = GetEtherType(buffer);
-    SWAPBYTES(etherType);
+    unsigned short etherType = GetEtherType(buffer);
     if(etherType == ARP_ETHERTYPE)
     {
         // check operation == reply
         if(*(unsigned short *)&buffer->_buffer[ARP_OPCODE_INDEX] == ARP_REPLY_OPERATION)
         {
-        	//todo: umv: make arp table ip, MAC, counter
+            //todo: umv: make arp table ip, MAC, counter
             memcpy(arpCache, &buffer->_buffer[ARP_SENDER_MAC_INDEX], MAC_ADDRESS_LENGTH);
         }
     }
 
-    else if(etherType == IP_ETHERTYPE)
+    if(etherType == IP_ETHERTYPE)
     {
-
+        /*if(buffer->_buffer[ETHERNET_PAYLOAD_INDEX] & 0xFF == IPV4_VERSION)
+        {
+            if(! (buffer->_buffer[IP_PACKET_FLAGS_INDEX] & (IP_FLAG_MOREFRAG | IP_FRAGOFS_MASK)))
+            {*/
+                switch(buffer->_buffer[IP_PACKET_PROTOCOL_INDEX])
+                {
+                    case ICMP_PROTOCOL:
+                         BuildIcmpPacket(buffer);
+                         Write(buffer);
+                         break;
+                    case TCP_PROTOCOL:
+                         break;
+                    case UDP_PROTOCOL:
+                         break;
+                }
+          //  }
+        //}
     }
 }
 
@@ -246,7 +261,7 @@ void DoNetworkStuff(void)
     EndReadFrame();                              // release buffer in ethernet controller
   }
 
-  if (TCPFlags & TCP_TIMER_RUNNING)
+  /*if (TCPFlags & TCP_TIMER_RUNNING)
     if (TCPFlags & TIMER_TYPE_RETRY)
     {
       if (TCPTimer > RETRY_TIMEOUT)
@@ -270,9 +285,9 @@ void DoNetworkStuff(void)
       TCPStateMachine = CLOSED;
       TCPFlags = 0;                              // reset all flags, stop retransmission...
       SocketStatus &= SOCK_DATA_AVAILABLE;       // clear all flags but data available
-    }
+    }*/
 
-  switch (TCPStateMachine)
+  /*switch (TCPStateMachine)
   {
     case CLOSED :
     case LISTENING :
@@ -322,7 +337,7 @@ void DoNetworkStuff(void)
         }
       break;
     }
-  }
+  }*/
 
   if (TransmitControl & SEND_FRAME2)
   {
@@ -904,13 +919,13 @@ unsigned short CalcChecksum(void *Start, unsigned short Count, unsigned char IsT
 
   piStart = Start;                               // Keil: Line added
   while (Count > 1) {                            // sum words
-//  Sum += *((unsigned short *)Start)++;		     // Keil: Line replaced with following line
+//  Sum += *((unsigned short *)Start)++;             // Keil: Line replaced with following line
     Sum += *piStart++;
     Count -= 2;
   }
 
   if (Count)                                     // add left-over byte, if any
-//  Sum += *(unsigned char *)Start; 	         // Keil: Line replaced with following line
+//  Sum += *(unsigned char *)Start;              // Keil: Line replaced with following line
     Sum += *(unsigned char *)piStart;
   
   while (Sum >> 16)                              // fold 32-bit sum to 16 bits
