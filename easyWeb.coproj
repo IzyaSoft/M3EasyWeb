@@ -4,7 +4,7 @@
     <Device manufacturerId="7" manufacturerName="NXP" chipId="165" chipName="LPC1768" boardId="51" boardName="LandTiger v2.0"/>
     <BuildOption>
       <Compile>
-        <Option name="OptimizationLevel" value="0"/>
+        <Option name="OptimizationLevel" value="2"/>
         <Option name="UseFPU" value="0"/>
         <Option name="UserEditCompiler" value=""/>
         <Option name="SupportCPlusplus" value="0"/>

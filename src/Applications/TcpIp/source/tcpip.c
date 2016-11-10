@@ -9,6 +9,31 @@ extern struct NetworkConfiguration networkConfiguration;
 
 unsigned char* arpCache[6];
 
+static void WriteData(struct EthernetBuffer* txBuffer, unsigned char debugPrintEnabled)
+{
+	if(debugPrintEnabled)
+	{
+        printf("Outgoing Packet: ");
+        printStringHexSymbols(txBuffer->_buffer, txBuffer->_storedBytes, 6);
+	}
+    Write(txBuffer);
+}
+
+static void ReadData(struct EthernetBuffer* rxBuffer, unsigned char debugPrintEnabled)
+{
+    Read(rxBuffer);
+    if(debugPrintEnabled)
+    {
+        printf("Incoming Packet: ");
+        printStringHexSymbols(rxBuffer->_buffer, rxBuffer->_storedBytes, 6);
+    }
+}
+
+static unsigned short GetWord(struct EthernetBuffer* buffer, uint32_t index)
+{
+    return ((unsigned short) buffer->_buffer[index] << 8) + buffer->_buffer[index + 1];
+}
+
 //todo: umv: make proper arp cache
 void InitializeNetwork(struct EthernetConfiguration* ethernetConfiguration)
 {
@@ -36,13 +61,9 @@ void HandleNetworkEvents()
             rxBuffer._bufferCapacity = MAX_ETH_FRAME_SIZE;
         }
 
-        Read(&rxBuffer);
-
-        //printf("Incoming Packet: ");
-        //printStringHexSymbols(rxBuffer._buffer, rxBuffer._storedBytes, 6);
+        ReadData(&rxBuffer, 0);
         if(CheckIsPacketBrodcast(&rxBuffer))
         {
-            // possibly arp or some other broadcast messages
             HandleBrodcastPacket(&rxBuffer);
         }
         else
@@ -67,9 +88,7 @@ void HandleBrodcastPacket(struct EthernetBuffer* buffer)
     if(etherType == ARP_ETHERTYPE)
     {
         BuildArpReply(buffer, networkConfiguration._macAddress, networkConfiguration._ipAddress);
-        //printf("Outgoing Packet: ");
-        //printStringHexSymbols(buffer->_buffer, buffer->_storedBytes, 6);
-        Write(buffer);
+        WriteData(buffer, 0);
     }
 }
 
@@ -88,10 +107,11 @@ void HandleIndividualAddressPacket(struct EthernetBuffer* buffer)
 
     if(etherType == IP_ETHERTYPE)
     {
-        /*if(buffer->_buffer[ETHERNET_PAYLOAD_INDEX] & 0xFF == IPV4_VERSION)
+    	//printf("ip version: %d", GetWord(buffer, ETHERNET_PAYLOAD_INDEX));
+        if((GetWord(buffer, ETHERNET_PAYLOAD_INDEX) & 0xFF00) == IPV4_VERSION)
         {
-            if(! (buffer->_buffer[IP_PACKET_FLAGS_INDEX] & (IP_FLAG_MOREFRAG | IP_FRAGOFS_MASK)))
-            {*/
+            if(! (GetWord(buffer, IP_PACKET_FLAGS_INDEX) & (IP_FLAG_MOREFRAG | IP_FRAGOFS_MASK)))
+            {
                 switch(buffer->_buffer[IP_PACKET_PROTOCOL_INDEX])
                 {
                     case ICMP_PROTOCOL:
@@ -103,14 +123,14 @@ void HandleIndividualAddressPacket(struct EthernetBuffer* buffer)
                     case UDP_PROTOCOL:
                          break;
                 }
-          //  }
-        //}
+            }
+        }
     }
 }
 
 unsigned short GetEtherType(struct EthernetBuffer* buffer)
 {
-    return ((unsigned short)(buffer->_buffer[ETHERNET_ETHERTYPE_INDEX]) << 8) + buffer->_buffer[ETHERNET_ETHERTYPE_INDEX + 1];
+    return GetWord(buffer, ETHERNET_ETHERTYPE_INDEX);
 }
 
 // EASY WEB AWFUL DESIGN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1058,4 +1078,3 @@ unsigned short SwapBytes(unsigned short Data)
 {
   return (Data >> 8) | (Data << 8);
 }
-
