@@ -27,7 +27,6 @@
 
 #define IP_HEADER_SIZE                                                   20
 
-//unsigned short GetIpHeaderSize(struct EthernetBuffer* buffer);
 unsigned short GetIpFrameSize(struct EthernetBuffer* buffer);
 unsigned short GetChecksumForNonTcpPackets(void *address, unsigned short count);
 

@@ -1,4 +1,4 @@
-﻿#include "tcpip.h"
+﻿#include "networkService.h"
 #include "arp.h"
 #include "ip.h"
 #include "networkConfiguration.h"
@@ -1032,6 +1032,9 @@ void TCPClockHandler(void)
   TCPTimer++;                                    // timer for retransmissions
 
 }
+
+// Absolutely useless 4 me!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
 // easyWEB internal function
 // transfers the contents of 'TxFrame1'-Buffer to the EMAC

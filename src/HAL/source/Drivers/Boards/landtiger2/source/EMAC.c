@@ -1,5 +1,5 @@
 ﻿#include "EMAC.h"
-#include "tcpip.h"
+#include "networkService.h"
 #include "LPC17xx.h"
 
 static unsigned short *rptr;

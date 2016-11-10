@@ -50,3 +50,8 @@ void BuildArpReply(struct EthernetBuffer* buffer, unsigned char* macAddress, uns
     // Set length in bytes
     buffer->_storedBytes = ETHERNET_HEADER_SIZE + ARP_PACKET_SIZE;
 }
+
+void BuildArpRequest(struct EthernetBuffer* buffer)
+{
+
+}
