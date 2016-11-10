@@ -18,9 +18,12 @@ void BuildIcmpPacket(struct EthernetBuffer* buffer)
         memcpy(destinatioIpAddress, &buffer->_buffer[IP_PACKET_HEADER_SOURCE_IP_INDEX], IPV4_LENGTH);
         memcpy(sourceIpAddress, &buffer->_buffer[IP_PACKET_HEADER_DESTINATION_IP_INDEX], IPV4_LENGTH);
         // Ethernet
-        memcpy(&buffer->_buffer[ETHERNET_DESTINATION_ADDRESS_INDEX], destinationMac, MAC_ADDRESS_LENGTH);
+/*        memcpy(&buffer->_buffer[ETHERNET_DESTINATION_ADDRESS_INDEX], destinationMac, MAC_ADDRESS_LENGTH);
         memcpy(&buffer->_buffer[ETHERNET_SOURCE_ADDRESS_INDEX], sourceMac, MAC_ADDRESS_LENGTH);
-        *(unsigned short *)&buffer->_buffer[ETHERNET_ETHERTYPE_INDEX] = SWAPBYTES(IP_ETHERTYPE);
+        *(unsigned short *)&buffer->_buffer[ETHERNET_ETHERTYPE_INDEX] = SWAPBYTES(IP_ETHERTYPE);*/
+
+        InsertEthernetHeader(buffer, sourceMac, destinationMac, IP_ETHERTYPE);
+
         // IP
         *(unsigned short *)&buffer->_buffer[ETHERNET_PAYLOAD_INDEX] = SWAPBYTES(IPV4_VERSION);
         WriteWordAsBigEndian(&buffer->_buffer[IP_PACKET_SIZE_INDEX], IP_HEADER_SIZE + ICMP_HEADER_SIZE + icmpDataCount);
