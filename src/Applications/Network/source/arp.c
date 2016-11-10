@@ -14,6 +14,19 @@ static void RevertMacAddress(unsigned char* macAddress)
     macAddress[3] = swap;
 }
 
+// todo: umv: very rough method, make it more smarter
+static unsigned char GetNetmaskFfBytesNumber(unsigned char* netmask)
+{
+	unsigned char ffBytes = 0;
+    for(unsigned char counter = 0; counter < IPV4_LENGTH; counter++)
+    {
+        if(netmask[counter] == 0xFF)
+            ffBytes++;
+        else break;
+    }
+    return ffBytes;
+}
+
 void BuildArpReply(struct EthernetBuffer* buffer, unsigned char* macAddress, unsigned char* ipAddress)
 {
     unsigned char destinationMac[MAC_ADDRESS_LENGTH];
@@ -51,7 +64,41 @@ void BuildArpReply(struct EthernetBuffer* buffer, unsigned char* macAddress, uns
     buffer->_storedBytes = ETHERNET_HEADER_SIZE + ARP_PACKET_SIZE;
 }
 
-void BuildArpRequest(struct EthernetBuffer* buffer)
+void BuildArpRequest(struct EthernetBuffer* buffer, unsigned char* macAddress, unsigned char* ipAddress,
+                     unsigned char* destinationIpAddress, unsigned char* gatewayIpAddress, unsigned char* netmask)
 {
+    unsigned char sourceMac[MAC_ADDRESS_LENGTH];
+    unsigned char destinationMac[MAC_ADDRESS_LENGTH] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
+    memcpy(sourceMac, macAddress, MAC_ADDRESS_LENGTH);
+    RevertMacAddress(sourceMac);
+    // Ethernet
+    memcpy(&buffer->_buffer[ETHERNET_DESTINATION_ADDRESS_INDEX], destinationMac, MAC_ADDRESS_LENGTH);
+    memcpy(&buffer->_buffer[ETHERNET_SOURCE_ADDRESS_INDEX], sourceMac, MAC_ADDRESS_LENGTH);
+    *(unsigned short *)&buffer->_buffer[ETHERNET_ETHERTYPE_INDEX] = SWAPBYTES(ARP_ETHERTYPE);
+    // ARP
+    *(unsigned short *)&buffer->_buffer[ARP_HARDWARE_ADDRESS_TYPE_INDEX] = SWAPBYTES(HARDWARE_ETH10);
+    *(unsigned short *)&buffer->_buffer[ARP_PROTOCOL_INDEX] = SWAPBYTES(IP_ETHERTYPE);
+    *(unsigned short *)&buffer->_buffer[ARP_HLEN_PLEN_INDEX] = SWAPBYTES(IPV4_HLEN_PLEN);
+    *(unsigned short *)&buffer->_buffer[ARP_OPCODE_INDEX] = SWAPBYTES(ARP_REQUEST_OPERATION);
+    memcpy(&buffer->_buffer[ARP_SENDER_MAC_INDEX], sourceMac, MAC_ADDRESS_LENGTH);
+    memcpy(&buffer->_buffer[ARP_SENDER_IP_INDEX], ipAddress, IPV4_LENGTH);
+    memcpy(&buffer->_buffer[ARP_TARGET_MAC_INDEX], 0x00, MAC_ADDRESS_LENGTH);
+    memcpy(&buffer->_buffer[ARP_TARGET_IP_INDEX], destinationIpAddress, IPV4_LENGTH);
+
+    unsigned char ffBytesNumber = GetNetmaskFfBytesNumber(netmask);
+    unsigned char useGatewayAsDestination = 0;
+    for(unsigned char counter = 0; counter < ffBytesNumber; counter ++)
+    {
+        if(ipAddress[counter] != destinationIpAddress[counter])
+        {
+            useGatewayAsDestination = 1;
+            break;
+        }
+    }
+
+    if(useGatewayAsDestination)
+        memcpy(&buffer->_buffer[ARP_TARGET_IP_INDEX], destinationIpAddress, IPV4_LENGTH);
+
+    buffer->_storedBytes = ETHERNET_HEADER_SIZE + ARP_PACKET_SIZE;
 }

@@ -25,6 +25,7 @@
 #define ARP_REPLY_OPERATION                   2
 
 void BuildArpReply(struct EthernetBuffer* buffer, unsigned char* macAddress, unsigned char* ipAddress);
-void BuildArpRequest(struct EthernetBuffer* buffer);
+void BuildArpRequest(struct EthernetBuffer* buffer, unsigned char* macAddress, unsigned char* ipAddress,
+                     unsigned char* destinationIpAddress, unsigned char* gatewayIpAddress, unsigned char* netmask);
 
 #endif

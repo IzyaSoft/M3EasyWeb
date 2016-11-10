@@ -102,6 +102,7 @@ void HandleIndividualAddressPacket(struct EthernetBuffer* buffer)
         {
             //todo: umv: make arp table ip, MAC, counter
             memcpy(arpCache, &buffer->_buffer[ARP_SENDER_MAC_INDEX], MAC_ADDRESS_LENGTH);
+            printf("arp reply received!\r\n");
         }
     }
 
@@ -116,6 +117,9 @@ void HandleIndividualAddressPacket(struct EthernetBuffer* buffer)
                 {
                     case ICMP_PROTOCOL:
                          BuildIcmpPacket(buffer);
+                         Write(buffer);
+                         unsigned char queryAddr[4] ={192, 168, 200, 10};
+                         BuildArpRequest(buffer, networkConfiguration._macAddress, networkConfiguration._ipAddress, queryAddr, networkConfiguration._gateway, networkConfiguration._netmask);
                          Write(buffer);
                          break;
                     case TCP_PROTOCOL:
