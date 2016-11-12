@@ -1,22 +1,15 @@
 ﻿#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
 #include "driverConfig.h"
+
+#define extern        // WTF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (make this nice!!!!!!)
 #include "hal.h"
 #include "networkManager.h"
-#include "LPC17xx.h"
-
-#define extern        // WTF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-#include "main.h"
-
-#include "type.h"
-#include "EMAC.h"
 #include "networkService.h"
 
+#include "main.h"     // for remove!
 #include "webpage.h"
-
 
 extern struct NetworkConfiguration networkConfiguration;
 
@@ -26,7 +19,7 @@ unsigned char ledsValue = 0xAA;
 
 extern void TCPClockHandler(void);
 
-volatile DWORD TimeTick  = 0;
+volatile uint32_t TimeTick  = 0;
 
 /* SysTick interrupt happens every 10 ms */
 
@@ -36,27 +29,26 @@ static void UpdateLeds()
     SetLedsValue(LED_PORT_NUMBER, ledsValue);
 }
 
-void SysTick_Handler (void)
+void SysTickHandler (void)
 {
     TimeTick++;
     if (TimeTick >= 20)
     {
     	UpdateLeds();
         TimeTick = 0;
-        TCPClockHandler();
+        //TCPClockHandler();
     }
 }
+
 
 int main()
 {
     // Clocks initialization
-    SystemInit();                                      // setup core clocks
-    SysTick_Config(SystemCoreClock / 100);               // Generate interrupt every 10 ms
+    ConfigureSystemClock();
+    SetSysTickHandler(&SysTickHandler, 100);  // every 10 ms
     // Modules configuration
     ConfigureLedPort(LED_PORT_NUMBER, LED_PORT_MASK, ledsValue);
     ConfigureAdc(ADC_CHANNEL_5, ADC_CLOCK_DIVIDER);
-    // TCPLowLevelInit();
-
     // Networks
     struct EthernetConfiguration ethernetConfiguration;
     GetNetworkConfiguration(&networkConfiguration);
@@ -82,8 +74,8 @@ int main()
   }
 */
 
-    HTTPStatus = 0;                                // clear HTTP-server's flag register
-    TCPLocalPort = TCP_PORT_HTTP;                  // set port we want to listen to
+    //HTTPStatus = 0;                                // clear HTTP-server's flag register
+    //TCPLocalPort = TCP_PORT_HTTP;                  // set port we want to listen to
   
     while (1)                                      // repeat forever
     {
@@ -105,7 +97,7 @@ int main()
 // not work. In this case, simply add some extra lines
 // (e.g. CR and LFs) to the HTML-code.
 
-void HTTPServer(void)
+/*void HTTPServer(void)
 {
     if (SocketStatus & SOCK_CONNECTED)             // check if somebody has connected to our TCP
     {
@@ -200,4 +192,4 @@ void InsertDynamicValues(void)
                 }
         Key++;
     }
-}
+}*/

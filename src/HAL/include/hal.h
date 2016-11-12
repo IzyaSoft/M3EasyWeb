@@ -8,6 +8,10 @@
 #include "ethernetConfiguration.h"
 #include "ethernetBuffer.h"
 
+// CLOCK API
+void ConfigureSystemClock();
+void SetSysTickHandler(void (*sysTickHandler)(), uint32_t systemClockDivider);
+
 // LED DRIVER API
 #ifdef USE_GPIO_LED_DRIVER
     void ConfigureLedPort(unsigned char gpioPortNumber, uint32_t ledGpioDirectionMask, uint32_t initialValue);

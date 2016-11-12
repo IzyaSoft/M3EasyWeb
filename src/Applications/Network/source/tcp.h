@@ -22,6 +22,21 @@
 #define TCP_CHECKSUM_INDEX                                   TCP_WINDOW_INDEX + TCP_WINDOW_LENGTH                                       // Checksum Field (16 bit)
 #define TCP_URGENCY_INDEX                                    TCP_CHECKSUM_INDEX + TCP_CHECKSUM_LENGTH                                   // Urgent Pointer (16 bit)
 
+enum TcpState                                                                                                                           // states of the TCP-state machine according to RFC793
+{
+    CLOSED,
+    LISTENING,
+    SYN_SENT,
+    SYN_RECD,
+    ESTABLISHED,
+    FIN_WAIT_1,
+    FIN_WAIT_2,
+    CLOSE_WAIT,
+    CLOSING,
+    LAST_ACK,
+    TIME_WAIT
+};
+
 void ReadTcpHeader(struct EthernetBuffer* buffer, struct TcpHeader* tcpHeader);
 
 #endif

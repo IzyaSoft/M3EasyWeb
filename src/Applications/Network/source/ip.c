@@ -1,5 +1,6 @@
 #include "ip.h"
 #include "networkUtils.h"
+#include <string.h>
 unsigned short GetIpFrameSize(struct EthernetBuffer* buffer)
 {
     return (unsigned short)(buffer->_buffer[IP_PACKET_SIZE_INDEX] << 8) + (buffer->_buffer[IP_PACKET_SIZE_INDEX + 1]);

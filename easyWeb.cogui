@@ -18,6 +18,9 @@
 <part id="2"/>
 <part id="3"/>
 <part id="4"/>
+<part id="5"/>
+<part id="6"/>
+<part id="7"/>
 </presentation>
 </folder>
 </info>
@@ -26,21 +29,33 @@
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/easyWeb/src/main.c"/>
 <editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1884" selectionTopPixel="660"/>
 </editor>
-<editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="networkService.c" partName="networkService.c" path="E:/uetm/commutator/M3EasyWeb/src/Applications/Network/source/networkService.c" title="networkService.c" tooltip="E:/uetm/commutator/M3EasyWeb/src/Applications/Network/source/networkService.c" workbook="DefaultEditorWorkbook">
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="networkService.c" partName="networkService.c" path="E:/uetm/commutator/M3EasyWeb/src/Applications/Network/source/networkService.c" title="networkService.c" tooltip="E:/uetm/commutator/M3EasyWeb/src/Applications/Network/source/networkService.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/easyWeb/src/Applications/Network/source/networkService.c"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="3373" selectionTopPixel="1560"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="4870" selectionTopPixel="1784"/>
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="tcp.h" partName="tcp.h" path="E:/uetm/commutator/M3EasyWeb/src/Applications/Network/source/tcp.h" title="tcp.h" tooltip="E:/uetm/commutator/M3EasyWeb/src/Applications/Network/source/tcp.h" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/easyWeb/src/Applications/Network/include/tcp.h"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="864" selectionTopPixel="0"/>
+<editorState selectionHorizontalPixel="0" selectionLength="19" selectionOffset="1214" selectionTopPixel="0"/>
 </editor>
-<editor id="org.eclipse.cdt.ui.editor.CEditor" name="tcp.c" partName="tcp.c" path="E:/uetm/commutator/M3EasyWeb/src/Applications/Network/source/tcp.c" title="tcp.c" tooltip="E:/uetm/commutator/M3EasyWeb/src/Applications/Network/source/tcp.c" workbook="DefaultEditorWorkbook">
+<editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="tcp.c" partName="tcp.c" path="E:/uetm/commutator/M3EasyWeb/src/Applications/Network/source/tcp.c" title="tcp.c" tooltip="E:/uetm/commutator/M3EasyWeb/src/Applications/Network/source/tcp.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/easyWeb/src/Applications/Network/source/tcp.c"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="108" selectionTopPixel="0"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="843" selectionTopPixel="0"/>
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="networkService.h" partName="networkService.h" path="E:/uetm/commutator/M3EasyWeb/src/Applications/Network/include/NetworkService.h" title="networkService.h" tooltip="E:/uetm/commutator/M3EasyWeb/src/Applications/Network/include/NetworkService.h" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/easyWeb/src/Applications/Network/include/networkService.h"/>
-<editorState selectionHorizontalPixel="0" selectionLength="709" selectionOffset="5888" selectionTopPixel="1447"/>
+<editorState selectionHorizontalPixel="0" selectionLength="13" selectionOffset="6679" selectionTopPixel="1447"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="networkUtils.h" partName="networkUtils.h" path="E:/uetm/commutator/M3EasyWeb/src/Applications/Network/include/networkUtils.h" title="networkUtils.h" tooltip="E:/uetm/commutator/M3EasyWeb/src/Applications/Network/include/networkUtils.h" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/easyWeb/src/Applications/Network/include/networkUtils.h"/>
+<editorState selectionHorizontalPixel="0" selectionLength="154" selectionOffset="411" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="networkUtils.c" partName="networkUtils.c" path="E:/uetm/commutator/M3EasyWeb/src/Applications/Network/source/networkUtils.c" title="networkUtils.c" tooltip="E:/uetm/commutator/M3EasyWeb/src/Applications/Network/source/networkUtils.c" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/easyWeb/src/Applications/Network/source/networkUtils.c"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1603" selectionTopPixel="295"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="tcpHeader.h" partName="tcpHeader.h" path="E:/uetm/commutator/M3EasyWeb/src/Applications/Network/include/tcpHeader.h" title="tcpHeader.h" tooltip="E:/uetm/commutator/M3EasyWeb/src/Applications/Network/include/tcpHeader.h" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/easyWeb/src/Applications/Network/include/tcpHeader.h"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="310" selectionTopPixel="0"/>
 </editor>
 </editors>
 <views>
@@ -61,7 +76,7 @@
 <element path="/easyWeb/src/BusinessLogic/managers/source"/>
 </expanded>
 <selection>
-<element path="/easyWeb/src/Applications/Network/include/networkService.h"/>
+<element path="/easyWeb/src/Applications/Network/source/networkUtils.c"/>
 </selection>
 </viewState>
 </view>
@@ -80,7 +95,6 @@
 <view id="org.eclipse.ui.console.ConsoleView" partName="Console">
 <viewState/>
 </view>
-<view id="org.eclipse.cdt.debug.ui.memory.memorybrowser.MemoryBrowser" partName="Memory Browser"/>
 <view id="org.eclipse.debug.ui.VariableView" partName="Variables">
 <viewState/>
 </view>
@@ -236,70 +250,49 @@
 <view id="org.eclipse.ui.console.ConsoleView"/>
 <view id="org.coocox.codebugger.trace.ui.traceview"/>
 <view id="org.coocox.builder.ui.views.ProjectView"/>
-<fastViewBars>
-<fastViewBar fastViewLocation="131072" id="org.eclipse.ui.internal.ViewStack@a01a18" orientation="256" selectedTabId="org.coocox.codebugger.trace.ui.traceview" style="0">
-<fastViews>
-<view id="org.eclipse.cdt.debug.ui.memory.memorybrowser.MemoryBrowser" ratio="0.3"/>
+<fastViewBars>&#x0A;<fastViewBar fastViewLocation="131072" id="org.eclipse.ui.internal.ViewStack@a01a18" orientation="256" selectedTabId="org.coocox.codebugger.trace.ui.traceview" style="0">&#x0A;<fastViews>&#x0A;<view id="org.eclipse.cdt.debug.ui.memory.memorybrowser.MemoryBrowser" ratio="0.3"/>
 </fastViews>
 </fastViewBar>
 </fastViewBars>
 <viewLayoutRec closeable="false" id="org.eclipse.debug.ui.DebugView"/>
-<layout>
-<mainWindow>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@1ca4ee7">
-<folder activePageID="org.coocox.builder.ui.views.ProjectView" appearance="2" expanded="2">
-<page content="org.coocox.builder.ui.views.ProjectView" label="Project"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<layout>&#x0A;<mainWindow>&#x0A;<info folder="true" part="org.eclipse.ui.internal.ViewStack@1ca4ee7">&#x0A;<folder activePageID="org.coocox.builder.ui.views.ProjectView" appearance="2" expanded="2">&#x0A;<page content="org.coocox.builder.ui.views.ProjectView" label="Project"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 </presentation>
 </folder>
 </info>
 <info part="org.eclipse.ui.editorss" ratio="0.24986738" ratioLeft="471" ratioRight="1414" relationship="2" relative="org.eclipse.ui.internal.ViewStack@1ca4ee7"/>
-<info folder="true" part="stickyFolderRight" ratio="0.7495672" ratioLeft="1299" ratioRight="434" relationship="2" relative="org.eclipse.ui.editorss">
-<folder appearance="2" expanded="2">
-<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<info folder="true" part="stickyFolderRight" ratio="0.7495672" ratioLeft="1299" ratioRight="434" relationship="2" relative="org.eclipse.ui.editorss">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@88c0ef" ratio="0.685836" ratioLeft="644" ratioRight="295" relationship="4" relative="org.eclipse.ui.editorss">
-<folder activePageID="org.eclipse.debug.ui.DebugView" appearance="2" expanded="2">
-<page content="org.eclipse.debug.ui.BreakpointView" label="Breakpoints"/>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@88c0ef" ratio="0.685836" ratioLeft="644" ratioRight="295" relationship="4" relative="org.eclipse.ui.editorss">&#x0A;<folder activePageID="org.eclipse.debug.ui.DebugView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.debug.ui.BreakpointView" label="Breakpoints"/>
 <page content="org.eclipse.debug.ui.VariableView" label="Variables"/>
 <page content="org.eclipse.debug.ui.DebugView" label="Debug"/>
 <page content="org.eclipse.debug.ui.ModuleView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 <part id="1"/>
 <part id="2"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@a01a18" ratio="0.49971148" ratioLeft="866" ratioRight="867" relationship="2" relative="org.eclipse.ui.internal.ViewStack@88c0ef">
-<folder appearance="2" expanded="0">
-<page content="org.eclipse.cdt.debug.ui.memory.memorybrowser.MemoryBrowser" label="LabelNotFound"/>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@a01a18" ratio="0.49971148" ratioLeft="866" ratioRight="867" relationship="2" relative="org.eclipse.ui.internal.ViewStack@88c0ef">&#x0A;<folder appearance="2" expanded="0">&#x0A;<page content="org.eclipse.cdt.debug.ui.memory.memorybrowser.MemoryBrowser" label="LabelNotFound"/>
 <page content="org.eclipse.debug.ui.ExpressionView" label="LabelNotFound"/>
 <page content="org.eclipse.debug.ui.MemoryView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.ProgressView" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@1115458" ratio="0.7826087" ratioLeft="1494" ratioRight="415" relationship="2" relative="org.eclipse.ui.editorss">
-<folder activePageID="org.eclipse.debug.ui.RegisterView" appearance="2" expanded="2">
-<page content="org.eclipse.debug.ui.RegisterView" label="Registers"/>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@1115458" ratio="0.7826087" ratioLeft="1494" ratioRight="415" relationship="2" relative="org.eclipse.ui.editorss">&#x0A;<folder activePageID="org.eclipse.debug.ui.RegisterView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.debug.ui.RegisterView" label="Registers"/>
 <page content="org.eclipse.cdt.dsf.debug.ui.disassembly.view" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.ContentOutline" label="LabelNotFound"/>
 <page content="org.coocox.coassistant.view.CoAssistantView_debug" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@11b873c" ratio="0.5803432" ratioLeft="372" ratioRight="269" relationship="4" relative="org.eclipse.ui.editorss">
-<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
-<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@11b873c" ratio="0.5803432" ratioLeft="372" ratioRight="269" relationship="4" relative="org.eclipse.ui.editorss">&#x0A;<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
 <page content="org.coocox.codebugger.trace.ui.traceview" label="Semihosting"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 <part id="1"/>
 </presentation>
 </folder>
@@ -311,167 +304,168 @@
 <workingSets/>
 <navigationHistory>
 <editors>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/main.c"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/Applications/Network/source/networkService.c"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/Applications/Network/source/icmp.c"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/Applications/Network/include/ip.h"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/Applications/Network/source/ip.c"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/HAL/source/Drivers/Boards/LandTiger2/source/ethernetDriver.c"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/Applications/Network/include/tcp.h"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/Applications/Network/source/tcp.c"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/Applications/Network/include/networkService.h"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/HAL/source/Drivers/Boards/LandTiger2/include/EMAC.h"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/Applications/Network/include/tcpHeader.c"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/Applications/Network/include/tcp.h"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/Applications/Network/source/tcp.c"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/Applications/Network/include/tcpHeader.h"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/Applications/Network/include/networkUtils.h"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/Applications/Network/source/networkUtils.c"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/easyWeb/src/Applications/Network/include/networkService.h"/>
 </editors>
-<item historyLabel="ip.c" index="4">
-<position/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="2467" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="1108" y="0"/>
-</item>
-<item historyLabel="ip.c" index="4">
-<position/>
-</item>
-<item historyLabel="ip.h" index="3">
-<position info="not_deleted" x="2216" y="0"/>
-</item>
-<item historyLabel="ethernetDriver.c" index="5">
-<position info="not_deleted" x="8809" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="1138" y="0"/>
-</item>
-<item historyLabel="ip.c" index="4">
-<position/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="1413" y="0"/>
-</item>
-<item historyLabel="ip.c" index="4">
-<position/>
-</item>
-<item historyLabel="ip.h" index="3">
-<position info="not_deleted" x="2216" y="0"/>
-</item>
-<item historyLabel="ip.c" index="4">
-<position/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="1413" y="0"/>
-</item>
-<item historyLabel="icmp.c" index="2">
-<position/>
-</item>
-<item historyLabel="icmp.c" index="2">
-<position/>
-</item>
-<item historyLabel="networkService.c" index="1">
-<position info="not_deleted" x="1817" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="1204" y="0"/>
-</item>
-<item historyLabel="icmp.c" index="2">
-<position/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="1884" y="0"/>
-</item>
-<item historyLabel="networkService.c" index="1">
-<position info="not_deleted" x="1817" y="0"/>
-</item>
-<item historyLabel="networkService.c" index="1">
-<position info="not_deleted" x="25428" y="0"/>
-</item>
-<item historyLabel="networkService.c" index="1">
-<position info="not_deleted" x="26391" y="15"/>
-</item>
-<item historyLabel="tcp.h" index="6">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="tcp.c" index="7">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="tcp.h" index="6">
-<position info="not_deleted" x="1008" y="0"/>
-</item>
-<item historyLabel="ip.c" index="4">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="tcp.h" index="6">
-<position info="not_deleted" x="1008" y="0"/>
-</item>
-<item historyLabel="icmp.c" index="2">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="tcp.h" index="6">
-<position info="not_deleted" x="1008" y="0"/>
-</item>
-<item historyLabel="networkService.c" index="1">
-<position info="not_deleted" x="26391" y="15"/>
-</item>
-<item historyLabel="networkService.h" index="8">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="networkService.h" index="8">
-<position info="not_deleted" x="525" y="51"/>
-</item>
-<item historyLabel="tcp.c" index="7">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="networkService.c" index="1">
-<position info="not_deleted" x="26391" y="15"/>
-</item>
-<item historyLabel="networkService.c" index="1">
-<position info="not_deleted" x="26378" y="6"/>
-</item>
-<item historyLabel="networkService.c" index="1">
-<position info="not_deleted" x="14181" y="0"/>
-</item>
-<item historyLabel="EMAC.h" index="9">
+<item historyLabel="EMAC.h" index="4">
 <position info="not_deleted" x="18623" y="0"/>
 </item>
-<item historyLabel="networkService.c" index="1">
+<item historyLabel="networkService.c" index="0">
 <position info="not_deleted" x="3481" y="1533"/>
 </item>
-<item historyLabel="tcpHeader.c" index="10">
+<item historyLabel="tcpHeader.c" index="5">
 <position info="not_deleted" x="217" y="0"/>
 </item>
-<item historyLabel="networkService.h" index="8">
+<item historyLabel="networkService.h" index="3">
 <position info="not_deleted" x="525" y="51"/>
 </item>
-<item historyLabel="networkService.c" index="1">
+<item historyLabel="networkService.c" index="0">
 <position info="not_deleted" x="3373" y="0"/>
 </item>
-<item historyLabel="tcpHeader.c" index="10">
+<item historyLabel="tcpHeader.c" index="5">
 <position info="not_deleted" x="84" y="0"/>
 </item>
-<item historyLabel="networkService.c" index="1">
+<item historyLabel="networkService.c" index="0">
 <position info="not_deleted" x="3373" y="0"/>
 </item>
-<item historyLabel="tcp.h" index="6">
+<item historyLabel="tcp.h" index="1">
 <position info="not_deleted" x="1008" y="0"/>
 </item>
-<item historyLabel="tcp.h" index="6">
+<item historyLabel="tcp.h" index="1">
 <position info="not_deleted" x="917" y="78"/>
 </item>
-<item historyLabel="tcp.c" index="7">
+<item historyLabel="tcp.c" index="2">
 <position info="not_deleted" x="108" y="0"/>
 </item>
-<item historyLabel="tcp.h" index="6">
+<item historyLabel="tcp.h" index="1">
 <position info="not_deleted" x="913" y="0"/>
 </item>
-<item historyLabel="networkService.h" index="8">
+<item historyLabel="networkService.h" index="3">
 <position info="not_deleted" x="5888" y="709"/>
+</item>
+<item historyLabel="tcp.h" index="1">
+<position info="not_deleted" x="864" y="0"/>
+</item>
+<item historyLabel="networkService.c" index="0">
+<position info="not_deleted" x="3373" y="0"/>
 </item>
 <item historyLabel="tcp.h" index="6">
 <position info="not_deleted" x="864" y="0"/>
 </item>
-<item active="true" historyLabel="networkService.c" index="1">
+<item historyLabel="tcp.c" index="7">
+<position info="not_deleted" x="847" y="0"/>
+</item>
+<item historyLabel="tcp.h" index="6">
+<position info="not_deleted" x="864" y="0"/>
+</item>
+<item historyLabel="tcp.c" index="7">
+<position info="not_deleted" x="109" y="0"/>
+</item>
+<item historyLabel="tcpHeader.h" index="8">
+<position info="not_deleted" x="107" y="11"/>
+</item>
+<item historyLabel="tcp.c" index="7">
+<position info="not_deleted" x="109" y="0"/>
+</item>
+<item historyLabel="tcp.c" index="7">
+<position info="not_deleted" x="202" y="0"/>
+</item>
+<item historyLabel="tcp.h" index="6">
+<position info="not_deleted" x="554" y="21"/>
+</item>
+<item historyLabel="tcp.c" index="7">
+<position info="not_deleted" x="202" y="0"/>
+</item>
+<item historyLabel="tcp.c" index="7">
+<position info="not_deleted" x="278" y="0"/>
+</item>
+<item historyLabel="networkService.c" index="0">
 <position info="not_deleted" x="3373" y="0"/>
+</item>
+<item historyLabel="networkUtils.h" index="9">
+<position info="not_deleted" x="251" y="69"/>
+</item>
+<item historyLabel="tcp.h" index="6">
+<position info="not_deleted" x="554" y="21"/>
+</item>
+<item historyLabel="networkUtils.c" index="10">
+<position info="not_deleted" x="595" y="0"/>
+</item>
+<item historyLabel="networkUtils.h" index="9">
+<position info="not_deleted" x="251" y="69"/>
+</item>
+<item historyLabel="networkUtils.h" index="9">
+<position info="not_deleted" x="411" y="154"/>
+</item>
+<item historyLabel="networkUtils.c" index="10">
+<position info="not_deleted" x="595" y="0"/>
+</item>
+<item historyLabel="networkUtils.c" index="10">
+<position info="not_deleted" x="1345" y="0"/>
+</item>
+<item historyLabel="networkUtils.c" index="10">
+<position info="not_deleted" x="882" y="0"/>
+</item>
+<item historyLabel="networkUtils.c" index="10">
+<position info="not_deleted" x="1603" y="0"/>
+</item>
+<item historyLabel="tcpHeader.h" index="8">
+<position info="not_deleted" x="107" y="11"/>
+</item>
+<item historyLabel="networkUtils.c" index="10">
+<position info="not_deleted" x="1603" y="0"/>
+</item>
+<item historyLabel="tcp.h" index="6">
+<position info="not_deleted" x="554" y="21"/>
+</item>
+<item historyLabel="tcp.c" index="7">
+<position info="not_deleted" x="107" y="0"/>
+</item>
+<item historyLabel="tcpHeader.h" index="8">
+<position info="not_deleted" x="373" y="0"/>
+</item>
+<item historyLabel="tcp.c" index="7">
+<position info="not_deleted" x="107" y="0"/>
+</item>
+<item historyLabel="tcp.c" index="7">
+<position info="not_deleted" x="109" y="0"/>
+</item>
+<item historyLabel="tcpHeader.h" index="8">
+<position info="not_deleted" x="310" y="0"/>
+</item>
+<item historyLabel="tcp.c" index="7">
+<position info="not_deleted" x="770" y="0"/>
+</item>
+<item historyLabel="tcp.h" index="6">
+<position info="not_deleted" x="1214" y="19"/>
+</item>
+<item historyLabel="tcp.c" index="7">
+<position info="not_deleted" x="770" y="0"/>
+</item>
+<item historyLabel="networkService.c" index="0">
+<position info="not_deleted" x="4870" y="0"/>
+</item>
+<item historyLabel="tcp.c" index="7">
+<position info="not_deleted" x="770" y="0"/>
+</item>
+<item historyLabel="networkService.h" index="11">
+<position info="not_deleted" x="5888" y="709"/>
+</item>
+<item historyLabel="networkService.h" index="11">
+<position info="not_deleted" x="6679" y="13"/>
+</item>
+<item active="true" historyLabel="tcp.c" index="7">
+<position/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -480,6 +474,15 @@
 <actionBarAdvisor/>
 </window>
 <mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="tcpHeader.h" tooltip="easyWeb/src/Applications/Network/include/tcpHeader.h">
+<persistable path="/easyWeb/src/Applications/Network/include/tcpHeader.h"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="networkUtils.c" tooltip="easyWeb/src/Applications/Network/source/networkUtils.c">
+<persistable path="/easyWeb/src/Applications/Network/source/networkUtils.c"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="networkUtils.h" tooltip="easyWeb/src/Applications/Network/include/networkUtils.h">
+<persistable path="/easyWeb/src/Applications/Network/include/networkUtils.h"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="tcpHeader.c" tooltip="easyWeb/src/Applications/Network/include/tcpHeader.c">
 <persistable path="/easyWeb/src/Applications/Network/include/tcpHeader.c"/>
 </file>
@@ -502,8 +505,7 @@
 <persistable path="/easyWeb/src/Applications/Network/include/tcp.h"/>
 </file>
 <file factoryID="org.coocox.component.board.ui.editor.BoardEditorElementFactory" id="org.coocox.component.board.ui.editor.BoardBrowserEditor" name="Board" tooltip="Board">
-<persistable>
-<subPage/>
+<persistable>&#x0A;<subPage/>
 </persistable>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="ethernet.c" tooltip="easyWeb/src/Applications/Network/source/ethernet.c">
@@ -514,11 +516,6 @@
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="ethernetDriver.c" tooltip="easyWeb/src/HAL/source/Drivers/Boards/LandTiger2/source/ethernetDriver.c">
 <persistable path="/easyWeb/src/HAL/source/Drivers/Boards/LandTiger2/source/ethernetDriver.c"/>
-</file>
-<file factoryID="org.coocox.builder.ui.persistent.PersistentElementFactory" id="org.coocox.builder.ui.editors.ConfigEditor" name="" tooltip="">
-<persistable>
-<org.coocox.builder.ui.editors.ConfigEditor/>
-</persistable>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="networkManager.h" tooltip="easyWeb/src/BusinessLogic/managers/include/networkManager.h">
 <persistable path="/easyWeb/src/BusinessLogic/managers/include/networkManager.h"/>

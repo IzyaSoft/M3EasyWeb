@@ -3,8 +3,8 @@
 
 void ReadTcpHeader(struct EthernetBuffer* buffer, struct TcpHeader* tcpHeader)
 {
-    tchHeader->_sourcePort = ntohs(GetWord(buffer, TCP_SOURCE_PORT_INDEX));
-    tchHeader->_destinationPort = ntohs(GetWord(buffer, TCP_DESTINATION_PORT_INDEX));
+    tcpHeader->_sourcePort = ntohs(GetWord(buffer, TCP_SOURCE_PORT_INDEX));
+    tcpHeader->_destinationPort = ntohs(GetWord(buffer, TCP_DESTINATION_PORT_INDEX));
     tcpHeader->_sequenceNumber = ntohl(GetDoubleWord(buffer, TCP_SEQUENCE_NUMBER_INDEX));
     tcpHeader->_acknoledgemengtNumber = ntohl(GetDoubleWord(buffer, TCP_ACKNOWLEDGEMENT_NUMBER_INDEX));
     tcpHeader->_windowsSize = ntohs(GetWord(buffer, TCP_WINDOW_INDEX));
