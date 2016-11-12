@@ -19,11 +19,11 @@ void BuildIcmpPacket(struct EthernetBuffer* buffer)
         memcpy(sourceIpAddress, &buffer->_buffer[IP_PACKET_HEADER_DESTINATION_IP_INDEX], IPV4_LENGTH);
 
         InsertEthernetHeader(buffer, sourceMac, destinationMac, IP_ETHERTYPE);
-        InsertIpHeader(buffer, IP_HEADER_SIZE + ICMP_HEADER_SIZE + icmpDataCount, 0, 0, (TTL << 8) | ICMP_PROTOCOL, sourceIpAddress, destinationIpAddress);
+        InsertIpHeader(buffer, IPV4_VERSION, IP_HEADER_SIZE + ICMP_HEADER_SIZE + icmpDataCount, 0, 0, (TTL << 8) | ICMP_PROTOCOL, sourceIpAddress, destinationIpAddress);
         // ICMP
         SetWord(ICMP_ECHO_RESPONSE << 8, buffer, ICMP_TYPE_INDEX);
         SetWord(0, buffer, ICMP_CHEKSUM_INDEX);
-        SetWord(SWAPBYTES(GetChecksumForNonTcpPackets(&buffer->_buffer[IP_PACKET_DATA_INDEX], icmpDataCount + ICMP_HEADER_SIZE)), buffer, ICMP_CHEKSUM_INDEX);
+        SetWord(SWAPBYTES(GetIpChecksum(&buffer->_buffer[IP_PACKET_DATA_INDEX], icmpDataCount + ICMP_HEADER_SIZE)), buffer, ICMP_CHEKSUM_INDEX);
         buffer->_storedBytes = ETHERNET_HEADER_SIZE + IP_HEADER_SIZE + ICMP_HEADER_SIZE + icmpDataCount;
     }
 }

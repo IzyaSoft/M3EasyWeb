@@ -1,6 +1,7 @@
-#include "tcpServer.h"
+#include "tcpService.h"
 #include "networkApplicationConfig.h"
 #include "tcp.h"
+#include "ip.h"
 
 extern struct NetworkApplicationConfig* networkApplicationsConfig [];
 extern unsigned short numberOfConfigs;
@@ -32,10 +33,76 @@ static void TcpStateMachine(struct NetworkApplicationConfig* application, struct
     switch(application->_tcpState)
     {
         case CLOSED:
+             memcpy(application->_client._ipAddress, &buffer->_buffer[IP_PACKET_HEADER_SOURCE_IP_INDEX], IPV4_LENGTH);
+             memcpy(application->_client._macAddress, &buffer->_buffer[ETHERNET_SOURCE_ADDRESS_INDEX], MAC_ADDRESS_LENGTH);
+             unsigned char tcpCode = 0;
+             if((tcpHeader->_flags >> 8) & TCP_CODE_ACK)
+             {
+                 tcpHeader->_sequenceNumber = tcpHeader->_acknoledgementNumber;
+                 tcpCode = TCP_CODE_RST;
+             }
+             else
+             {
+                 tcpHeader->_sequenceNumber = 0;
+                 tcpHeader->_acknoledgementNumber = tcpHeader->_sequenceNumber + ntohs(GetWord(buffer, IP_PACKET_SIZE_INDEX)) - IP_HEADER_SIZE - tcpHeader->_headerSize;
+                 if((tcpHeader->_flags >> 8) & (TCP_CODE_SYN | TCP_CODE_FIN))
+                     tcpHeader->_acknoledgementNumber++;
+                 tcpCode = TCP_CODE_RST | TCP_CODE_ACK;
+             }
+             application->_sequenceNumber = tcpHeader->_sequenceNumber;
+             application->_acknowledgementNumber = tcpHeader->_acknoledgementNumber;
+             BuildTcpFrame(tcpHeader, buffer, tcpCode, application);
+             TransmitData(buffer);
              break;
         case LISTENING:
+             if(!((tcpHeader->_flags >> 8) & TCP_CODE_RST))
+             {
+                 memcpy(application->_client._ipAddress, &buffer->_buffer[IP_PACKET_HEADER_SOURCE_IP_INDEX], IPV4_LENGTH);
+                 memcpy(application->_client._macAddress, &buffer->_buffer[ETHERNET_SOURCE_ADDRESS_INDEX], MAC_ADDRESS_LENGTH);
+                 if((tcpHeader->_flags >> 8) & TCP_CODE_ACK)
+                 {
+                     // todo: umv: check is that right?
+                     application->_sequenceNumber = application->_acknowledgementNumber;
+                     tcpHeader->_sequenceNumber = application->_sequenceNumber;
+                     tcpHeader->_acknoledgementNumber = application->_acknowledgementNumber;
+                     tcpCode = TCP_CODE_RST;
+                 }
+                 else if((tcpHeader->_flags >> 8) & TCP_CODE_SYN)
+                 {
+                     tcpCode = TCP_CODE_SYN | TCP_CODE_ACK;
+                     application->_acknowledgementNumber = application->_sequenceNumber + 1;
+                     // TCPSeqNr = ((unsigned long)ISNGenHigh << 16) | (LPC_TIM0->TC & 0xFFFF);
+                     application->_notAcknowledgedNumber = application->_sequenceNumber + 1;
+                     tcpHeader->_sequenceNumber = application->_sequenceNumber;
+                     tcpHeader->_acknoledgementNumber = application->_acknowledgementNumber;
+                     //LastFrameSent = TCP_SYN_ACK_FRAME;
+                     //TCPStartRetryTimer();
+                     application->_tcpState = SYN_RECD;
+                 }
+                 else break;
+                 BuildTcpFrame(tcpHeader, buffer, tcpCode, application);
+                 TransmitData(buffer);
+             }
              break;
         case SYN_SENT:
+             if(memcmp(application->_client._ipAddress, &buffer[IP_PACKET_HEADER_SOURCE_IP_INDEX], IPV4_LENGTH))
+                 break;
+             if((tcpHeader->_flags >> 8) & TCP_CODE_ACK)
+             {
+                 application->_tcpState = CLOSED;
+                 if(!((tcpHeader->_flags >> 8) & TCP_CODE_RST))
+                 {
+                     //
+                 }
+             }
+             if(!((tcpHeader->_flags >> 8) & TCP_CODE_RST))
+             {
+
+             }
+             if(!((tcpHeader->_flags >> 8) & TCP_CODE_RST))
+             {
+
+             }
              break;
         default:
              break;
@@ -45,57 +112,6 @@ static void TcpStateMachine(struct NetworkApplicationConfig* application, struct
 
 /*	  switch (TCPStateMachine)                                 // implement the TCP state machine
 	  {
-	    case CLOSED :
-	    {
-	      if (!(TCPCode & TCP_CODE_RST))
-	      {
-	        TCPRemotePort = TCPSegSourcePort;
-	        memcpy(&RemoteMAC, &RecdFrameMAC, 6);              // save opponents MAC and IP
-	        memcpy(&RemoteIP, &RecdFrameIP, 4);                // for later use
-
-	        if (TCPCode & TCP_CODE_ACK)                        // make the reset sequence
-	        {                                                  // acceptable to the other
-	          TCPSeqNr = TCPSegAck;                            // TCP
-	          PrepareTCP_FRAME(TCP_CODE_RST);
-	        }
-	        else
-	        {
-	          TCPSeqNr = 0;
-	          TCPAckNr = TCPSegSeq + NrOfDataBytes;
-	          if (TCPCode & (TCP_CODE_SYN | TCP_CODE_FIN)) TCPAckNr++;
-	          PrepareTCP_FRAME(TCP_CODE_RST | TCP_CODE_ACK);
-	        }
-	      }
-	      break;
-	    }
-	    case LISTENING :
-	    {
-	      if (!(TCPCode & TCP_CODE_RST))                       // ignore segment containing RST
-	      {
-	        TCPRemotePort = TCPSegSourcePort;
-	        memcpy(&RemoteMAC, &RecdFrameMAC, 6);              // save opponents MAC and IP
-	        memcpy(&RemoteIP, &RecdFrameIP, 4);                // for later use
-
-	        if (TCPCode & TCP_CODE_ACK)                        // reset a bad
-	        {                                                  // acknowledgement
-	          TCPSeqNr = TCPSegAck;
-	          PrepareTCP_FRAME(TCP_CODE_RST);
-	        }
-	        else if (TCPCode & TCP_CODE_SYN)
-	        {
-	          TCPAckNr = TCPSegSeq + 1;                           // get remote ISN, next byte we expect
-	//            TCPSeqNr = ((unsigned long)ISNGenHigh << 16) | (T0TC & 0xFFFF);  // Keil: changed from TAR to T0TC;
-	            TCPSeqNr = ((unsigned long)ISNGenHigh << 16) | (LPC_TIM0->TC & 0xFFFF);  // Keil: changed from TAR to T0TC;
-	                                                              // set local ISN
-	          TCPUNASeqNr = TCPSeqNr + 1;                         // one byte out -> increase by one
-	          PrepareTCP_FRAME(TCP_CODE_SYN | TCP_CODE_ACK);
-	          LastFrameSent = TCP_SYN_ACK_FRAME;
-	          TCPStartRetryTimer();
-	          TCPStateMachine = SYN_RECD;
-	        }
-	      }
-	      break;
-	    }
 	    case SYN_SENT :
 	    {
 	      if (memcmp(&RemoteIP, &RecdFrameIP, 4)) break;  // drop segment if its IP doesn't belong

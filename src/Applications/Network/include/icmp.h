@@ -17,8 +17,6 @@
 #define ICMP_CODE_INDEX                               ICMP_TYPE_INDEX + ICMP_TYPE_LENGTH
 #define ICMP_CHEKSUM_INDEX                            ICMP_CODE_INDEX + ICMP_CODE_LENGTH
 
-#define TTL                                           64
-
 void BuildIcmpPacket(struct EthernetBuffer* buffer);
 
 #endif

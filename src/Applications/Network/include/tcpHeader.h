@@ -13,7 +13,7 @@ struct TcpHeader
     unsigned short _checkSum;
     unsigned short _urgency;
     uint32_t _sequenceNumber;
-    uint32_t _acknoledgemengtNumber;
+    uint32_t _acknoledgementNumber;
     uint32_t _dataIndex;
 };
 

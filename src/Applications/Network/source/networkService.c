@@ -29,6 +29,11 @@ static void ReadData(struct EthernetBuffer* rxBuffer, unsigned char debugPrintEn
     }
 }
 
+void TransmitData(struct EthernetBuffer* buffer)
+{
+	WriteData(buffer, 0);
+}
+
 //todo: umv: make proper arp cache
 void InitializeNetwork(struct EthernetConfiguration* ethernetConfiguration)
 {
@@ -41,10 +46,11 @@ void HandleNetworkEvents()
     if(CheckIsDataAvailable())
     {
         uint32_t dataSize = CheckAvailableDataSize();
-        unsigned char localBuffer[MAX_LOCAL_BUFFER_SIZE_LIMIT] = {};  // todo: umv possibly do malloc + free
+        //unsigned char localBuffer[MAX_LOCAL_BUFFER_SIZE_LIMIT] = {};  // todo: umv possibly do malloc + free
         struct EthernetBuffer rxBuffer;
-
-        if(dataSize <= MAX_LOCAL_BUFFER_SIZE_LIMIT)
+        rxBuffer._buffer = ethernetBuffer;
+        rxBuffer._bufferCapacity = MAX_ETH_FRAME_SIZE;
+/*        if(dataSize <= MAX_LOCAL_BUFFER_SIZE_LIMIT)
         {
             // local buffer usage
             rxBuffer._buffer = localBuffer;
@@ -54,7 +60,7 @@ void HandleNetworkEvents()
         {
             rxBuffer._buffer = ethernetBuffer;
             rxBuffer._bufferCapacity = MAX_ETH_FRAME_SIZE;
-        }
+        }*/
 
         ReadData(&rxBuffer, 0);
         if(CheckIsPacketBrodcast(&rxBuffer))

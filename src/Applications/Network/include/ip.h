@@ -27,9 +27,13 @@
 
 #define IP_HEADER_SIZE                                                   20
 
+#define IP_TOS_D                                                         0x0010              // TOS low delay
+#define IP_TOS_T                                                         0x0008              // TOS high throughput
+#define IP_TOS_R                                                         0x0004              // TOS high reliability
+
 unsigned short GetIpFrameSize(struct EthernetBuffer* buffer);
-unsigned short GetChecksumForNonTcpPackets(void *address, unsigned short count);
-void InsertIpHeader(struct EthernetBuffer* buffer, unsigned short packetSize, unsigned short packetId, unsigned short packetFlags, unsigned short ttl,
+unsigned short GetIpChecksum(void *address, unsigned short count);
+void InsertIpHeader(struct EthernetBuffer* buffer, unsigned short ipVersion, unsigned short packetSize, unsigned short packetId, unsigned short packetFlags, unsigned short ttl,
                     unsigned char* sourceIpAddress, unsigned char* destinationIpAddress);
 
 #endif

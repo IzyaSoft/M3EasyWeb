@@ -23,6 +23,14 @@ void SetWord(unsigned short word, struct EthernetBuffer* buffer, uint32_t positi
     buffer->_buffer[position] = (unsigned char) ((word &0xFF00) >> 8);
 }
 
+void SetDoubleWord(uint32_t dword, struct EthernetBuffer* buffer, uint32_t position)
+{
+	buffer->_buffer[position + 3] = (unsigned char) (dword & 0x000000FF);
+	buffer->_buffer[position + 2] = (unsigned char) ((dword & 0x0000FF00) >> 8);
+	buffer->_buffer[position + 1] = (unsigned char) ((dword & 0x00FF0000) >> 16);
+    buffer->_buffer[position] = (unsigned char) ((dword & 0xFF000000) >> 24);
+}
+
 static uint32_t Revert4BytesOrder(uint32_t value)
 {
     uint32_t result = ((value & 0x000000FF) << 24) + ((value & 0x0000FF00) << 8) + ((value & 0x00FF0000) >> 8) + ((value & 0xFF000000) >> 24);
