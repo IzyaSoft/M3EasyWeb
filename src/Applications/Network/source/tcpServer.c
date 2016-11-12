@@ -1,13 +1,47 @@
 #include "tcpServer.h"
+#include "networkApplicationConfig.h"
 #include "tcp.h"
 
-//TcpState tcpStateMachine;
+extern struct NetworkApplicationConfig* networkApplicationsConfig [];
+extern unsigned short numberOfConfigs;
+
+static void TcpStateMachine(struct NetworkApplicationConfig* application, struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer);
+static struct NetworkApplicationConfig* Filtrate(struct TcpHeader* tcpHeader);
 
 void HandleTcpPacket(struct EthernetBuffer* buffer)
 {
     struct TcpHeader tcpHeader;
     ReadTcpHeader(buffer, &tcpHeader);
+    struct NetworkApplicationConfig* selectedApplication = Filtrate(&tcpHeader);
+    if(selectedApplication != 0)
+        TcpStateMachine(selectedApplication, buffer, &tcpHeader);
 }
+
+static struct NetworkApplicationConfig* Filtrate(struct TcpHeader* tcpHeader)
+{
+    for(unsigned char appCounter= 0; appCounter < numberOfConfigs; appCounter++)
+    {
+        if(networkApplicationsConfig[appCounter]->_isTcpApplication && networkApplicationsConfig[appCounter]->_applicationPort == tcpHeader->_destinationPort)
+        	return networkApplicationsConfig[appCounter];
+    }
+    return 0;
+}
+
+static void TcpStateMachine(struct NetworkApplicationConfig* application, struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer)
+{
+    switch(application->_tcpState)
+    {
+        case CLOSED:
+             break;
+        case LISTENING:
+             break;
+        case SYN_SENT:
+             break;
+        default:
+             break;
+    }
+}
+
 
 /*	  switch (TCPStateMachine)                                 // implement the TCP state machine
 	  {

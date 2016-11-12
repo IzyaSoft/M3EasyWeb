@@ -83,6 +83,7 @@
   <Files>
     <File name="src/HAL" path="" type="2"/>
     <File name="src/Applications/Http/NestedResources/webpage.h" path="src/Applications/Http/NestedResources/webpage.h" type="1"/>
+    <File name="src/BusinessLogic/data/include/networkApplicationConfig.h" path="src/BusinessLogic/data/include/networkApplicationConfig.h" type="1"/>
     <File name="src/Applications/Network/source/tcp.c" path="src/Applications/Network/source/tcp.c" type="1"/>
     <File name="src/Applications/Network/include/ip.h" path="src/Applications/Network/include/ip.h" type="1"/>
     <File name="src/Applications/Network/source/networkService.c" path="src/Applications/Network/source/networkService.c" type="1"/>
@@ -92,12 +93,11 @@
     <File name="src/HAL/source/Drivers/Chips/common/cmsis/include/core_cmInstr.h" path="src/HAL/source/Drivers/Chips/common/cmsis/include/core_cmInstr.h" type="1"/>
     <File name="src/HAL/source/Drivers/Boards/LandTiger2/source" path="" type="2"/>
     <File name="src/debugTools/semihosting.h" path="src/debugTools/semihosting/semihosting.h" type="1"/>
-    <File name="src" path="" type="2"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_nvic.h" path="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_nvic.h" type="1"/>
+    <File name="src" path="" type="2"/>
     <File name="src/Applications/Network/source/ethernet.c" path="src/Applications/Network/source/ethernet.c" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_libcfg_default.h" path="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_libcfg_default.h" type="1"/>
     <File name="src/debugTools/sh_cmd.s" path="src/debugTools/semihosting/sh_cmd.s" type="1"/>
-    <File name="src/BusinessLogic/data/include/type.h" path="src/BusinessLogic/data/include/type.h" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_pinsel.c" path="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_pinsel.c" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_libcfg_default.c" path="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_libcfg_default.c" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/common" path="" type="2"/>

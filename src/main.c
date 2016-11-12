@@ -7,39 +7,31 @@
 #include "hal.h"
 #include "networkManager.h"
 #include "networkService.h"
+#include "networkApplicationConfig.h"
 
 #include "main.h"     // for remove!
 #include "webpage.h"
 
+#define HTTP_PORT 80
+#define TFTP_PORT 21
+
+static void InitializeHttpConfig();
+static void InitializeTftpConfig();
+static void UpdateLeds();
+void SysTickHandler();
+
+struct NetworkApplicationConfig httpConfig;
+struct NetworkApplicationConfig tftpConfig;
+
 extern struct NetworkConfiguration networkConfiguration;
+extern struct NetworkApplicationConfig* networkApplicationsConfig [] = {&httpConfig, &tftpConfig};
+extern unsigned short numberOfConfigs = 2;
 
 unsigned int pagecounter = 100;
 unsigned int adcValue = 0;
 unsigned char ledsValue = 0xAA;
-
-extern void TCPClockHandler(void);
-
-volatile uint32_t TimeTick  = 0;
-
-/* SysTick interrupt happens every 10 ms */
-
-static void UpdateLeds()
-{
-    ledsValue = 0xFF - ledsValue;
-    SetLedsValue(LED_PORT_NUMBER, ledsValue);
-}
-
-void SysTickHandler (void)
-{
-    TimeTick++;
-    if (TimeTick >= 20)
-    {
-    	UpdateLeds();
-        TimeTick = 0;
-        //TCPClockHandler();
-    }
-}
-
+//extern void TCPClockHandler(void);
+volatile uint32_t timeTick  = 0;
 
 int main()
 {
@@ -56,6 +48,8 @@ int main()
     ethernetConfiguration._useAutoNegotiation = 1;
 
     InitializeNetwork(&ethernetConfiguration);
+    InitializeHttpConfig();
+    InitializeTftpConfig();
 
 /*
   *(unsigned char *)RemoteIP = 24;               // uncomment those lines to get the
@@ -73,6 +67,9 @@ int main()
     DoNetworkStuff();
   }
 */
+
+
+
 
     //HTTPStatus = 0;                                // clear HTTP-server's flag register
     //TCPLocalPort = TCP_PORT_HTTP;                  // set port we want to listen to
@@ -193,3 +190,36 @@ void InsertDynamicValues(void)
         Key++;
     }
 }*/
+
+static void InitializeHttpConfig()
+{
+    httpConfig._applicationPort = HTTP_PORT;
+    httpConfig._isTcpApplication = 1;
+    httpConfig._tcpState = CLOSED;
+    // todo: umv: add handler
+}
+
+static void InitializeTftpConfig()
+{
+    tftpConfig._applicationPort = TFTP_PORT;
+    tftpConfig._isTcpApplication = 1;
+    tftpConfig._tcpState = CLOSED;
+    // todo: umv: add handler
+}
+
+static void UpdateLeds()
+{
+    ledsValue = 0xFF - ledsValue;
+    SetLedsValue(LED_PORT_NUMBER, ledsValue);
+}
+
+void SysTickHandler ()
+{
+    timeTick++;
+    if (timeTick >= 20)
+    {
+    	UpdateLeds();
+        timeTick = 0;
+        //TCPClockHandler();
+    }
+}
