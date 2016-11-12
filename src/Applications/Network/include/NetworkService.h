@@ -15,7 +15,6 @@ void HandleNetworkEvents();
 unsigned char CheckIsPacketBrodcast(struct EthernetBuffer* buffer);
 void HandleBrodcastPacket(struct EthernetBuffer* buffer);
 void HandleIndividualAddressPacket(struct EthernetBuffer* buffer);
-void HandleTcpPacket(struct EthernetBuffer* buffer);
 
 #define RETRY_TIMEOUT        8                   // wait max. 8 x 262ms for an ACK (about 2 sec.)
 #define FIN_TIMEOUT          2                   // max. time to wait for an ACK of a FIN

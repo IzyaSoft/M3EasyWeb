@@ -1,3 +1,3 @@
 #include "networkService.h"
 
-void HandleTcpRequest(struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer);
+void HandleTcpPacket(struct EthernetBuffer* buffer);
