@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "networkApplicationClient.h"
+#include "tcpServiceContext.h"
 
 struct NetworkApplicationConfig
 {
@@ -11,9 +12,7 @@ struct NetworkApplicationConfig
     unsigned char _tcpState;
     void (*_applicationHandler) (struct EthernetBuffer*, struct TcpHeader* tcpHeader);
     struct NetworkApplicationClient _client;   // temporary is one, in future could be many
-    uint32_t _sequenceNumber;
-    uint32_t _acknowledgementNumber;
-    uint32_t _notAcknowledgedNumber;
+    struct TcpServiceContext _context;
 };
 
 #endif

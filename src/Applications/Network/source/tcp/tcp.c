@@ -36,7 +36,7 @@ void ReadTcpHeader(struct EthernetBuffer* buffer, struct TcpHeader* tcpHeader)
     tcpHeader->_sourcePort = ntohs(GetWord(buffer, TCP_SOURCE_PORT_INDEX));
     tcpHeader->_destinationPort = ntohs(GetWord(buffer, TCP_DESTINATION_PORT_INDEX));
     tcpHeader->_sequenceNumber = ntohl(GetDoubleWord(buffer, TCP_SEQUENCE_NUMBER_INDEX));
-    tcpHeader->_acknoledgementNumber = ntohl(GetDoubleWord(buffer, TCP_ACKNOWLEDGEMENT_NUMBER_INDEX));
+    tcpHeader->_acknowledgementNumber = ntohl(GetDoubleWord(buffer, TCP_ACKNOWLEDGEMENT_NUMBER_INDEX));
     tcpHeader->_windowsSize = ntohs(GetWord(buffer, TCP_WINDOW_INDEX));
     tcpHeader->_urgency = ntohs(GetWord(buffer, TCP_URGENCY_INDEX));
     tcpHeader->_checkSum = ntohs(GetWord(buffer, TCP_CHECKSUM_INDEX));
@@ -57,8 +57,8 @@ void BuildTcpFrame(struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer, u
     // TCP
     SetWord(htons(tcpHeader->_sourcePort),buffer, TCP_SOURCE_PORT_INDEX);
     SetWord(htons(tcpHeader->_destinationPort),buffer, TCP_DESTINATION_PORT_INDEX);
-    SetDoubleWord(htonl(tcpHeader->_sequenceNumber), buffer, TCP_SEQUENCE_NUMBER_INDEX);
-    SetDoubleWord(htonl(tcpHeader->_acknoledgementNumber), buffer, TCP_ACKNOWLEDGEMENT_NUMBER_INDEX);
+    SetDoubleWord(htonl(application->_context._sequenceNumber), buffer, TCP_SEQUENCE_NUMBER_INDEX);
+    SetDoubleWord(htonl(application->_context._acknowledgementNumber), buffer, TCP_ACKNOWLEDGEMENT_NUMBER_INDEX);
 
     SetWord(htons(MAX_TCP_RX_DATA_SIZE), buffer, TCP_WINDOW_INDEX);
     SetWord(0, buffer, TCP_CHECKSUM_INDEX);

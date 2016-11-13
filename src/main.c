@@ -8,6 +8,7 @@
 #include "networkManager.h"
 #include "networkService.h"
 #include "networkApplicationConfig.h"
+#include "tcpService.h"
 
 #include "main.h"     // for remove!
 #include "webpage.h"
@@ -220,6 +221,6 @@ void SysTickHandler ()
     {
     	UpdateLeds();
         timeTick = 0;
-        //TCPClockHandler();
+        HandleTcpServiceClockTick();
     }
 }

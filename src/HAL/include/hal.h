@@ -12,6 +12,9 @@
 void ConfigureSystemClock();
 void SetSysTickHandler(void (*sysTickHandler)(), uint32_t systemClockDivider);
 
+// TIMER API
+unsigned short GetTimerCountValue(unsigned char timerNumber);
+
 // LED DRIVER API
 #ifdef USE_GPIO_LED_DRIVER
     void ConfigureLedPort(unsigned char gpioPortNumber, uint32_t ledGpioDirectionMask, uint32_t initialValue);
