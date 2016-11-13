@@ -11,14 +11,20 @@ static uint32_t tcpServiceClock = 0;
 
 static void TcpStateMachine(struct NetworkApplicationConfig* application, struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer);
 static struct NetworkApplicationConfig* Filtrate(struct TcpHeader* tcpHeader);
-static void ReloadRetransmissionClocks();
+static void ReloadRetransmissionClocks(struct NetworkApplicationConfig* application);
+static void StartTimer(struct NetworkApplicationConfig* application);    // todo: umv: very strange function, should be re-factored
+static void StopTimer(struct NetworkApplicationConfig* application);     // todo: umv: very strange function, should be re-factored
+static void RestartTimer(struct NetworkApplicationConfig* application);  // todo: umv: very strange function, should be re-factored
 static void HandleLastTcpPacketAckowledgedState(struct NetworkApplicationConfig* application, struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer);
+// todo: umv: very strange functions (below), should be re-factored
 static void HandleFinalTcpState(struct NetworkApplicationConfig* application, struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer);
+static void FinalizeTcpOperations(struct NetworkApplicationConfig* application, struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer);
+
 
 void HandleTcpServiceClockTick()
 {
-sequenceNumberUpperWord++;
-tcpServiceClock++;
+    sequenceNumberUpperWord++;
+    tcpServiceClock++;
 }
 
 void HandleTcpPacket(struct EthernetBuffer* buffer)
@@ -27,15 +33,38 @@ void HandleTcpPacket(struct EthernetBuffer* buffer)
     ReadTcpHeader(buffer, &tcpHeader);
     struct NetworkApplicationConfig* selectedApplication = Filtrate(&tcpHeader);
     if(selectedApplication != 0)
+    {
         TcpStateMachine(selectedApplication, buffer, &tcpHeader);
+        FinalizeTcpOperations(selectedApplication, buffer, &tcpHeader);
+    }
 }
 
-static void ReloadRetransmissionClocks()
+static void ReloadRetransmissionClocks(struct NetworkApplicationConfig* application)
 {
     tcpServiceClock = 0;
-    //RetryCounter = MAX_RETRYS;
-    //TCPFlags |= TCP_TIMER_RUNNING;
-    //TCPFlags |= TIMER_TYPE_RETRY;
+    application->_retryCounter = MAX_RETRIES;
+    application->_tcpFlags|= TCP_TIMER_RUNNING;
+    application->_tcpFlags |= TIMER_TYPE_RETRY;
+}
+
+// todo: umv: very strange function, should be re-factored
+static void StartTimer(struct NetworkApplicationConfig* application)
+{
+    tcpServiceClock = 0;
+    application->_tcpFlags |= TCP_TIMER_RUNNING;
+    application->_tcpFlags &= ~TIMER_TYPE_RETRY;
+}
+
+// todo: umv: very strange function, should be re-factored
+static void StopTimer(struct NetworkApplicationConfig* application)
+{
+    application->_tcpFlags &= ~TCP_TIMER_RUNNING;
+}
+
+// todo: umv: very strange function, should be re-factored
+static void RestartTimer(struct NetworkApplicationConfig* application)
+{
+    tcpServiceClock = 0;
 }
 
 static struct NetworkApplicationConfig* Filtrate(struct TcpHeader* tcpHeader)
@@ -88,8 +117,7 @@ static void TcpStateMachine(struct NetworkApplicationConfig* application, struct
                      application->_context._acknowledgementNumber = tcpHeader->_sequenceNumber + 1;
                      application->_context._sequenceNumber = ((unsigned long)sequenceNumberUpperWord << 16) | GetTimerCountValue(0);
                      application->_context._unAcknowledgedSequenceNumber = application->_context._sequenceNumber + 1;
-                     // LastFrameSent = TCP_SYN_ACK_FRAME;
-                     ReloadRetransmissionClocks();
+                     ReloadRetransmissionClocks(application);
                      application->_tcpState = SYN_RECD;
                  }
                  else break;
@@ -117,29 +145,28 @@ static void TcpStateMachine(struct NetworkApplicationConfig* application, struct
                  if ((tcpHeader->_flags >> 8) & TCP_CODE_ACK)              // if ACK was acceptable, reset connection
                  {
                      application->_tcpState = CLOSED;
-                     //TCPFlags = 0;                          // reset all flags, stop retransmission...
-                     //SocketStatus = SOCK_ERR_CONN_RESET;
+                     application->_tcpFlags = 0;                          // reset all flags, stop retransmission...
+                     application->_socketStatus = SOCK_ERR_CONN_RESET;
                  }
                  break;
              }
              if((tcpHeader->_flags >> 8) & TCP_CODE_SYN)
              {
                  application->_context._acknowledgementNumber = tcpHeader->_sequenceNumber + 1;
-                 //TCPStopTimer();
+                 StopTimer(application);
                  if((tcpHeader->_flags >> 8) & TCP_CODE_ACK)
                  {
                                             // stop retransmission, other TCP got our SYN
                      application->_context._sequenceNumber = application->_context._unAcknowledgedSequenceNumber;                // advance our sequence number
                      tcpCode = TCP_CODE_ACK;        // ACK this ISN
                      application->_tcpState = ESTABLISHED;
-                     //SocketStatus |= SOCK_CONNECTED;
-                     //SocketStatus |= SOCK_TX_BUF_RELEASED;  // user may send data now :-)
+                     application->_socketStatus |= SOCK_CONNECTED;
+                     application->_socketStatus |= SOCK_TX_BUF_RELEASED;  // user may send data now :-)
                  }
                  else
                  {
                      tcpCode = TCP_CODE_SYN | TCP_CODE_ACK;
-                     //LastFrameSent = TCP_SYN_ACK_FRAME;               // now continue with sending
-                     //TCPStartRetryTimer();                            // SYN_ACK frames
+                     ReloadRetransmissionClocks(application);
                      application->_tcpState = SYN_RECD;
                  }
                  BuildTcpFrame(tcpHeader, buffer, TCP_CODE_RST, application);
@@ -154,8 +181,8 @@ static void TcpStateMachine(struct NetworkApplicationConfig* application, struct
              if((tcpHeader->_flags >> 8) & TCP_CODE_RST)
              {
                  application->_tcpState = CLOSED;                // close the state machine
-                 //TCPFlags = 0;                            // reset all flags, stop retransmission...
-                 //SocketStatus = SOCK_ERR_CONN_RESET;      // indicate an error to user
+                 application->_tcpFlags = 0;                            // reset all flags, stop retransmission...
+                 application->_socketStatus = SOCK_ERR_CONN_RESET;      // indicate an error to user
                  break;
              }
              if((tcpHeader->_flags >> 8) & TCP_CODE_SYN)
@@ -163,25 +190,25 @@ static void TcpStateMachine(struct NetworkApplicationConfig* application, struct
                  BuildTcpFrame(tcpHeader, buffer, TCP_CODE_RST, application);
                  TransmitData(buffer);
                  application->_tcpState = CLOSED;                // close connection...
-                 // TCPFlags = 0;                            // reset all flags, stop retransmission...
-                 // SocketStatus = SOCK_ERR_REMOTE;          // fatal error!
+                 application->_tcpFlags = 0;                            // reset all flags, stop retransmission...
+                 application->_socketStatus = SOCK_ERR_REMOTE;          // fatal error!
                  break;                                   // ...and drop the frame
              }
              if(!((tcpHeader->_flags >> 8) & TCP_CODE_ACK))
                  break;
              if(tcpHeader->_acknowledgementNumber == application->_context._unAcknowledgedSequenceNumber)
              {
-                 //TCPStopTimer();                          // stop retransmission
+                 StopTimer(application);                          // stop retransmission
                  application->_context._sequenceNumber = application->_context._unAcknowledgedSequenceNumber;                  // advance our sequence number
                  HandleLastTcpPacketAckowledgedState(application, tcpHeader, buffer);
-                 //if(application->_tcpState == ESTABLISHED)      // if true, give the frame buffer back
-                     //SocketStatus |= SOCK_TX_BUF_RELEASED;  // to user
+                 if(application->_tcpState == ESTABLISHED)      // if true, give the frame buffer back
+                     application->_socketStatus |= SOCK_TX_BUF_RELEASED;  // to user
                  if ((application->_tcpState == ESTABLISHED) || (application->_tcpState == FIN_WAIT_1) || (application->_tcpState == FIN_WAIT_2))
                  {
                      if(GetWord(buffer, IP_PACKET_SIZE_INDEX))
                      {
                          //TCPRxDataCount = NrOfDataBytes;                // ...tell the user...
-                         //SocketStatus |= SOCK_DATA_AVAILABLE;           // indicate the new data to user
+                         application->_socketStatus |= SOCK_DATA_AVAILABLE;           // indicate the new data to user
                          application->_context._acknowledgementNumber += GetWord(buffer, IP_PACKET_SIZE_INDEX);
                          BuildTcpFrame(tcpHeader, buffer, TCP_CODE_ACK, application);
                          TransmitData(buffer);
@@ -200,7 +227,7 @@ static void HandleLastTcpPacketAckowledgedState(struct NetworkApplicationConfig*
     {
         case SYN_RECD:
              application->_tcpState = ESTABLISHED;       // user may send data now :-)
-             //SocketStatus |= SOCK_CONNECTED;
+             application->_socketStatus |= SOCK_CONNECTED;
              break;
              break;
         case FIN_WAIT_1:
@@ -211,13 +238,13 @@ static void HandleLastTcpPacketAckowledgedState(struct NetworkApplicationConfig*
              break;
         case LAST_ACK:
              application->_tcpState = CLOSED;
-             //TCPFlags = 0;                        // reset all flags, stop retransmission...
-             //SocketStatus &= SOCK_DATA_AVAILABLE; // clear all flags but data available
+             application->_tcpFlags = 0;                        // reset all flags, stop retransmission...
+             application->_socketStatus &= SOCK_DATA_AVAILABLE; // clear all flags but data available
              break;
         case TIME_WAIT:
              BuildTcpFrame(tcpHeader, buffer, TCP_CODE_ACK, application);
              TransmitData(buffer);
-             //TCPRestartTimer();                   // restart TIME_WAIT timeout
+             RestartTimer(application);                   // restart TIME_WAIT timeout
              break;
         default:
              break;
@@ -234,20 +261,93 @@ static void HandleFinalTcpState(struct NetworkApplicationConfig* application, st
              break;
         case FIN_WAIT_1: // if our FIN was ACKed, we automatically
              application->_tcpState = CLOSING;           // enter FIN_WAIT_2 (look above) and therefore
-             //SocketStatus &= ~SOCK_CONNECTED;     // TIME_WAIT
+             application->_socketStatus &= ~SOCK_CONNECTED;     // TIME_WAIT
              break;
         case FIN_WAIT_2:
-             //TCPStartTimeWaitTimer();
+             StartTime(application);
              application->_tcpState = TIME_WAIT;
-             //SocketStatus &= ~SOCK_CONNECTED;
-            break;
-       case TIME_WAIT :
-            //TCPRestartTimer();
-            break;
-       default:
-            break;
+             application->_socketStatus &= ~SOCK_CONNECTED;
+             break;
+        case TIME_WAIT :
+             RestartTimer(application);
+             break;
+        default:
+             break;
     }
     application->_context._acknowledgementNumber++;                              // ACK remote's FIN flag
     BuildTcpFrame(tcpHeader, buffer, TCP_CODE_ACK, application);
     TransmitData(buffer);
+}
+
+static void FinalizeTcpOperations(struct NetworkApplicationConfig* application, struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer)
+{
+    if(application->_tcpFlags & TCP_TIMER_RUNNING)
+    {
+        if (application->_tcpFlags & TIMER_TYPE_RETRY)
+        {
+            if (tcpServiceClock > RETRY_TIMEOUT)
+            {
+                RestartTimer(application);                       // set a new timeout
+                if(application->_retryCounter)
+                {
+                  //TCPHandleRetransmission();             // resend last frame
+            	  application->_retryCounter--;
+                }
+                else
+                {
+                    StopTimer(application);
+                    //TCPHandleTimeout();
+                }
+            }
+        }
+        else if (tcpServiceClock > FIN_TIMEOUT)
+        {
+            application->_tcpState = CLOSED;
+            application->_tcpFlags = 0;                              // reset all flags, stop retransmission...
+            application->_socketStatus &= SOCK_DATA_AVAILABLE;       // clear all flags but data available
+        }
+    }
+    switch (application->_tcpState)
+    {
+        case CLOSED:
+        case LISTENING:
+             if(application->_tcpFlags & TCP_ACTIVE_OPEN)            // stack has to open a connection?
+             {
+                 application->_context._sequenceNumber = ((unsigned long)sequenceNumberUpperWord << 16) | (GetTimerCountValue(0) & 0xFFFF);
+                 application->_context._unAcknowledgedSequenceNumber = application->_context._sequenceNumber;
+                 application->_context._acknowledgementNumber = 0;                                       // we don't know what to ACK!
+                 application->_context._unAcknowledgedSequenceNumber++;                                      // count SYN as a byte
+                 BuildTcpFrame(tcpHeader, buffer, TCP_CODE_SYN, application);
+                 TransmitData(buffer);
+                 StartTimer(application);                               // we NEED a retry-timeout
+                 application->_tcpState = SYN_SENT;
+              }
+              break;
+         case SYN_RECD:
+         case ESTABLISHED:
+              if(application->_tcpFlags & TCP_CLOSE_REQUESTED)                  // user has user initated a close?
+              {
+                  if(application->_context._sequenceNumber == application->_context._unAcknowledgedSequenceNumber)                          // all data ACKed?
+                  {
+                      application->_context._unAcknowledgedSequenceNumber++;
+                      BuildTcpFrame(tcpHeader, buffer, TCP_CODE_FIN | TCP_CODE_ACK, application);
+                      TransmitData(buffer);
+                      StartTimer(application);
+                      application->_tcpState = FIN_WAIT_1;
+                  }
+              }
+              break;
+         case CLOSE_WAIT:
+              if(application->_context._sequenceNumber == application->_context._unAcknowledgedSequenceNumber)                            // all data ACKed?
+              {
+                  application->_context._unAcknowledgedSequenceNumber++;                                        // count FIN as a byte
+                  BuildTcpFrame(tcpHeader, buffer, TCP_CODE_FIN | TCP_CODE_ACK, application);
+                  TransmitData(buffer);
+                  StartTimer(application);
+                  application->_tcpState = LAST_ACK;
+              }
+              break;
+         default:
+              break;
+    }
 }

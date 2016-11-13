@@ -17,18 +17,6 @@ void HandleBrodcastPacket(struct EthernetBuffer* buffer);
 void HandleIndividualAddressPacket(struct EthernetBuffer* buffer);
 void TransmitData(struct EthernetBuffer* buffer);
 
-#define RETRY_TIMEOUT        8                   // wait max. 8 x 262ms for an ACK (about 2 sec.)
-#define FIN_TIMEOUT          2                   // max. time to wait for an ACK of a FIN
-                                                 // before closing TCP state-machine (about 0.5 s)
-#define MAX_RETRYS           4                   // nr. of resendings before reset conn.
-                                                 // total nr. of transmissions = MAX_RETRYS + 1
-
-                                                 // (increasing the buffer-size dramatically
-                                                 // increases the transfer-speed!)
-                                        
-#define MAX_ETH_TX_DATA_SIZE 60                  // 2nd buffer, used for ARP, ICMP, TCP (even!)
-                                                 // enough to echo 32 byte via ICMP
-
 #define IP_VER_IHL           0x4500              // IPv4, Header Length = 5x32 bit
 
 #define IP_FLAG_DONTFRAG     0x4000              // don't fragment IP frame
