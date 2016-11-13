@@ -89,10 +89,12 @@ static void TcpStateMachine(struct NetworkApplicationConfig* application, struct
                  break;
              if((tcpHeader->_flags >> 8) & TCP_CODE_ACK)
              {
-                 application->_tcpState = CLOSED;
-                 if(!((tcpHeader->_flags >> 8) & TCP_CODE_RST))
+                 if(application->_acknowledgementNumber != application->_notAcknowledgedNumber)
                  {
-                     //
+                     if(!((tcpHeader->_flags >> 8) & TCP_CODE_RST))
+                     {
+                    	 application->_sequenceNumber = application->_acknowledgementNumber;
+                     }
                  }
              }
              if(!((tcpHeader->_flags >> 8) & TCP_CODE_RST))
@@ -103,6 +105,7 @@ static void TcpStateMachine(struct NetworkApplicationConfig* application, struct
              {
 
              }
+             application->_tcpState = CLOSED;
              break;
         default:
              break;
