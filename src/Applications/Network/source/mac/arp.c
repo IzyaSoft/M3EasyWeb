@@ -4,6 +4,7 @@
 #include "networkUtils.h"
 
 extern struct NetworkConfiguration networkConfiguration;
+extern unsigned char arpCache[6] = {};
 
 /*static void RevertMacAddress(unsigned char* macAddress)
 {

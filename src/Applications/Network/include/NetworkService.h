@@ -9,6 +9,7 @@
 //#define MAX_LOCAL_BUFFER_SIZE_LIMIT                   127
 
 extern unsigned char ethernetBuffer[MAX_ETH_FRAME_SIZE];
+//extern unsigned char arpCache[6];
 
 void InitializeNetwork(struct EthernetConfiguration* ethernetConfiguration);
 void HandleNetworkEvents();
@@ -16,6 +17,8 @@ unsigned char CheckIsPacketBrodcast(struct EthernetBuffer* buffer);
 void HandleBrodcastPacket(struct EthernetBuffer* buffer);
 void HandleIndividualAddressPacket(struct EthernetBuffer* buffer);
 void TransmitData(struct EthernetBuffer* buffer);
+unsigned char HasApplicationData();   // todo: umv: to do return as signed if non successfully -1 and app number if successfully....
+struct EthernetBuffer* GetEthernetBuffer();
 
 #define IP_VER_IHL           0x4500              // IPv4, Header Length = 5x32 bit
 

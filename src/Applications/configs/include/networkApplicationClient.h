@@ -7,7 +7,7 @@
 struct NetworkApplicationClient
 {
     unsigned char _ipAddress[IPV4_LENGTH];
-    unsigned char* _macAddress[MAC_ADDRESS_LENGTH];
+    unsigned char _macAddress[MAC_ADDRESS_LENGTH];
 };
 
 #endif

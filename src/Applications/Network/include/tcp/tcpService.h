@@ -24,6 +24,6 @@
 #define SOCK_ERR_REMOTE                                 0x40      // remote TCP caused fatal error
 #define SOCK_ERR_ETHERNET                               0x50      // network interface error (timeout)
 
-void HandleTcpPacket(struct EthernetBuffer* buffer);
+unsigned char HandleTcpPacket(struct EthernetBuffer* buffer);
 void HandleTcpServiceClockTick();
 #endif

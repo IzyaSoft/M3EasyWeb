@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "diagnostic.h"
 #include "LPC17xx.h"
 

@@ -6,17 +6,19 @@
 #include "debugPrintFunctions.h"
 
 extern struct NetworkConfiguration networkConfiguration;
-
-unsigned char* arpCache[6];
+extern unsigned char arpCache[6];
+unsigned char hasData;
+static struct EthernetBuffer rxBuffer;
 
 static void WriteData(struct EthernetBuffer* txBuffer, unsigned char debugPrintEnabled)
 {
-	if(debugPrintEnabled)
-	{
+    Write(txBuffer);
+    if(debugPrintEnabled)
+    {
         printf("Outgoing Packet: ");
         printStringHexSymbols(txBuffer->_buffer, txBuffer->_storedBytes, 6);
 	}
-    Write(txBuffer);
+
 }
 
 static void ReadData(struct EthernetBuffer* rxBuffer, unsigned char debugPrintEnabled)
@@ -46,8 +48,8 @@ void HandleNetworkEvents()
     if(CheckIsDataAvailable())
     {
         uint32_t dataSize = CheckAvailableDataSize();
-        //unsigned char localBuffer[MAX_LOCAL_BUFFER_SIZE_LIMIT] = {};  // todo: umv possibly do malloc + free
-        struct EthernetBuffer rxBuffer;
+        // unsigned char localBuffer[MAX_LOCAL_BUFFER_SIZE_LIMIT] = {};  // todo: umv possibly do malloc + free
+        // struct EthernetBuffer rxBuffer;
         rxBuffer._buffer = ethernetBuffer;
         rxBuffer._bufferCapacity = MAX_ETH_FRAME_SIZE;
 /*        if(dataSize <= MAX_LOCAL_BUFFER_SIZE_LIMIT)
@@ -118,7 +120,7 @@ void HandleIndividualAddressPacket(struct EthernetBuffer* buffer)
                          Write(buffer);
                          break;
                     case TCP_PROTOCOL:
-                         HandleTcpPacket(buffer);
+                         hasData = HandleTcpPacket(buffer);
                          break;
                     case UDP_PROTOCOL:
                          break;
@@ -126,4 +128,19 @@ void HandleIndividualAddressPacket(struct EthernetBuffer* buffer)
             }
         }
     }
+}
+
+unsigned char HasApplicationData()
+{
+    if(hasData)
+    {
+        hasData = 0;
+        return 1;
+    }
+    return 0;
+}
+
+struct EthernetBuffer* GetEthernetBuffer()
+{
+    return &rxBuffer;
 }

@@ -4,21 +4,24 @@
 #include "ip.h"
 #include "hal.h"
 
+extern unsigned char arpCache[6];
+
 extern struct NetworkApplicationConfig* networkApplicationsConfig [];
 extern unsigned short numberOfConfigs;
 static uint32_t sequenceNumberUpperWord = 0;
 static uint32_t tcpServiceClock = 0;
 
-static void TcpStateMachine(struct NetworkApplicationConfig* application, struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer);
+static unsigned char HandleApplicationTcpState(struct NetworkApplicationConfig* application, struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer);
 static struct NetworkApplicationConfig* Filtrate(struct TcpHeader* tcpHeader);
 static void ReloadRetransmissionClocks(struct NetworkApplicationConfig* application);
 static void StartTimer(struct NetworkApplicationConfig* application);    // todo: umv: very strange function, should be re-factored
 static void StopTimer(struct NetworkApplicationConfig* application);     // todo: umv: very strange function, should be re-factored
 static void RestartTimer(struct NetworkApplicationConfig* application);  // todo: umv: very strange function, should be re-factored
 static void HandleLastTcpPacketAckowledgedState(struct NetworkApplicationConfig* application, struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer);
-// todo: umv: very strange functions (below), should be re-factored
-static void HandleFinalTcpState(struct NetworkApplicationConfig* application, struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer);
+// todo: umv: very strange functions (all below this linSettingPlae), should be re-factored
+static void  HandleFinalTcpState(struct NetworkApplicationConfig* application, struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer);
 static void FinalizeTcpOperations(struct NetworkApplicationConfig* application, struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer);
+static void HandleTimeout(struct NetworkApplicationConfig* application);
 
 
 void HandleTcpServiceClockTick()
@@ -27,16 +30,18 @@ void HandleTcpServiceClockTick()
     tcpServiceClock++;
 }
 
-void HandleTcpPacket(struct EthernetBuffer* buffer)
+unsigned char HandleTcpPacket(struct EthernetBuffer* buffer)
 {
     struct TcpHeader tcpHeader;
     ReadTcpHeader(buffer, &tcpHeader);
     struct NetworkApplicationConfig* selectedApplication = Filtrate(&tcpHeader);
     if(selectedApplication != 0)
     {
-        TcpStateMachine(selectedApplication, buffer, &tcpHeader);
-        FinalizeTcpOperations(selectedApplication, buffer, &tcpHeader);
+        unsigned char result = HandleApplicationTcpState(selectedApplication, &tcpHeader, buffer);
+        FinalizeTcpOperations(selectedApplication, &tcpHeader, buffer);
+        return result;
     }
+    return 0;
 }
 
 static void ReloadRetransmissionClocks(struct NetworkApplicationConfig* application)
@@ -77,41 +82,47 @@ static struct NetworkApplicationConfig* Filtrate(struct TcpHeader* tcpHeader)
     return 0;
 }
 
-static void TcpStateMachine(struct NetworkApplicationConfig* application, struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer)
+static unsigned char HandleApplicationTcpState(struct NetworkApplicationConfig* application, struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer)
 {
+    unsigned char result = 0;
+    printf("In printf HandleApplicationTcpState \r\n");
     switch(application->_tcpState)
     {
         case CLOSED:
+             printf ("closed case \r\n");
              memcpy(application->_client._ipAddress, &buffer->_buffer[IP_PACKET_HEADER_SOURCE_IP_INDEX], IPV4_LENGTH);
              memcpy(application->_client._macAddress, &buffer->_buffer[ETHERNET_SOURCE_ADDRESS_INDEX], MAC_ADDRESS_LENGTH);
+             printf ("in closed state\r\n");
              unsigned char tcpCode = 0;
-             if((tcpHeader->_flags >> 8) & TCP_CODE_ACK)
+             if(tcpHeader->_flags & TCP_CODE_ACK)
              {
-             application->_context._sequenceNumber = tcpHeader->_acknowledgementNumber;
+                 application->_context._sequenceNumber = tcpHeader->_acknowledgementNumber;
                  tcpCode = TCP_CODE_RST;
              }
              else
              {
                  application->_context._sequenceNumber = 0;
                  tcpHeader->_acknowledgementNumber = tcpHeader->_sequenceNumber + ntohs(GetWord(buffer, IP_PACKET_SIZE_INDEX)) - IP_HEADER_SIZE - tcpHeader->_headerSize;
-                 if((tcpHeader->_flags >> 8) & (TCP_CODE_SYN | TCP_CODE_FIN))
+                 if(tcpHeader->_flags & (TCP_CODE_SYN | TCP_CODE_FIN))
                      application->_context._acknowledgementNumber++;
                  tcpCode = TCP_CODE_RST | TCP_CODE_ACK;
              }
+             printf ("sending response \r\n");
              BuildTcpFrame(tcpHeader, buffer, tcpCode, application);
              TransmitData(buffer);
              break;
         case LISTENING:
-             if(!((tcpHeader->_flags >> 8) & TCP_CODE_RST))
+             printf ("in listening state\r\n");
+             if(!(tcpHeader->_flags & TCP_CODE_RST))
              {
                  memcpy(application->_client._ipAddress, &buffer->_buffer[IP_PACKET_HEADER_SOURCE_IP_INDEX], IPV4_LENGTH);
                  memcpy(application->_client._macAddress, &buffer->_buffer[ETHERNET_SOURCE_ADDRESS_INDEX], MAC_ADDRESS_LENGTH);
-                 if((tcpHeader->_flags >> 8) & TCP_CODE_ACK)
+                 if(tcpHeader->_flags & TCP_CODE_ACK)
                  {
                      application->_context._sequenceNumber = tcpHeader->_acknowledgementNumber;
                      tcpCode = TCP_CODE_RST;
                  }
-                 else if((tcpHeader->_flags >> 8) & TCP_CODE_SYN)
+                 else if(tcpHeader->_flags & TCP_CODE_SYN)
                  {
                      tcpCode = TCP_CODE_SYN | TCP_CODE_ACK;
                      application->_context._acknowledgementNumber = tcpHeader->_sequenceNumber + 1;
@@ -128,11 +139,11 @@ static void TcpStateMachine(struct NetworkApplicationConfig* application, struct
         case SYN_SENT:
              if(memcmp(application->_client._ipAddress, &buffer[IP_PACKET_HEADER_SOURCE_IP_INDEX], IPV4_LENGTH))
                  break;
-             if((tcpHeader->_flags >> 8) & TCP_CODE_ACK)
+             if(tcpHeader->_flags & TCP_CODE_ACK)
              {
                  if(tcpHeader->_acknowledgementNumber != application->_context._unAcknowledgedSequenceNumber)
                  {
-                     if(!((tcpHeader->_flags >> 8) & TCP_CODE_RST))
+                     if(!(tcpHeader->_flags & TCP_CODE_RST))
                      {
                          application->_context._sequenceNumber = tcpHeader->_acknowledgementNumber;
                          BuildTcpFrame(tcpHeader, buffer, TCP_CODE_RST, application);
@@ -140,9 +151,9 @@ static void TcpStateMachine(struct NetworkApplicationConfig* application, struct
                      }
                  }
              }
-             if((tcpHeader->_flags >> 8) & TCP_CODE_RST)
+             if(tcpHeader->_flags& TCP_CODE_RST)
              {
-                 if ((tcpHeader->_flags >> 8) & TCP_CODE_ACK)              // if ACK was acceptable, reset connection
+                 if (tcpHeader->_flags & TCP_CODE_ACK)              // if ACK was acceptable, reset connection
                  {
                      application->_tcpState = CLOSED;
                      application->_tcpFlags = 0;                          // reset all flags, stop retransmission...
@@ -150,11 +161,11 @@ static void TcpStateMachine(struct NetworkApplicationConfig* application, struct
                  }
                  break;
              }
-             if((tcpHeader->_flags >> 8) & TCP_CODE_SYN)
+             if(tcpHeader->_flags & TCP_CODE_SYN)
              {
                  application->_context._acknowledgementNumber = tcpHeader->_sequenceNumber + 1;
                  StopTimer(application);
-                 if((tcpHeader->_flags >> 8) & TCP_CODE_ACK)
+                 if(tcpHeader->_flags & TCP_CODE_ACK)
                  {
                                             // stop retransmission, other TCP got our SYN
                      application->_context._sequenceNumber = application->_context._unAcknowledgedSequenceNumber;                // advance our sequence number
@@ -178,14 +189,14 @@ static void TcpStateMachine(struct NetworkApplicationConfig* application, struct
                 break;
              if (tcpHeader->_sequenceNumber != application->_context._acknowledgementNumber) // drop if it's not the segment we expect
                 break;
-             if((tcpHeader->_flags >> 8) & TCP_CODE_RST)
+             if(tcpHeader->_flags & TCP_CODE_RST)
              {
                  application->_tcpState = CLOSED;                // close the state machine
                  application->_tcpFlags = 0;                            // reset all flags, stop retransmission...
                  application->_socketStatus = SOCK_ERR_CONN_RESET;      // indicate an error to user
                  break;
              }
-             if((tcpHeader->_flags >> 8) & TCP_CODE_SYN)
+             if(tcpHeader->_flags & TCP_CODE_SYN)
              {
                  BuildTcpFrame(tcpHeader, buffer, TCP_CODE_RST, application);
                  TransmitData(buffer);
@@ -194,7 +205,7 @@ static void TcpStateMachine(struct NetworkApplicationConfig* application, struct
                  application->_socketStatus = SOCK_ERR_REMOTE;          // fatal error!
                  break;                                   // ...and drop the frame
              }
-             if(!((tcpHeader->_flags >> 8) & TCP_CODE_ACK))
+             if(!(tcpHeader->_flags & TCP_CODE_ACK))
                  break;
              if(tcpHeader->_acknowledgementNumber == application->_context._unAcknowledgedSequenceNumber)
              {
@@ -207,6 +218,7 @@ static void TcpStateMachine(struct NetworkApplicationConfig* application, struct
                  {
                      if(GetWord(buffer, IP_PACKET_SIZE_INDEX))
                      {
+                         result = 1;
                          //TCPRxDataCount = NrOfDataBytes;                // ...tell the user...
                          application->_socketStatus |= SOCK_DATA_AVAILABLE;           // indicate the new data to user
                          application->_context._acknowledgementNumber += GetWord(buffer, IP_PACKET_SIZE_INDEX);
@@ -214,11 +226,12 @@ static void TcpStateMachine(struct NetworkApplicationConfig* application, struct
                          TransmitData(buffer);
                      }
                  }
-                 if((tcpHeader->_flags >> 8) & TCP_CODE_FIN)
+                 if(tcpHeader->_flags & TCP_CODE_FIN)
                      HandleFinalTcpState(application, tcpHeader, buffer);
              }
              break;
     }
+    return result;
 }
 
 static void HandleLastTcpPacketAckowledgedState(struct NetworkApplicationConfig* application, struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer)
@@ -264,7 +277,7 @@ static void HandleFinalTcpState(struct NetworkApplicationConfig* application, st
              application->_socketStatus &= ~SOCK_CONNECTED;     // TIME_WAIT
              break;
         case FIN_WAIT_2:
-             StartTime(application);
+             StartTimer(application);
              application->_tcpState = TIME_WAIT;
              application->_socketStatus &= ~SOCK_CONNECTED;
              break;
@@ -290,13 +303,13 @@ static void FinalizeTcpOperations(struct NetworkApplicationConfig* application, 
                 RestartTimer(application);                       // set a new timeout
                 if(application->_retryCounter)
                 {
-                  //TCPHandleRetransmission();             // resend last frame
-            	  application->_retryCounter--;
+                    //TCPHandleRetransmission();             // resend last frame
+                    application->_retryCounter--;
                 }
                 else
                 {
                     StopTimer(application);
-                    //TCPHandleTimeout();
+                    HandleTimeout(application);
                 }
             }
         }
@@ -350,4 +363,16 @@ static void FinalizeTcpOperations(struct NetworkApplicationConfig* application, 
          default:
               break;
     }
+}
+
+static void HandleTimeout(struct NetworkApplicationConfig* application)
+{
+	application->_tcpState = CLOSED;
+
+    if (application->_tcpFlags & (TCP_ACTIVE_OPEN))// | IP_ADDR_RESOLVED)) == TCP_ACTIVE_OPEN)
+        application->_socketStatus = SOCK_ERR_ARP_TIMEOUT;         // indicate an error to user
+    else
+        application->_socketStatus = SOCK_ERR_TCP_TIMEOUT;
+
+    application->_tcpFlags = 0;
 }

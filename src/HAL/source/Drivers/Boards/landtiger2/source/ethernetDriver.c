@@ -100,10 +100,10 @@
         LPC_EMAC->RxConsumeIndex = dmaBufferIndex;
     }
 
-    static unsigned char IsReadyForTransmit()
+/*    static unsigned char IsReadyForTransmit()
     {
         return 1;
-    }
+    }*/
 
     uint32_t CheckAvailableDataSize()
     {

@@ -26,5 +26,6 @@
 
 void BuildArpReply(struct EthernetBuffer* buffer);
 void BuildArpRequest(struct EthernetBuffer* buffer, unsigned char* destinationIpAddress);
+// unsigned char CheckIsMacInCache();
 
 #endif

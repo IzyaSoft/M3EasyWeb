@@ -9,6 +9,7 @@
 #include "networkService.h"
 #include "networkApplicationConfig.h"
 #include "tcpService.h"
+#include "httpServer.h"
 
 #include "main.h"     // for remove!
 #include "webpage.h"
@@ -78,6 +79,10 @@ int main()
     while (1)                                      // repeat forever
     {
         HandleNetworkEvents();
+        if(!(httpConfig._socketStatus & SOCK_ACTIVE))
+            OpenServer(&httpConfig, 0);
+        if( HasApplicationData())
+            StartProcessing(GetEthernetBuffer());
     	//DoNetworkStuff();
         /*if (!(SocketStatus & SOCK_ACTIVE))
             TCPPassiveOpen();   // listen for incoming TCP-connection
@@ -197,7 +202,6 @@ static void InitializeHttpConfig()
     httpConfig._applicationPort = HTTP_PORT;
     httpConfig._isTcpApplication = 1;
     httpConfig._tcpState = CLOSED;
-    // todo: umv: add handler
 }
 
 static void InitializeTftpConfig()
@@ -205,7 +209,6 @@ static void InitializeTftpConfig()
     tftpConfig._applicationPort = TFTP_PORT;
     tftpConfig._isTcpApplication = 1;
     tftpConfig._tcpState = CLOSED;
-    // todo: umv: add handler
 }
 
 static void UpdateLeds()

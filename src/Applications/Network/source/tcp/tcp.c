@@ -2,6 +2,8 @@
 #include "networkUtils.h"
 #include "networkConfiguration.h"
 
+static void PrintTcpHeader(struct TcpHeader* tcpHeader);
+
 extern struct NetworkConfiguration networkConfiguration;
 
 unsigned short GetTcpChecksum(void *address, unsigned short count, unsigned char* sourceIp, unsigned char* destinationIp)
@@ -31,22 +33,26 @@ unsigned short GetTcpChecksum(void *address, unsigned short count, unsigned char
     return ~checkSum;
 }
 
+//todo: umv: maybe we should return tcpHeader as result (maybe we should dynamically create TcpHeader objects)
 void ReadTcpHeader(struct EthernetBuffer* buffer, struct TcpHeader* tcpHeader)
 {
-    tcpHeader->_sourcePort = ntohs(GetWord(buffer, TCP_SOURCE_PORT_INDEX));
-    tcpHeader->_destinationPort = ntohs(GetWord(buffer, TCP_DESTINATION_PORT_INDEX));
-    tcpHeader->_sequenceNumber = ntohl(GetDoubleWord(buffer, TCP_SEQUENCE_NUMBER_INDEX));
-    tcpHeader->_acknowledgementNumber = ntohl(GetDoubleWord(buffer, TCP_ACKNOWLEDGEMENT_NUMBER_INDEX));
-    tcpHeader->_windowsSize = ntohs(GetWord(buffer, TCP_WINDOW_INDEX));
-    tcpHeader->_urgency = ntohs(GetWord(buffer, TCP_URGENCY_INDEX));
-    tcpHeader->_checkSum = ntohs(GetWord(buffer, TCP_CHECKSUM_INDEX));
-    tcpHeader->_flags = ntohs(GetWord(buffer, TCP_DATA_CODE_INDEX));
-
-    tcpHeader->_dataIndex = ((tcpHeader->_flags & 0x000F) * 4) - 1;
+    tcpHeader->_sourcePort = GetWord(buffer, TCP_SOURCE_PORT_INDEX);
+    tcpHeader->_destinationPort = GetWord(buffer, TCP_DESTINATION_PORT_INDEX);
+    tcpHeader->_sequenceNumber = GetDoubleWord(buffer, TCP_SEQUENCE_NUMBER_INDEX);
+    tcpHeader->_acknowledgementNumber =GetDoubleWord(buffer, TCP_ACKNOWLEDGEMENT_NUMBER_INDEX);
+    tcpHeader->_windowsSize = GetWord(buffer, TCP_WINDOW_INDEX);
+    tcpHeader->_urgency = GetWord(buffer, TCP_URGENCY_INDEX);
+    tcpHeader->_checkSum = GetWord(buffer, TCP_CHECKSUM_INDEX);
+    unsigned short flagsCode = GetWord(buffer, TCP_DATA_CODE_INDEX);
+    tcpHeader->_flags = (unsigned char)flagsCode;//);
+    tcpHeader->_headerSize = ((flagsCode & 0xF000) >> 12) * 4;
+    tcpHeader->_dataIndex = tcpHeader->_headerSize - 1;
+    // PrintTcpHeader(tcpHeader);
 }
 
 void BuildTcpFrame(struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer, unsigned short tcpCode, struct NetworkApplicationConfig* application)
 {
+	printf("TCP response building...\r\n");
     // Ethernet
     InsertEthernetHeader(buffer, networkConfiguration._macAddress, application->_client._macAddress, IP_ETHERTYPE);
     // IP
@@ -55,10 +61,10 @@ void BuildTcpFrame(struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer, u
         length += TCP_OPT_MSS_SIZE;
     InsertIpHeader(buffer, IPV4_VERSION | IP_TOS_D, length, 0, 0, (TTL << 8) | TCP_PROTOCOL, networkConfiguration._ipAddress, application->_client._ipAddress);
     // TCP
-    SetWord(htons(tcpHeader->_sourcePort),buffer, TCP_SOURCE_PORT_INDEX);
-    SetWord(htons(tcpHeader->_destinationPort),buffer, TCP_DESTINATION_PORT_INDEX);
-    SetDoubleWord(htonl(application->_context._sequenceNumber), buffer, TCP_SEQUENCE_NUMBER_INDEX);
-    SetDoubleWord(htonl(application->_context._acknowledgementNumber), buffer, TCP_ACKNOWLEDGEMENT_NUMBER_INDEX);
+    SetWord(tcpHeader->_destinationPort,buffer, TCP_SOURCE_PORT_INDEX);
+    SetWord(tcpHeader->_sourcePort,buffer, TCP_DESTINATION_PORT_INDEX);
+    SetDoubleWord(application->_context._sequenceNumber, buffer, TCP_SEQUENCE_NUMBER_INDEX);
+    SetDoubleWord(application->_context._acknowledgementNumber, buffer, TCP_ACKNOWLEDGEMENT_NUMBER_INDEX);
 
     SetWord(htons(MAX_TCP_RX_DATA_SIZE), buffer, TCP_WINDOW_INDEX);
     SetWord(0, buffer, TCP_CHECKSUM_INDEX);
@@ -66,16 +72,36 @@ void BuildTcpFrame(struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer, u
 
     if(tcpCode & TCP_CODE_SYN)
     {
-        SetWord(htons(0x6000 | tcpCode), buffer, TCP_DATA_CODE_INDEX);
-        SetWord(htons(TCP_OPT_MSS), buffer, TCP_DATA_INDEX);
-        SetWord(htons(MAX_TCP_RX_DATA_SIZE), buffer, TCP_DATA_INDEX + 2);
+        SetWord(0x6000 | tcpCode, buffer, TCP_DATA_CODE_INDEX);
+        SetWord(TCP_OPT_MSS, buffer, TCP_DATA_INDEX);
+        SetWord(MAX_TCP_RX_DATA_SIZE, buffer, TCP_DATA_INDEX + 2);
         SetWord(GetTcpChecksum(&buffer->_buffer[TCP_SOURCE_PORT_INDEX], TCP_HEADER_SIZE + TCP_OPT_MSS_SIZE, networkConfiguration._ipAddress, application->_client._ipAddress), buffer, TCP_CHECKSUM_INDEX);
     }
     else
     {
-        SetWord(htons(0x5000 | tcpCode), buffer, TCP_DATA_CODE_INDEX);
+        SetWord(0x5000 | tcpCode, buffer, TCP_DATA_CODE_INDEX);
         SetWord(GetTcpChecksum(&buffer->_buffer[TCP_SOURCE_PORT_INDEX], TCP_HEADER_SIZE, networkConfiguration._ipAddress, application->_client._ipAddress), buffer, TCP_CHECKSUM_INDEX);
     }
 
     buffer->_storedBytes = length += ETHERNET_HEADER_SIZE;
 }
+
+static void PrintTcpHeader(struct TcpHeader* tcpHeader)
+{
+    printf("TCP received and parsed\r\n");
+    printf("TCP Header\r\n");
+    printf("Source port: %d\r\n", tcpHeader->_sourcePort);
+    printf("Destination port: %d\r\n", tcpHeader->_destinationPort);
+
+    printf("Header size: %d\r\n", tcpHeader->_headerSize);
+    printf("Flags: %d\r\n", tcpHeader->_flags);
+
+    printf("Sequence number: %d\r\n", tcpHeader->_sequenceNumber);
+    printf("Acknowledgement number: %d\r\n", tcpHeader->_acknowledgementNumber);
+
+    printf("Urgency: %d\r\n", tcpHeader->_urgency);
+    printf("Window size: %d\r\n", tcpHeader->_windowsSize);
+
+    printf("Data index: %d\r\n", tcpHeader->_dataIndex);
+}
+
