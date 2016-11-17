@@ -9,7 +9,6 @@ struct ArpEntry
     unsigned char _ipAddress[IPV4_LENGTH];
     unsigned char _macAddress[MAC_ADDRESS_LENGTH];
     uint32_t _entryCreationTimestamp;
-    //unsigned char _isEntryValid;
     unsigned char _isEntryInited;
 };
 

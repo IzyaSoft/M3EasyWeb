@@ -1,10 +1,10 @@
-#include "tcpService.h"
-#include "networkApplicationConfig.h"
-#include "tcp.h"
-#include "ip.h"
 #include "hal.h"
-
-extern unsigned char arpCache[6];
+#include "arpCache.h"
+#include "ip.h"
+#include "tcp.h"
+#include "tcpService.h"
+#include "networkService.h"
+#include "networkApplicationConfig.h"
 
 extern struct NetworkApplicationConfig* networkApplicationsConfig [];
 extern unsigned short numberOfConfigs;
@@ -84,14 +84,20 @@ static struct NetworkApplicationConfig* Filtrate(struct TcpHeader* tcpHeader)
 
 static unsigned char HandleApplicationTcpState(struct NetworkApplicationConfig* application, struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer)
 {
+    char fail = -1;
     unsigned char result = 0;
-    printf("In printf HandleApplicationTcpState \r\n");
+    // printf("In printf HandleApplicationTcpState \r\n");
     switch(application->_tcpState)
     {
         case CLOSED:
              printf ("closed case \r\n");
              memcpy(application->_client._ipAddress, &buffer->_buffer[IP_PACKET_HEADER_SOURCE_IP_INDEX], IPV4_LENGTH);
              memcpy(application->_client._macAddress, &buffer->_buffer[ETHERNET_SOURCE_ADDRESS_INDEX], MAC_ADDRESS_LENGTH);
+             if(CheckEntryIsPresent(application->_client._ipAddress)  == fail)
+             {
+                SendArpRequest(application->_client._ipAddress);
+                break;
+             }
              printf ("in closed state\r\n");
              unsigned char tcpCode = 0;
              if(tcpHeader->_flags & TCP_CODE_ACK)

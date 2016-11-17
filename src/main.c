@@ -32,7 +32,6 @@ extern unsigned short numberOfConfigs = 2;
 unsigned int pagecounter = 100;
 unsigned int adcValue = 0;
 unsigned char ledsValue = 0xAA;
-//extern void TCPClockHandler(void);
 volatile uint32_t timeTick  = 0;
 
 int main()

@@ -9,7 +9,6 @@
 //#define MAX_LOCAL_BUFFER_SIZE_LIMIT                   127
 
 extern unsigned char ethernetBuffer[MAX_ETH_FRAME_SIZE];
-//extern unsigned char arpCache[6];
 
 void InitializeNetwork(struct EthernetConfiguration* ethernetConfiguration);
 void HandleNetworkEvents();
