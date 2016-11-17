@@ -1,5 +1,5 @@
-﻿#ifndef __TCPIP_H
-#define __TCPIP_H
+﻿#ifndef NETWORKSERVICE_H
+#define NETWORKSERVICE_H
 
 #include "hal.h"
 #include "ethernetBuffer.h"
@@ -16,6 +16,7 @@ void HandleNetworkEvents();
 unsigned char CheckIsPacketBrodcast(struct EthernetBuffer* buffer);
 void HandleBrodcastPacket(struct EthernetBuffer* buffer);
 void HandleIndividualAddressPacket(struct EthernetBuffer* buffer);
+void HandleNetworkServiceClockTick(uint32_t clockValue);
 void TransmitData(struct EthernetBuffer* buffer);
 unsigned char HasApplicationData();   // todo: umv: to do return as signed if non successfully -1 and app number if successfully....
 struct EthernetBuffer* GetEthernetBuffer();

@@ -224,6 +224,8 @@ void SysTickHandler ()
     {
     	UpdateLeds();
         timeTick = 0;
+        if((timeTick % 10) == 0)
+            HandleNetworkServiceClockTick(timeTick);
         HandleTcpServiceClockTick();
     }
 }

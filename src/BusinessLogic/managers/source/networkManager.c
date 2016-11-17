@@ -1,7 +1,5 @@
 #include "networkManager.h"
 
-
-
 extern unsigned char macAddress[] =  {0x1E, 0x30, 0x6C, 0xA2, 0x45, 0x5E};
 extern unsigned char revertedMacAddress[] =  {0x5E, 0x45, 0xA2, 0x6C, 0x30, 0x1E};
 extern unsigned char defaultIpAddress[] = {192, 168, 200, 5};

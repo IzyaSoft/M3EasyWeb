@@ -20,7 +20,7 @@ extern unsigned char arpCache[6] = {};
 }*/
 
 // todo: umv: very rough method, make it more smarter
-static unsigned char GetNetmaskFfBytesNumber(unsigned char* netmask)
+static unsigned char GetNetmaskFFBytesNumber(unsigned char* netmask)
 {
 unsigned char ffBytes = 0;
     for(unsigned char counter = 0; counter < IPV4_LENGTH; counter++)
@@ -66,7 +66,7 @@ void BuildArpRequest(struct EthernetBuffer* buffer, unsigned char* destinationIp
 {
     unsigned char destinationMac[MAC_ADDRESS_LENGTH] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
-    unsigned char ffBytesNumber = GetNetmaskFfBytesNumber(networkConfiguration._netmask);
+    unsigned char ffBytesNumber = GetNetmaskFFBytesNumber(networkConfiguration._netmask);
     unsigned char useGatewayAsDestination = 0;
     for(unsigned char counter = 0; counter < ffBytesNumber; counter ++)
     {

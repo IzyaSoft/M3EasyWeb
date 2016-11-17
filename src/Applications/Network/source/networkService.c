@@ -1,14 +1,17 @@
 ﻿#include "networkService.h"
 #include "arp.h"
+#include "arpCache.h"
 #include "ip.h"
 #include "networkConfiguration.h"
 #include "networkUtils.h"
 #include "debugPrintFunctions.h"
+#include <stdio.h>
 
 extern struct NetworkConfiguration networkConfiguration;
 extern unsigned char arpCache[6];
 unsigned char hasData;
 static struct EthernetBuffer rxBuffer;
+uint32_t tickValue = 0;
 
 static void WriteData(struct EthernetBuffer* txBuffer, unsigned char debugPrintEnabled)
 {
@@ -31,15 +34,25 @@ static void ReadData(struct EthernetBuffer* rxBuffer, unsigned char debugPrintEn
     }
 }
 
+static void SendArpRequest(unsigned char* ipAddress)
+{
+    struct EthernetBuffer arpRequestBuffer;
+    unsigned char arpBuffer[60];
+    arpRequestBuffer._buffer = arpBuffer;
+    arpRequestBuffer._bufferCapacity = 60;
+    BuildArpRequest(&arpRequestBuffer, ipAddress);
+    WriteData(&arpRequestBuffer, 0);
+}
+
 void TransmitData(struct EthernetBuffer* buffer)
 {
 	WriteData(buffer, 0);
 }
 
-//todo: umv: make proper arp cache
 void InitializeNetwork(struct EthernetConfiguration* ethernetConfiguration)
 {
     InitializeEthrernet(ethernetConfiguration);
+    M3ArpCache._arpCacheUpdateTime = 50;
 }
 
 // Network Packet Routing
@@ -52,6 +65,7 @@ void HandleNetworkEvents()
         // struct EthernetBuffer rxBuffer;
         rxBuffer._buffer = ethernetBuffer;
         rxBuffer._bufferCapacity = MAX_ETH_FRAME_SIZE;
+        rxBuffer._storedBytes = 0;
 /*        if(dataSize <= MAX_LOCAL_BUFFER_SIZE_LIMIT)
         {
             // local buffer usage
@@ -102,13 +116,22 @@ void HandleIndividualAddressPacket(struct EthernetBuffer* buffer)
     {
         if(GetWord(buffer, ARP_OPCODE_INDEX) == ARP_REPLY_OPERATION)
         {
-            //todo: umv: make arp table ip, MAC, counter
-            memcpy(arpCache, &buffer->_buffer[ARP_SENDER_MAC_INDEX], MAC_ADDRESS_LENGTH);
+            struct ArpEntry entry;
+            memcpy(entry._macAddress, &buffer->_buffer[ARP_SENDER_MAC_INDEX], MAC_ADDRESS_LENGTH);
+            memcpy(entry._ipAddress, &buffer->_buffer[ARP_SENDER_IP_INDEX], IPV4_LENGTH);
+            //entry._isEntryInited = 1;
+            //entry._entryCreationTimestamp = tickValue;
+
+            //printf("Arp reply for ip: %d.%d.%d.%d received \r\n", buffer->_buffer[ARP_SENDER_IP_INDEX],buffer->_buffer[ARP_SENDER_IP_INDEX + 1],
+            //buffer->_buffer[ARP_SENDER_IP_INDEX + 2], buffer->_buffer[ARP_SENDER_IP_INDEX + 3]);
+            //printf("Arp reply ip copy: %d.%d.%d.%d received \r\n", entry._ipAddress[0],entry._ipAddress[1], entry._ipAddress[2], entry._ipAddress[3]);
+            AddEntry(&entry, tickValue);
         }
     }
 
-    if(etherType == IP_ETHERTYPE)
+    else if(etherType == IP_ETHERTYPE)
     {
+    	static unsigned char arpSend = 0;
         if((GetWord(buffer, ETHERNET_PAYLOAD_INDEX) & 0xFF00) == IPV4_VERSION)
         {
             if(! (GetWord(buffer, IP_PACKET_FLAGS_INDEX) & (IP_FLAG_MOREFRAG | IP_FRAGOFS_MASK)))
@@ -118,6 +141,14 @@ void HandleIndividualAddressPacket(struct EthernetBuffer* buffer)
                     case ICMP_PROTOCOL:
                          BuildIcmpPacket(buffer);
                          Write(buffer);
+                         if(!arpSend)
+                         {
+                         unsigned char ip1[] = {192, 168, 200, 10};
+                         SendArpRequest(ip1);
+                         unsigned char ip2[] = {192, 168, 100, 185};
+                         SendArpRequest(ip2);
+                         arpSend = 1;
+                         }
                          break;
                     case TCP_PROTOCOL:
                          hasData = HandleTcpPacket(buffer);
@@ -143,4 +174,28 @@ unsigned char HasApplicationData()
 struct EthernetBuffer* GetEthernetBuffer()
 {
     return &rxBuffer;
+}
+
+void HandleNetworkServiceClockTick(uint32_t clockValue)
+{
+    unsigned char entriesNumber;
+    tickValue++;
+    struct ArpEntry** expiredEntries = GetEntriesForUpdate(tickValue, &entriesNumber);
+    if(entriesNumber)
+    {
+        //struct EthernetBuffer arpRequestBuffer;
+        //unsigned char arpBuffer[60];
+        //arpRequestBuffer._buffer = arpBuffer;
+        ///arpRequestBuffer._bufferCapacity = 60;
+        for (unsigned char counter = 0; counter < entriesNumber; counter ++)
+        {
+            printf("Sending arp update query for %d.%d.%d.%d ip \r\n", expiredEntries[counter]->_ipAddress[0], expiredEntries[counter]->_ipAddress[1],
+                                                                       expiredEntries[counter]->_ipAddress[2], expiredEntries[counter]->_ipAddress[3]);
+            SendArpRequest(expiredEntries[counter]->_ipAddress);
+        }
+        //{
+            //BuildArpRequest(&arpRequestBuffer, expiredEntries[counter]->_ipAddress);
+            //WriteData(&arpRequestBuffer, 0);
+        //}
+    }
 }
