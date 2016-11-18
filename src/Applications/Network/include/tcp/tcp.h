@@ -56,5 +56,6 @@ enum TcpState                                                                   
 unsigned short GetTcpChecksum(void *address, unsigned short count, unsigned char* sourceIp, unsigned char* destinationIp);
 void ReadTcpHeader(struct EthernetBuffer* buffer, struct TcpHeader* tcpHeader);
 void BuildTcpFrame(struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer, unsigned short tcpCode, struct NetworkApplicationConfig* application);
+void BuildTcpDataFrame(struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer, struct NetworkApplicationConfig* application, unsigned char* dataBuffer, unsigned short dataBufferLength);
 
 #endif

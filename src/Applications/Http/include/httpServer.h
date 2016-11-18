@@ -6,7 +6,7 @@
 #include "ethernetBuffer.h"
 #include "tcpHeader.h"
 
-void OpenServer(struct NetworkApplicationConfig* config, unsigned char activeOpen);
+void OpenServer(struct NetworkApplicationConfig* config);
 void StartProcessing(struct EthernetBuffer* packedHttp);
 
 #endif

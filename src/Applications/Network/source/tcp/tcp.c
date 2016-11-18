@@ -56,10 +56,8 @@ void BuildTcpFrame(struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer, u
     InsertEthernetHeader(buffer, networkConfiguration._macAddress, application->_client._macAddress, IP_ETHERTYPE);
     // IP
     unsigned short length = IP_HEADER_SIZE + TCP_HEADER_SIZE;
-    printf("tcp code: %d!\r\n", tcpCode);
     if(tcpCode & TCP_CODE_SYN)
     {
-        printf("syn!\r\n");
         length += TCP_OPT_MSS_SIZE;
     }
     InsertIpHeader(buffer, IPV4_VERSION | IP_TOS_D, length, 0, 0, (TTL << 8) | TCP_PROTOCOL, networkConfiguration._ipAddress, application->_client._ipAddress);
@@ -86,6 +84,28 @@ void BuildTcpFrame(struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer, u
         SetWord(htons(GetTcpChecksum(&buffer->_buffer[TCP_SOURCE_PORT_INDEX], TCP_HEADER_SIZE, networkConfiguration._ipAddress, application->_client._ipAddress)), buffer, TCP_CHECKSUM_INDEX);
     }
 
+    buffer->_storedBytes = length += ETHERNET_HEADER_SIZE;
+}
+
+void BuildTcpDataFrame(struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer, struct NetworkApplicationConfig* application, unsigned char* dataBuffer, unsigned short dataBufferLength)
+{
+    // Ethernet
+    InsertEthernetHeader(buffer, networkConfiguration._macAddress, application->_client._macAddress, IP_ETHERTYPE);
+    // IP
+    unsigned short length = IP_HEADER_SIZE + TCP_HEADER_SIZE + dataBufferLength;
+    InsertIpHeader(buffer, IPV4_VERSION | IP_TOS_D, length, 0, 0, (TTL << 8) | TCP_PROTOCOL, networkConfiguration._ipAddress, application->_client._ipAddress);
+    // TCP
+    SetWord(application->_applicationPort, buffer, TCP_SOURCE_PORT_INDEX);
+    SetWord(tcpHeader->_sourcePort,buffer, TCP_DESTINATION_PORT_INDEX);
+    SetDoubleWord(application->_context._sequenceNumber, buffer, TCP_SEQUENCE_NUMBER_INDEX);
+    SetDoubleWord(application->_context._acknowledgementNumber, buffer, TCP_ACKNOWLEDGEMENT_NUMBER_INDEX);
+
+    SetWord(MAX_TCP_RX_DATA_SIZE, buffer, TCP_WINDOW_INDEX);
+    SetWord(0, buffer, TCP_CHECKSUM_INDEX);
+    SetWord(0, buffer, TCP_URGENCY_INDEX);
+    SetWord(0x5000 | TCP_CODE_ACK, buffer, TCP_DATA_CODE_INDEX);
+    memcpy(&buffer->_buffer[TCP_DATA_INDEX], dataBuffer, dataBufferLength);
+    SetWord(htons(GetTcpChecksum(&buffer->_buffer[TCP_SOURCE_PORT_INDEX], TCP_HEADER_SIZE + dataBufferLength, networkConfiguration._ipAddress, application->_client._ipAddress)), buffer, TCP_CHECKSUM_INDEX);
     buffer->_storedBytes = length += ETHERNET_HEADER_SIZE;
 }
 

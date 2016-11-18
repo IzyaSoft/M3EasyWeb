@@ -1,11 +1,12 @@
-﻿#include "networkService.h"
+﻿#include <stdio.h>
 #include "arp.h"
 #include "arpCache.h"
 #include "ip.h"
+#include "networkService.h"
 #include "networkConfiguration.h"
 #include "networkUtils.h"
 #include "debugPrintFunctions.h"
-#include <stdio.h>
+
 
 extern struct NetworkConfiguration networkConfiguration;
 unsigned char hasData;

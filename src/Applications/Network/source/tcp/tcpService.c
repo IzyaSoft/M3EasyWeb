@@ -120,7 +120,7 @@ static unsigned char HandleApplicationTcpState(struct NetworkApplicationConfig* 
                          application->_context._acknowledgementNumber++;
                      tcpCode = TCP_CODE_RST | TCP_CODE_ACK;
                  }
-                 printf ("sending response from closed state \r\n");
+                 //printf ("sending response from closed state \r\n");
                  BuildTcpFrame(tcpHeader, buffer, tcpCode, application);
                  TransmitData(buffer);
              }
@@ -155,7 +155,7 @@ static unsigned char HandleApplicationTcpState(struct NetworkApplicationConfig* 
                      application->_tcpState = SYN_RECD;
                  }
                  else break;
-                 printf ("sending response from listening state \r\n");
+                 //printf ("sending response from listening state \r\n");
                  BuildTcpFrame(tcpHeader, buffer, tcpCode, application);
                  TransmitData(buffer);
              }
