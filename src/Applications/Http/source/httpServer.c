@@ -6,7 +6,7 @@ struct NetworkApplicationConfig* httpServerConfig;
 void OpenServer(struct NetworkApplicationConfig* config, unsigned char activeOpen)
 {
     httpServerConfig = config;
-    if(activeOpen)
+    if(!activeOpen)
     {
         if(config->_tcpState == CLOSED)
         {

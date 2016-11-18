@@ -5,8 +5,8 @@ extern struct ArpCache* M3ArpCachePtr = &M3ArpCache;
 
 //void CopyEntry(unsigned char index, struct ArpEntry* entry, uint32_t timestamp);
 void CopyEntry(struct ArpEntry* srcEntry, struct ArpEntry* dstEntry, uint32_t timestamp);
-void UpdateEntryImpl(struct ArpEntry* entry, uint32_t timestamp, unsigned char* ipAddress);
-struct ArpEntry* GetArpEntryPointer(unsigned char index);
+void UpdateEntryImpl(struct ArpEntry* entry, uint32_t timestamp, unsigned char* ipAddress, unsigned char* macAddress);
+//struct ArpEntry* GetArpEntryPointer(unsigned char index);
 
 /*void CopyEntry(unsigned char index, struct ArpEntry* entry, uint32_t timestamp)
 {
@@ -31,11 +31,12 @@ void CopyEntry(struct ArpEntry* srcEntry, struct ArpEntry* dstEntry, uint32_t ti
     struct ArpCache* cache = M3ArpCachePtr;
 }
 
-void UpdateEntryImpl(struct ArpEntry* entry, uint32_t timestamp, unsigned char* ipAddress)
+void UpdateEntryImpl(struct ArpEntry* entry, uint32_t timestamp, unsigned char* ipAddress, unsigned char* macAddress)
 {
 	struct ArpCache* cache = M3ArpCachePtr;
     entry->_entryCreationTimestamp = timestamp;
     memcpy(&entry->_ipAddress[0], ipAddress, IPV4_LENGTH);
+    memcpy(&entry->_macAddress[0], macAddress, MAC_ADDRESS_LENGTH);
 }
 
 void InitArpCache(uint32_t updateTime)
@@ -114,5 +115,5 @@ void UpdateEntry(struct ArpEntry* entry, uint32_t timestamp)
     char fail = -1;
     char index = CheckEntryIsPresent(entry->_ipAddress);
     if(index != fail)
-        UpdateEntryImpl(&M3ArpCachePtr->_entries[index], timestamp, entry->_ipAddress);
+        UpdateEntryImpl(&M3ArpCachePtr->_entries[index], timestamp, entry->_ipAddress, entry->_macAddress);
 }
