@@ -17,9 +17,9 @@ void OpenServer(struct NetworkApplicationConfig* config)
     httpServerConfig = config;
     if(config->_tcpState == CLOSED)
     {
-        config->_tcpFlags &= ~TCP_ACTIVE_OPEN;                // passive open!
+        config->_tcpFlags &= ~TCP_ACTIVE_OPEN;
         config->_tcpState = LISTENING;
-        config->_socketStatus = SOCK_ACTIVE;                  // reset, socket now active
+        config->_socketStatus = SOCK_ACTIVE;
     }
     httpServerConfig->_context._sequenceNumber = 0;
     httpServerConfig->_context._acknowledgementNumber = 0;
@@ -30,15 +30,13 @@ void StartProcessing(struct EthernetBuffer* packedHttp)
 {
     if(httpServerConfig->_socketStatus & SOCK_DATA_AVAILABLE)
     {
-        printf("HTTP Request received!\r\n");
+        //printf("HTTP Request received!\r\n");
         httpServerConfig->_socketStatus &= ~SOCK_DATA_AVAILABLE;
         if(httpServerConfig->_socketStatus & SOCK_TX_BUF_RELEASED)     // todo: umv create 1 flag to application
         {
             // 1. HTTP data parsing ...
             // 2. Find Handler ....
             // 3. Return result ....
-            struct TcpHeader tcpHeader;
-            ReadTcpHeader(packedHttp, &tcpHeader);
             unsigned short demoPageLength = sizeof(demoPage) - 1;
             unsigned short demoHeaderLength = sizeof(demoResponseHeader) - 1;
             static struct EthernetBuffer txBuffer;
@@ -51,15 +49,15 @@ void StartProcessing(struct EthernetBuffer* packedHttp)
 
             memcpy(responseData, demoResponseHeader, demoHeaderLength);
             memcpy(&responseData[demoHeaderLength], demoPage, MAX_TCP_TX_DATA_SIZE - demoHeaderLength);
-            InsertDynamicValues(responseData,  MAX_TCP_TX_DATA_SIZE);                   // exchange some strings...
-            BuildTcpDataFrame(&tcpHeader, &txBuffer, httpServerConfig, responseData, MAX_TCP_TX_DATA_SIZE);
+            InsertDynamicValues(responseData,  MAX_TCP_TX_DATA_SIZE);
+            BuildTcpDataFrame(&txBuffer, httpServerConfig, responseData, MAX_TCP_TX_DATA_SIZE);
             SendTcpData(httpServerConfig, &txBuffer, MAX_TCP_TX_DATA_SIZE);
 
             unsigned short remainBytes = demoPageLength - MAX_TCP_TX_DATA_SIZE;
 
             memcpy(responseData, &demoPage[MAX_TCP_TX_DATA_SIZE], remainBytes);
-            InsertDynamicValues(responseData, remainBytes);                   // exchange some strings...
-            BuildTcpDataFrame(&tcpHeader, &txBuffer, httpServerConfig, responseData, remainBytes);
+            InsertDynamicValues(responseData, remainBytes);
+            BuildTcpDataFrame(&txBuffer, httpServerConfig, responseData, remainBytes);
             SendTcpData(httpServerConfig, &txBuffer, remainBytes);
         }
     }

@@ -48,14 +48,14 @@ enum TcpState                                                                   
 
 #define TCP_HEADER_SIZE                                      20
 #define TCP_OPT_MSS_SIZE                                     4
-#define TCP_OPT_MSS                                          0x0204                                                                     // Type 2, Option Length 4 (Max. Segment Size)
+#define TCP_OPT_MSS                                          0x0204                 // Type 2, Option Length 4 (Max. Segment Size)
 
-#define MAX_TCP_TX_DATA_SIZE                                 1024                                                                       // max. outgoing TCP data size (even!)
-#define MAX_TCP_RX_DATA_SIZE                                 1024                                                                       // max. incoming TCP data size (even!)
+#define MAX_TCP_TX_DATA_SIZE                                 1024                   // max. outgoing TCP data size (even!)
+#define MAX_TCP_RX_DATA_SIZE                                 1024                   // max. incoming TCP data size (even!)
 
-unsigned short GetTcpChecksum(void *address, unsigned short count, unsigned char* sourceIp, unsigned char* destinationIp);
-void ReadTcpHeader(struct EthernetBuffer* buffer, struct TcpHeader* tcpHeader);
-void BuildTcpFrame(struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer, unsigned short tcpCode, struct NetworkApplicationConfig* application);
-void BuildTcpDataFrame(struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer, struct NetworkApplicationConfig* application, unsigned char* dataBuffer, unsigned short dataBufferLength);
+//unsigned short GetTcpChecksum(void *address, unsigned short count, unsigned char* sourceIp, unsigned char* destinationIp);
+struct TcpHeader ReadTcpHeader(struct EthernetBuffer* buffer);
+void BuildTcpFrame(struct EthernetBuffer* buffer, unsigned short tcpCode, struct NetworkApplicationConfig* application);
+void BuildTcpDataFrame(struct EthernetBuffer* buffer, struct NetworkApplicationConfig* application, unsigned char* tcpData, unsigned short tcpDataLength);
 
 #endif

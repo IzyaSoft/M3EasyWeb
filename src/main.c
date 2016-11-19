@@ -23,13 +23,12 @@ void SysTickHandler();
 
 struct NetworkApplicationConfig httpConfig;
 struct NetworkApplicationConfig tftpConfig;
+unsigned char ledsValue = 0xAA;
+volatile uint32_t timeTick  = 0;
 
 extern struct NetworkConfiguration networkConfiguration;
 extern struct NetworkApplicationConfig* networkApplicationsConfig [] = {&httpConfig, &tftpConfig};
 extern unsigned short numberOfConfigs = 2;
-
-unsigned char ledsValue = 0xAA;
-volatile uint32_t timeTick  = 0;
 
 int main()
 {
