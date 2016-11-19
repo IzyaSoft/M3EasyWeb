@@ -18,3 +18,12 @@ unsigned short GetEtherType(struct EthernetBuffer* buffer)
 {
     return GetWord(buffer, ETHERNET_ETHERTYPE_INDEX);
 }
+
+struct EthernetHeader ReadEthernetHeader(struct EthernetBuffer* buffer)
+{
+    struct EthernetHeader ethernetHeader;
+    memcpy(&ethernetHeader._destinationMac[0], &buffer->_buffer[ETHERNET_DESTINATION_ADDRESS_INDEX], MAC_ADDRESS_LENGTH);
+    memcpy(&ethernetHeader._sourceMac[0], &buffer->_buffer[ETHERNET_SOURCE_ADDRESS_INDEX], MAC_ADDRESS_LENGTH);
+    ethernetHeader._etherType = GetEtherType(buffer);
+    return ethernetHeader;
+}

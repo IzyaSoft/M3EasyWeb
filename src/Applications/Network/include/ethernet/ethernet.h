@@ -28,5 +28,6 @@
 void InsertEthernetHeader(struct EthernetBuffer* buffer, unsigned char* sourceMac, unsigned char* destinationMac, unsigned short etherType);
 void InsertEthernetHeader2(struct EthernetBuffer* buffer, struct EthernetHeader* header);
 unsigned short GetEtherType(struct EthernetBuffer* buffer);
+struct EthernetHeader ReadEthernetHeader(struct EthernetBuffer* buffer);
 
 #endif
