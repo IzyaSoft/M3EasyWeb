@@ -2,6 +2,7 @@
 #define ETHERNET_H
 
 #include "ethernetBuffer.h"
+#include "ethernetHeader.h"
 #include "networkUtils.h"
 
 #define MAX_ETH_FRAME_SIZE                              1536
@@ -25,6 +26,7 @@
 #define TTL                                             641
 
 void InsertEthernetHeader(struct EthernetBuffer* buffer, unsigned char* sourceMac, unsigned char* destinationMac, unsigned short etherType);
+void InsertEthernetHeader2(struct EthernetBuffer* buffer, struct EthernetHeader* header);
 unsigned short GetEtherType(struct EthernetBuffer* buffer);
 
 #endif

@@ -2,12 +2,13 @@
 #define ETHERNET_HEADER_H
 
 #include <stdint.h>
-#include "ethernet.h"
+
+#define HARDWARE_ADDRESS_LENGTH    6  // == MAC_ADDRESS_LENGTH
 
 struct EthernetHeader
 {
-    unsigned char _sourceMac[MAC_ADDRESS_LENGTH];
-    unsigned char _destinationMac[MAC_ADDRESS_LENGTH];
+    unsigned char _sourceMac[HARDWARE_ADDRESS_LENGTH];
+    unsigned char _destinationMac[HARDWARE_ADDRESS_LENGTH];
     unsigned short _etherType;
 };
 
