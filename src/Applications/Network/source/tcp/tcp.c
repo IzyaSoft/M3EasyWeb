@@ -96,7 +96,7 @@ void BuildTcpDataFrame(struct TcpHeader* tcpHeader, struct EthernetBuffer* buffe
     InsertIpHeader(buffer, IPV4_VERSION | IP_TOS_D, length, 0, 0, (TTL << 8) | TCP_PROTOCOL, networkConfiguration._ipAddress, application->_client._ipAddress);
     // TCP
     SetWord(application->_applicationPort, buffer, TCP_SOURCE_PORT_INDEX);
-    SetWord(tcpHeader->_sourcePort,buffer, TCP_DESTINATION_PORT_INDEX);
+    SetWord(tcpHeader->_sourcePort,buffer, TCP_SOURCE_PORT_INDEX);
     SetDoubleWord(application->_context._sequenceNumber, buffer, TCP_SEQUENCE_NUMBER_INDEX);
     SetDoubleWord(application->_context._acknowledgementNumber, buffer, TCP_ACKNOWLEDGEMENT_NUMBER_INDEX);
 

@@ -31,21 +31,44 @@ void StartProcessing(struct EthernetBuffer* packedHttp)
         httpServerConfig->_socketStatus &= ~SOCK_DATA_AVAILABLE;
         if(httpServerConfig->_socketStatus & SOCK_TX_BUF_RELEASED)     // todo: umv create 1 flag to application
         {
-        // 1. HTTP data parsing ...
-        // 2. Find Handler ....
-        // 3. Return result ....
-    struct TcpHeader tcpHeader;
-    ReadTcpHeader(packedHttp, &tcpHeader);
-    uint32_t httpResponseSize = sizeof(demoPage) - 1;
-    unsigned char httpHeaderSent = 0;
-    unsigned char *dataPtr;
+            // 1. HTTP data parsing ...
+            // 2. Find Handler ....
+            // 3. Return result ....
+            struct TcpHeader tcpHeader;
+            ReadTcpHeader(packedHttp, &tcpHeader);
+            // uint32_t httpResponseSize = sizeof(demoPage) - 1;
+            // unsigned char httpHeaderSent = 0;
+            unsigned char *demoPagePtr = demoPage;
+            unsigned short demoPageLength = sizeof(demoPage);
+            unsigned char *demoHeaderPtr = demoResponseHeader;
+            unsigned short demoHeaderLength = sizeof(demoResponseHeader);
+            static struct EthernetBuffer txBuffer;
+            static unsigned char txBufferStorage[1536];
+            txBuffer._buffer = txBufferStorage;
+            txBuffer._bufferCapacity = 1536;
 
-    dataPtr = demoPage;
-    struct EthernetBuffer txBuffer;
-    unsigned char txBufferStorage[1536];
-    txBuffer._buffer = txBufferStorage;
-    txBuffer._bufferCapacity = 1536;
-    unsigned short length = 0;
+            memcpy(txBufferStorage, demoResponseHeader, demoHeaderLength);
+
+            memcpy(&txBufferStorage[demoHeaderLength], demoPage, MAX_TCP_TX_DATA_SIZE - demoHeaderLength);
+            InsertDynamicValues(txBufferStorage,  MAX_TCP_TX_DATA_SIZE);                   // exchange some strings...
+/*            for(unsigned short counter = 0; counter <MAX_TCP_TX_DATA_SIZE/4; counter++)
+            {
+                uint32_t* ptr = &txBufferStorage[counter];
+                *ptr = htonl(*ptr);
+            }*/
+            BuildTcpDataFrame(&tcpHeader, &txBuffer, httpServerConfig, txBufferStorage, MAX_TCP_TX_DATA_SIZE);
+            SendTcpData(httpServerConfig, &txBuffer, MAX_TCP_TX_DATA_SIZE);
+
+            memcpy(txBufferStorage, &demoPage[MAX_TCP_TX_DATA_SIZE], demoPageLength - MAX_TCP_TX_DATA_SIZE);
+            InsertDynamicValues(txBufferStorage, demoPageLength - MAX_TCP_TX_DATA_SIZE);                   // exchange some strings...
+/*            for(unsigned short counter = 0; counter < (demoPageLength - MAX_TCP_TX_DATA_SIZE)/4; counter++)
+            {
+                uint32_t* ptr = &txBufferStorage[counter];
+                *ptr = htonl(*ptr);
+            }*/
+            BuildTcpDataFrame(&tcpHeader, &txBuffer, httpServerConfig, txBufferStorage, demoPageLength - MAX_TCP_TX_DATA_SIZE);
+            SendTcpData(httpServerConfig, &txBuffer, demoPageLength - MAX_TCP_TX_DATA_SIZE);
+/*    unsigned short length = 0;
     //if(httpResponseSize > MAX_TCP_TX_DATA_SIZE)
     //{
     //if(!httpHeaderSent)
@@ -81,7 +104,7 @@ void StartProcessing(struct EthernetBuffer* packedHttp)
     //httpResponseSize = 0;                     // all data sent
     //}
     //}
-
+*/
         }
     }
 }
@@ -106,7 +129,6 @@ void InsertDynamicValues(unsigned char* buffer, unsigned short length)
                     case '8' :                                 // "AD8%"?
                     {
                         adcValue = GetAdcValue(5);
-                        //GetAD7Val();                  // get AD value
                         sprintf(NewKey, "0x%03X", adcValue);       // insert AD converter value
                         memcpy(Key, NewKey, 5);
                         break;
