@@ -46,8 +46,9 @@ void SendTcpData(struct NetworkApplicationConfig* application, struct EthernetBu
 {
     //if(application->_socketStatus & SOCK_TX_BUF_RELEASED)
     //{
-        application->_socketStatus &= ~SOCK_TX_BUF_RELEASED;               // occupy tx-buffer
-        application->_context._unAcknowledgedSequenceNumber += tcpDataLength;                       // advance UNA
+        application->_socketStatus &= ~SOCK_TX_BUF_RELEASED;                      // occupy tx-buffer
+        application->_context._unAcknowledgedSequenceNumber += tcpDataLength;     // advance UNA
+        application->_context._sequenceNumber += tcpDataLength;       // todo: umv: custom SHIT, hack (wrong) // we shoul received ack here ! or retransmit buofer
         StartTimer(application);
         TransmitData(txBuffer);
     //}
@@ -126,10 +127,10 @@ static unsigned char HandleApplicationTcpState(struct NetworkApplicationConfig* 
                  {
                      application->_context._sequenceNumber = 0;
                      application->_context._acknowledgementNumber = tcpHeader->_sequenceNumber + GetWord(buffer, IP_PACKET_SIZE_INDEX) - IP_HEADER_SIZE - tcpHeader->_headerSize;
-                     printf("[cl]ack number in tcp header: %d\r\n", tcpHeader->_acknowledgementNumber);
-                     printf("[cl]seq number in tcp header: %d\r\n", tcpHeader->_sequenceNumber);
-                     printf("[cl]ack number in app: %d\r\n", application->_context._acknowledgementNumber);
-                     printf("[cl]seq number in tcp header: %d\r\n", application->_context._sequenceNumber);
+                     //printf("[cl]ack number in tcp header: %d\r\n", tcpHeader->_acknowledgementNumber);
+                     //printf("[cl]seq number in tcp header: %d\r\n", tcpHeader->_sequenceNumber);
+                     ///printf("[cl]ack number in app: %d\r\n", application->_context._acknowledgementNumber);
+                     //printf("[cl]seq number in tcp header: %d\r\n", application->_context._sequenceNumber);
                      if(tcpHeader->_flags & (TCP_CODE_SYN | TCP_CODE_FIN))
                          application->_context._acknowledgementNumber++;
                      tcpCode = TCP_CODE_RST | TCP_CODE_ACK;
@@ -171,10 +172,10 @@ static unsigned char HandleApplicationTcpState(struct NetworkApplicationConfig* 
                  }
                  else break;
                  //printf ("sending response from listening state \r\n");
-                 printf("[li]ack number in tcp header: %d\r\n", tcpHeader->_acknowledgementNumber);
-                 printf("[li]seq number in tcp header: %d\r\n", tcpHeader->_sequenceNumber);
-                 printf("[li]ack number in app: %d\r\n", application->_context._acknowledgementNumber);
-                 printf("[li]seq number in tcp header: %d\r\n", application->_context._sequenceNumber);
+                 //printf("[li]ack number in tcp header: %d\r\n", tcpHeader->_acknowledgementNumber);
+                 //printf("[li]seq number in tcp header: %d\r\n", tcpHeader->_sequenceNumber);
+                 //printf("[li]ack number in app: %d\r\n", application->_context._acknowledgementNumber);
+                 //printf("[li]seq number in tcp header: %d\r\n", application->_context._sequenceNumber);
                  BuildTcpFrame(tcpHeader, buffer, tcpCode, application);
                  TransmitData(buffer);
              }

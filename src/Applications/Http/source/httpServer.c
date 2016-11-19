@@ -39,16 +39,17 @@ void StartProcessing(struct EthernetBuffer* packedHttp)
             // 3. Return result ....
             struct TcpHeader tcpHeader;
             ReadTcpHeader(packedHttp, &tcpHeader);
-            unsigned short demoPageLength = sizeof(demoPage);
-            unsigned short demoHeaderLength = sizeof(demoResponseHeader);
+            unsigned short demoPageLength = sizeof(demoPage) - 1;
+            unsigned short demoHeaderLength = sizeof(demoResponseHeader) - 1;
             static struct EthernetBuffer txBuffer;
             static unsigned char txBufferStorage[1536];
             txBuffer._buffer = txBufferStorage;
             txBuffer._bufferCapacity = 1536;
             static unsigned char responseData[MAX_TCP_TX_DATA_SIZE];
 
-            memcpy(responseData, demoResponseHeader, demoHeaderLength);
+            printf("total length: %D\r\n", demoHeaderLength + demoPageLength);
 
+            memcpy(responseData, demoResponseHeader, demoHeaderLength);
             memcpy(&responseData[demoHeaderLength], demoPage, MAX_TCP_TX_DATA_SIZE - demoHeaderLength);
             InsertDynamicValues(responseData,  MAX_TCP_TX_DATA_SIZE);                   // exchange some strings...
             BuildTcpDataFrame(&tcpHeader, &txBuffer, httpServerConfig, responseData, MAX_TCP_TX_DATA_SIZE);

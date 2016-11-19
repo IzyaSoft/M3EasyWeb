@@ -1,4 +1,4 @@
-﻿const unsigned char demoPage[] = {
+const unsigned char demoPage[] = {
 "<html>\r\n"
 "<head>\r\n"
 "<meta http-equiv=\"refresh\" content=\"5\">\r\n"

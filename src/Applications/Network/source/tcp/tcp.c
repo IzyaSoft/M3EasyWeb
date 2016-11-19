@@ -47,7 +47,7 @@ void ReadTcpHeader(struct EthernetBuffer* buffer, struct TcpHeader* tcpHeader)
     tcpHeader->_flags = (unsigned char)flagsCode;//);
     tcpHeader->_headerSize = ((flagsCode & 0xF000) >> 12) * 4;
     tcpHeader->_dataIndex = tcpHeader->_headerSize - 1;
-    PrintTcpHeader(tcpHeader);
+    //PrintTcpHeader(tcpHeader);
 }
 
 void BuildTcpFrame(struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer, unsigned short tcpCode, struct NetworkApplicationConfig* application)
