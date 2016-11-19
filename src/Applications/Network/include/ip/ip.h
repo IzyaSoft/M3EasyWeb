@@ -31,6 +31,12 @@
 #define IP_TOS_T                                                         0x0008              // TOS high throughput
 #define IP_TOS_R                                                         0x0004              // TOS high reliability
 
+#define IP_VER_IHL                                                       0x4500              // IPv4, Header Length = 5x32 bit
+
+#define IP_FLAG_DONTFRAG                                                 0x4000              // don't fragment IP frame
+#define IP_FLAG_MOREFRAG                                                 0x2000              // more fragments available
+#define IP_FRAGOFS_MASK                                                  0x1FFF              // indicates where this fragment belongs
+
 unsigned short GetIpFrameSize(struct EthernetBuffer* buffer);
 unsigned short GetIpChecksum(void *address, unsigned short count);
 void InsertIpHeader(struct EthernetBuffer* buffer, unsigned short ipVersion, unsigned short packetSize, unsigned short packetId, unsigned short packetFlags, unsigned short ttl,

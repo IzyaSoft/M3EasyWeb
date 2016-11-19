@@ -87,18 +87,18 @@
     <File name="src/HAL/source/Drivers/Boards/LandTiger2/source/clockDriver.c" path="src/HAL/source/Drivers/Boards/landtiger2/source/clockDriver.c" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/source/startup_LPC17xx.c" path="src/HAL/source/Drivers/Chips/lpc17xx/source/startup_LPC17xx.c" type="1"/>
     <File name="src/Applications/Network/source/ethernet/ethernet.c" path="src/Applications/Network/source/ethernet/ethernet.c" type="1"/>
-    <File name="src/Applications/Network/source/tcp" path="" type="2"/>
     <File name="src/Applications/utils/include/networkUtils.h" path="src/Applications/utils/include/networkUtils.h" type="1"/>
+    <File name="src/Applications/Network/source/tcp" path="" type="2"/>
     <File name="src" path="" type="2"/>
-    <File name="src/debugTools/sh_cmd.s" path="src/debugTools/semihosting/sh_cmd.s" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_libcfg_default.h" path="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_libcfg_default.h" type="1"/>
+    <File name="src/debugTools/sh_cmd.s" path="src/debugTools/semihosting/sh_cmd.s" type="1"/>
     <File name="src/Applications/Network/source/tcp/tcpService.c" path="src/Applications/Network/source/tcp/tcpService.c" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_libcfg_default.c" path="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_libcfg_default.c" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/common" path="" type="2"/>
     <File name="src/Applications/utils" path="" type="2"/>
     <File name="src/Applications/Network" path="" type="2"/>
-    <File name="src/HAL/source/Drivers/Boards" path="" type="2"/>
     <File name="src/Applications/Network/source/mac/arpCache.c" path="src/Applications/Network/source/mac/arpCache.c" type="1"/>
+    <File name="src/HAL/source/Drivers/Boards" path="" type="2"/>
     <File name="src/HAL/source" path="" type="2"/>
     <File name="src/HAL/source/Drivers/Boards/LandTiger2/source/ledDriver.c" path="src/HAL/source/Drivers/Boards/landtiger2/source/ledDriver.c" type="1"/>
     <File name="src/Applications/config" path="" type="2"/>
@@ -113,21 +113,21 @@
     <File name="src/BusinessLogic/managers/source/networkManager.c" path="src/BusinessLogic/managers/source/networkManager.c" type="1"/>
     <File name="src/Applications" path="" type="2"/>
     <File name="src/HAL/source/Drivers/Chips/common/cmsis/include/core_cmFunc.h" path="src/HAL/source/Drivers/Chips/common/cmsis/include/core_cmFunc.h" type="1"/>
-    <File name="src/BusinessLogic/data/include" path="" type="2"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/include" path="" type="2"/>
+    <File name="src/BusinessLogic/data/include" path="" type="2"/>
     <File name="src/HAL/source/Drivers/Boards/LandTiger2/include" path="" type="2"/>
     <File name="src/HAL/include/hal.h" path="src/HAL/include/hal.h" type="1"/>
     <File name="src/HAL/source/Drivers/Boards/LandTiger2/source/ethernetDriver.c" path="src/HAL/source/Drivers/Boards/landtiger2/source/ethernetDriver.c" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_clkpwr.c" path="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_clkpwr.c" type="1"/>
     <File name="src/Applications/Network/include/mac/arp.h" path="src/Applications/Network/include/mac/arp.h" type="1"/>
     <File name="src/debugTools/debugPrintFunctions.h" path="src/debugTools/debugPrintFunctions.h" type="1"/>
-    <File name="src/HAL/source/Drivers/Chips/lpc17xx/source" path="" type="2"/>
     <File name="src/HAL/include" path="" type="2"/>
+    <File name="src/HAL/source/Drivers/Chips/lpc17xx/source" path="" type="2"/>
     <File name="src/Applications/Http/include" path="" type="2"/>
     <File name="src/Applications/Network/include/mac/arpCache.h" path="src/Applications/Network/include/mac/arpCache.h" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/common/cmsis" path="" type="2"/>
-    <File name="src/BusinessLogic/managers/source" path="" type="2"/>
     <File name="src/HAL/source/Drivers/Boards/LandTiger2" path="" type="2"/>
+    <File name="src/BusinessLogic/managers/source" path="" type="2"/>
     <File name="src/BusinessLogic" path="" type="2"/>
     <File name="src/main.h" path="src/main.h" type="1"/>
     <File name="src/BusinessLogic/managers" path="" type="2"/>
@@ -137,19 +137,19 @@
     <File name="src/HAL/source/Drivers/Boards/LandTiger2/source/adcDriver.c" path="src/HAL/source/Drivers/Boards/landtiger2/source/adcDriver.c" type="1"/>
     <File name="src/BusinessLogic/managers/include/networkManager.h" path="src/BusinessLogic/managers/include/networkManager.h" type="1"/>
     <File name="src/Applications/Network/include/tcp/tcpService.h" path="src/Applications/Network/include/tcp/tcpService.h" type="1"/>
-    <File name="src/HAL" path="" type="2"/>
     <File name="src/Applications/Network/source/ip/ip.c" path="src/Applications/Network/source/ip/ip.c" type="1"/>
-    <File name="src/Applications/Network/include/ip/icmp.h" path="src/Applications/Network/include/ip/icmp.h" type="1"/>
+    <File name="src/HAL" path="" type="2"/>
     <File name="src/Applications/Network/source/networkService.c" path="src/Applications/Network/source/networkService.c" type="1"/>
+    <File name="src/Applications/Network/include/ip/icmp.h" path="src/Applications/Network/include/ip/icmp.h" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_pinsel.h" path="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_pinsel.h" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/common/cmsis/include/core_cmInstr.h" path="src/HAL/source/Drivers/Chips/common/cmsis/include/core_cmInstr.h" type="1"/>
     <File name="src/HAL/source/Drivers/Boards/LandTiger2/source" path="" type="2"/>
-    <File name="src/debugTools/semihosting.h" path="src/debugTools/semihosting/semihosting.h" type="1"/>
     <File name="src/Applications/Network/source/ip" path="" type="2"/>
+    <File name="src/debugTools/semihosting.h" path="src/debugTools/semihosting/semihosting.h" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_nvic.h" path="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_nvic.h" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_pinsel.c" path="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_pinsel.c" type="1"/>
-    <File name="src/Applications/Network/source" path="" type="2"/>
     <File name="src/BusinessLogic/data/source" path="" type="2"/>
+    <File name="src/Applications/Network/source" path="" type="2"/>
     <File name="src/HAL/source/Drivers" path="" type="2"/>
     <File name="src/Applications/config/include/networkApplicationClient.h" path="src/Applications/configs/include/networkApplicationClient.h" type="1"/>
     <File name="src/Applications/Network/include/ip" path="" type="2"/>
@@ -158,9 +158,9 @@
     <File name="src/Applications/Network/source/ethernet" path="" type="2"/>
     <File name="src/HAL/source/Drivers/Boards/LandTiger2/include/ethernetDriver.h" path="src/HAL/source/Drivers/Boards/landtiger2/include/ethernetDriver.h" type="1"/>
     <File name="src/debugTools/semihosting.c" path="src/debugTools/semihosting/semihosting.c" type="1"/>
-    <File name="src/Applications/Network/include/ethernet/ethernet.h" path="src/Applications/Network/include/ethernet/ethernet.h" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_gpio.c" path="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_gpio.c" type="1"/>
     <File name="src/BusinessLogic/data" path="" type="2"/>
+    <File name="src/Applications/Network/include/ethernet/ethernet.h" path="src/Applications/Network/include/ethernet/ethernet.h" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_nvic.c" path="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_nvic.c" type="1"/>
     <File name="src/HAL/source/Drivers/Chips" path="" type="2"/>
     <File name="src/Applications/Network/include/tcp" path="" type="2"/>
