@@ -30,8 +30,7 @@ void HandleTcpServiceClockTick()
 
 unsigned char HandleTcpPacket(struct EthernetBuffer* buffer)
 {
-    struct TcpHeader tcpHeader;
-    ReadTcpHeader(buffer, &tcpHeader);
+    struct TcpHeader tcpHeader= ReadTcpHeader(buffer);
     struct NetworkApplicationConfig* selectedApplication = Filtrate(&tcpHeader);
     if(selectedApplication != 0)
     {

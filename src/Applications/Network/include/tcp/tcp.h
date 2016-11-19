@@ -53,8 +53,8 @@ enum TcpState                                                                   
 #define MAX_TCP_TX_DATA_SIZE                                 1024                   // max. outgoing TCP data size (even!)
 #define MAX_TCP_RX_DATA_SIZE                                 1024                   // max. incoming TCP data size (even!)
 
-unsigned short GetTcpChecksum(void *address, unsigned short count, unsigned char* sourceIp, unsigned char* destinationIp);
-void ReadTcpHeader(struct EthernetBuffer* buffer, struct TcpHeader* tcpHeader);
+//unsigned short GetTcpChecksum(void *address, unsigned short count, unsigned char* sourceIp, unsigned char* destinationIp);
+struct TcpHeader ReadTcpHeader(struct EthernetBuffer* buffer);
 void BuildTcpFrame(struct EthernetBuffer* buffer, unsigned short tcpCode, struct NetworkApplicationConfig* application);
 void BuildTcpDataFrame(struct EthernetBuffer* buffer, struct NetworkApplicationConfig* application, unsigned char* tcpData, unsigned short tcpDataLength);
 

@@ -2,51 +2,25 @@
 #include "networkUtils.h"
 #include "networkConfiguration.h"
 
-static void PrintTcpHeader(struct TcpHeader* tcpHeader);
-
 extern struct NetworkConfiguration networkConfiguration;
+static void PrintTcpHeader(struct TcpHeader* tcpHeader);
+static unsigned short GetTcpChecksum(void *address, unsigned short count, unsigned char* sourceIp, unsigned char* destinationIp);
 
-unsigned short GetTcpChecksum(void *address, unsigned short count, unsigned char* sourceIp, unsigned char* destinationIp)
+struct TcpHeader ReadTcpHeader(struct EthernetBuffer* buffer)
 {
-    unsigned long checkSum = 0;
-    unsigned short * addressShort = address;
-
-    checkSum += ((unsigned short)sourceIp[1] << 8) + sourceIp[0];
-    checkSum += ((unsigned short)sourceIp[3] << 8) + sourceIp[2];
-    checkSum += ((unsigned short)destinationIp[1] << 8) + destinationIp[0];
-    checkSum += ((unsigned short)destinationIp[3] << 8) + destinationIp[2];
-    checkSum += htons(count);
-    checkSum += htons(TCP_PROTOCOL);
-
-    while (count > 1)
-    {
-        checkSum += *addressShort++;
-        count -= 2;
-    }
-
-    if(count)                                     // add left-over byte, if any
-        checkSum += *(unsigned char*)addressShort;
-
-    while (checkSum >> 16)                        // fold 32-bit sum to 16 bits
-        checkSum = (checkSum & 0xFFFF) + (checkSum >> 16);
-    return ~checkSum;
-}
-
-//todo: umv: maybe we should return tcpHeader as result (maybe we should dynamically create TcpHeader objects)
-void ReadTcpHeader(struct EthernetBuffer* buffer, struct TcpHeader* tcpHeader)
-{
-    tcpHeader->_sourcePort = GetWord(buffer, TCP_SOURCE_PORT_INDEX);
-    tcpHeader->_destinationPort = GetWord(buffer, TCP_DESTINATION_PORT_INDEX);
-    tcpHeader->_sequenceNumber = GetDoubleWord(buffer, TCP_SEQUENCE_NUMBER_INDEX);
-    tcpHeader->_acknowledgementNumber = GetDoubleWord(buffer, TCP_ACKNOWLEDGEMENT_NUMBER_INDEX);
-    tcpHeader->_windowsSize = GetWord(buffer, TCP_WINDOW_INDEX);
-    tcpHeader->_urgency = GetWord(buffer, TCP_URGENCY_INDEX);
-    tcpHeader->_checkSum = GetWord(buffer, TCP_CHECKSUM_INDEX);
+    struct TcpHeader tcpHeader;
+    tcpHeader._sourcePort = GetWord(buffer, TCP_SOURCE_PORT_INDEX);
+    tcpHeader._destinationPort = GetWord(buffer, TCP_DESTINATION_PORT_INDEX);
+    tcpHeader._sequenceNumber = GetDoubleWord(buffer, TCP_SEQUENCE_NUMBER_INDEX);
+    tcpHeader._acknowledgementNumber = GetDoubleWord(buffer, TCP_ACKNOWLEDGEMENT_NUMBER_INDEX);
+    tcpHeader._windowsSize = GetWord(buffer, TCP_WINDOW_INDEX);
+    tcpHeader._urgency = GetWord(buffer, TCP_URGENCY_INDEX);
+    tcpHeader._checkSum = GetWord(buffer, TCP_CHECKSUM_INDEX);
     unsigned short flagsCode = GetWord(buffer, TCP_DATA_CODE_INDEX);
-    tcpHeader->_flags = (unsigned char)flagsCode;//);
-    tcpHeader->_headerSize = ((flagsCode & 0xF000) >> 12) * 4;
-    tcpHeader->_dataIndex = tcpHeader->_headerSize - 1;
-    //PrintTcpHeader(tcpHeader);
+    tcpHeader._flags = (unsigned char)flagsCode;//);
+    tcpHeader._headerSize = ((flagsCode & 0xF000) >> 12) * 4;
+    tcpHeader._dataIndex = tcpHeader._headerSize - 1;
+    return tcpHeader;
 }
 
 void BuildTcpFrame(struct EthernetBuffer* buffer, unsigned short tcpCode, struct NetworkApplicationConfig* application)
@@ -104,6 +78,32 @@ void BuildTcpDataFrame(struct EthernetBuffer* buffer, struct NetworkApplicationC
     memcpy(&buffer->_buffer[TCP_DATA_INDEX], tcpData, tcpDataLength);
     SetWord(htons(GetTcpChecksum(&buffer->_buffer[TCP_SOURCE_PORT_INDEX], TCP_HEADER_SIZE + tcpDataLength, networkConfiguration._ipAddress, application->_client._ipAddress)), buffer, TCP_CHECKSUM_INDEX);
     buffer->_storedBytes = length += ETHERNET_HEADER_SIZE;
+}
+
+static unsigned short GetTcpChecksum(void *address, unsigned short count, unsigned char* sourceIp, unsigned char* destinationIp)
+{
+    unsigned long checkSum = 0;
+    unsigned short * addressShort = address;
+
+    checkSum += ((unsigned short)sourceIp[1] << 8) + sourceIp[0];
+    checkSum += ((unsigned short)sourceIp[3] << 8) + sourceIp[2];
+    checkSum += ((unsigned short)destinationIp[1] << 8) + destinationIp[0];
+    checkSum += ((unsigned short)destinationIp[3] << 8) + destinationIp[2];
+    checkSum += htons(count);
+    checkSum += htons(TCP_PROTOCOL);
+
+    while (count > 1)
+    {
+        checkSum += *addressShort++;
+        count -= 2;
+    }
+
+    if(count)                                     // add left-over byte, if any
+        checkSum += *(unsigned char*)addressShort;
+
+    while (checkSum >> 16)                        // fold 32-bit sum to 16 bits
+        checkSum = (checkSum & 0xFFFF) + (checkSum >> 16);
+    return ~checkSum;
 }
 
 static void PrintTcpHeader(struct TcpHeader* tcpHeader)
