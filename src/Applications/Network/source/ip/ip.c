@@ -30,7 +30,7 @@ void InsertIpHeader(struct EthernetBuffer* buffer, unsigned short ipVersion, uns
                     unsigned short ttl, unsigned char* sourceIpAddress, unsigned char* destinationIpAddress)
 {
     SetWord(ipVersion, buffer, ETHERNET_PAYLOAD_INDEX);
-    WriteWordAsBigEndian(&buffer->_buffer[IP_PACKET_SIZE_INDEX], packetSize);
+    SetWord(packetSize, buffer, IP_PACKET_SIZE_INDEX);
     SetWord(packetId, buffer, IP_PACKET_ID_INDEX);
     SetWord(packetFlags, buffer, IP_PACKET_FLAGS_INDEX);
     SetWord(ttl, buffer, IP_PACKET_TTL_INDEX);

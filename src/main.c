@@ -41,7 +41,9 @@ int main()
     // Networks
     struct EthernetConfiguration ethernetConfiguration;
     GetNetworkConfiguration(&networkConfiguration);
-    ethernetConfiguration._macAddress = networkConfiguration._macAddress;
+    unsigned char revertedMac[MAC_ADDRESS_LENGTH] = {networkConfiguration._macAddress[5], networkConfiguration._macAddress[4], networkConfiguration._macAddress[3],
+                                                     networkConfiguration._macAddress[2], networkConfiguration._macAddress[1], networkConfiguration._macAddress[0]};
+    ethernetConfiguration._macAddress = revertedMac;
     ethernetConfiguration._useAutoNegotiation = 1;
 
     InitializeNetwork(&ethernetConfiguration);

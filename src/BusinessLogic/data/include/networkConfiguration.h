@@ -6,7 +6,6 @@ struct NetworkConfiguration
 	unsigned char _isStaticIp;
 
     unsigned char* _macAddress;
-    unsigned char* _revertedMacAddress;
     unsigned char* _ipAddress;
     unsigned char* _netmask;
     unsigned char* _gateway;
