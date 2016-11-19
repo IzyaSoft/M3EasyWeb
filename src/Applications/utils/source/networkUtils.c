@@ -1,12 +1,6 @@
 #include "networkUtils.h"
 #include "ethernet.h"
 
-void WriteWordAsBigEndian(unsigned char *address, unsigned short data)
-{
-    *address++ = data >> 8;
-    *address = (char)data;
-}
-
 unsigned short GetWord(struct EthernetBuffer* buffer, uint32_t index)
 {
     return ((unsigned short) (buffer->_buffer[index]) << 8) + buffer->_buffer[index + 1];
