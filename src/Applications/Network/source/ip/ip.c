@@ -37,5 +37,5 @@ void InsertIpHeader(struct EthernetBuffer* buffer, unsigned short ipVersion, uns
     SetWord(0, buffer, IP_PACKET_HEADER_CHECKSUM_INDEX);
     memcpy(&buffer->_buffer[IP_PACKET_HEADER_SOURCE_IP_INDEX], sourceIpAddress, IPV4_LENGTH);
     memcpy(&buffer->_buffer[IP_PACKET_HEADER_DESTINATION_IP_INDEX], destinationIpAddress, IPV4_LENGTH);
-    SetWord(SWAPBYTES(GetIpChecksum(&buffer->_buffer[ETHERNET_PAYLOAD_INDEX], IP_HEADER_SIZE)), buffer, IP_PACKET_HEADER_CHECKSUM_INDEX);
+    SetWord(htons(GetIpChecksum(&buffer->_buffer[ETHERNET_PAYLOAD_INDEX], IP_HEADER_SIZE)), buffer, IP_PACKET_HEADER_CHECKSUM_INDEX);
 }

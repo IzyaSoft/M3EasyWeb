@@ -22,9 +22,7 @@
 
 #define IPV4_VERSION                                    0x4500     // 5 - FOR IP HEADER SIZE
 
-#define TTL                                             64
-
-#define SWAPBYTES(word)                                 ((unsigned short)((word) << 8) | ((word) >> 8)) // convert little <-> big endian
+#define TTL                                             641
 
 void InsertEthernetHeader(struct EthernetBuffer* buffer, unsigned char* sourceMac, unsigned char* destinationMac, unsigned short etherType);
 unsigned short GetEtherType(struct EthernetBuffer* buffer);

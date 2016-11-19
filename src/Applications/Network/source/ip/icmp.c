@@ -23,7 +23,7 @@ void BuildIcmpPacket(struct EthernetBuffer* buffer)
         // ICMP
         SetWord(ICMP_ECHO_RESPONSE << 8, buffer, ICMP_TYPE_INDEX);
         SetWord(0, buffer, ICMP_CHEKSUM_INDEX);
-        SetWord(SWAPBYTES(GetIpChecksum(&buffer->_buffer[IP_PACKET_DATA_INDEX], icmpDataCount + ICMP_HEADER_SIZE)), buffer, ICMP_CHEKSUM_INDEX);
+        SetWord(htons(GetIpChecksum(&buffer->_buffer[IP_PACKET_DATA_INDEX], icmpDataCount + ICMP_HEADER_SIZE)), buffer, ICMP_CHEKSUM_INDEX);
         buffer->_storedBytes = ETHERNET_HEADER_SIZE + IP_HEADER_SIZE + ICMP_HEADER_SIZE + icmpDataCount;
     }
 }
