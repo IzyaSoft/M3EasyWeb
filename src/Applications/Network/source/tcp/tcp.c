@@ -29,7 +29,6 @@ unsigned short GetTcpChecksum(void *address, unsigned short count, unsigned char
 
     while (checkSum >> 16)                        // fold 32-bit sum to 16 bits
         checkSum = (checkSum & 0xFFFF) + (checkSum >> 16);
-
     return ~checkSum;
 }
 
@@ -50,16 +49,14 @@ void ReadTcpHeader(struct EthernetBuffer* buffer, struct TcpHeader* tcpHeader)
     //PrintTcpHeader(tcpHeader);
 }
 
-void BuildTcpFrame(struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer, unsigned short tcpCode, struct NetworkApplicationConfig* application)
+void BuildTcpFrame(struct EthernetBuffer* buffer, unsigned short tcpCode, struct NetworkApplicationConfig* application)
 {
     // Ethernet
     InsertEthernetHeader(buffer, networkConfiguration._macAddress, application->_client._macAddress, IP_ETHERTYPE);
     // IP
     unsigned short length = IP_HEADER_SIZE + TCP_HEADER_SIZE;
     if(tcpCode & TCP_CODE_SYN)
-    {
         length += TCP_OPT_MSS_SIZE;
-    }
     InsertIpHeader(buffer, IPV4_VERSION | IP_TOS_D, length, 0, 0, (TTL << 8) | TCP_PROTOCOL, networkConfiguration._ipAddress, application->_client._ipAddress);
     // TCP
     SetWord(application->_applicationPort, buffer, TCP_SOURCE_PORT_INDEX);
@@ -87,12 +84,12 @@ void BuildTcpFrame(struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer, u
     buffer->_storedBytes = length += ETHERNET_HEADER_SIZE;
 }
 
-void BuildTcpDataFrame(struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer, struct NetworkApplicationConfig* application, unsigned char* dataBuffer, unsigned short dataBufferLength)
+void BuildTcpDataFrame(struct EthernetBuffer* buffer, struct NetworkApplicationConfig* application, unsigned char* tcpData, unsigned short tcpDataLength)
 {
     // Ethernet
     InsertEthernetHeader(buffer, networkConfiguration._macAddress, application->_client._macAddress, IP_ETHERTYPE);
     // IP
-    unsigned short length = IP_HEADER_SIZE + TCP_HEADER_SIZE + dataBufferLength;
+    unsigned short length = IP_HEADER_SIZE + TCP_HEADER_SIZE + tcpDataLength;
     InsertIpHeader(buffer, IPV4_VERSION | IP_TOS_D, length, 0, 0, (TTL << 8) | TCP_PROTOCOL, networkConfiguration._ipAddress, application->_client._ipAddress);
     // TCP
     SetWord(application->_applicationPort, buffer, TCP_SOURCE_PORT_INDEX);
@@ -104,8 +101,8 @@ void BuildTcpDataFrame(struct TcpHeader* tcpHeader, struct EthernetBuffer* buffe
     SetWord(0, buffer, TCP_CHECKSUM_INDEX);
     SetWord(0, buffer, TCP_URGENCY_INDEX);
     SetWord(0x5000 | TCP_CODE_ACK, buffer, TCP_DATA_CODE_INDEX);
-    memcpy(&buffer->_buffer[TCP_DATA_INDEX], dataBuffer, dataBufferLength);
-    SetWord(htons(GetTcpChecksum(&buffer->_buffer[TCP_SOURCE_PORT_INDEX], TCP_HEADER_SIZE + dataBufferLength, networkConfiguration._ipAddress, application->_client._ipAddress)), buffer, TCP_CHECKSUM_INDEX);
+    memcpy(&buffer->_buffer[TCP_DATA_INDEX], tcpData, tcpDataLength);
+    SetWord(htons(GetTcpChecksum(&buffer->_buffer[TCP_SOURCE_PORT_INDEX], TCP_HEADER_SIZE + tcpDataLength, networkConfiguration._ipAddress, application->_client._ipAddress)), buffer, TCP_CHECKSUM_INDEX);
     buffer->_storedBytes = length += ETHERNET_HEADER_SIZE;
 }
 
