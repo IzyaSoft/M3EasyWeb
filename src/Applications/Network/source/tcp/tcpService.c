@@ -44,13 +44,13 @@ unsigned char HandleTcpPacket(struct EthernetBuffer* buffer)
 
 void SendTcpData(struct NetworkApplicationConfig* application, struct EthernetBuffer* txBuffer, unsigned short tcpDataLength)
 {
-    if (application->_socketStatus & SOCK_TX_BUF_RELEASED)
-    {
+    //if(application->_socketStatus & SOCK_TX_BUF_RELEASED)
+    //{
         application->_socketStatus &= ~SOCK_TX_BUF_RELEASED;               // occupy tx-buffer
         application->_context._unAcknowledgedSequenceNumber += tcpDataLength;                       // advance UNA
         StartTimer(application);
         TransmitData(txBuffer);
-    }
+    //}
 }
 
 static void ReloadRetransmissionClocks(struct NetworkApplicationConfig* application)
@@ -96,7 +96,6 @@ static unsigned char HandleApplicationTcpState(struct NetworkApplicationConfig* 
     char fail = -1;
     unsigned char result = 0;
     unsigned char tcpCode = 0;
-    // printf("In printf HandleApplicationTcpState \r\n");
     switch(application->_tcpState)
     {
         case CLOSED:
@@ -107,11 +106,12 @@ static unsigned char HandleApplicationTcpState(struct NetworkApplicationConfig* 
                  memcpy(application->_client._macAddress, &buffer->_buffer[ETHERNET_SOURCE_ADDRESS_INDEX], MAC_ADDRESS_LENGTH);
                  if(CheckEntryIsPresent(application->_client._ipAddress)  == fail)
                  {
-                    //SendArpRequest(application->_client._ipAddress);
+
                     struct ArpEntry entry;
                     memcpy(entry._ipAddress, &buffer->_buffer[IP_PACKET_HEADER_SOURCE_IP_INDEX], IPV4_LENGTH);
                     memcpy(entry._macAddress, &buffer->_buffer[ETHERNET_SOURCE_ADDRESS_INDEX], MAC_ADDRESS_LENGTH);
                     AddEntry(&entry, tcpServiceClock / 10);
+                    SendArpRequest(application->_client._ipAddress);
                     break;
                  }
                  //printf ("in closed state\r\n");
@@ -158,7 +158,7 @@ static unsigned char HandleApplicationTcpState(struct NetworkApplicationConfig* 
                  {
                      tcpCode = TCP_CODE_SYN | TCP_CODE_ACK;
                      application->_context._acknowledgementNumber = tcpHeader->_sequenceNumber + 1;
-                     application->_context._sequenceNumber = ((unsigned long)sequenceNumberUpperWord << 16) | GetTimerCountValue(0);
+                     application->_context._sequenceNumber = ((unsigned long)sequenceNumberUpperWord << 16) | (GetTimerCountValue(0) & 0xFFFF);
                      application->_context._unAcknowledgedSequenceNumber = application->_context._sequenceNumber + 1;
                      ReloadRetransmissionClocks(application);
                      application->_tcpState = SYN_RECD;

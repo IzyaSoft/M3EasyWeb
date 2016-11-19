@@ -36,11 +36,7 @@ void StartProcessing(struct EthernetBuffer* packedHttp)
             // 3. Return result ....
             struct TcpHeader tcpHeader;
             ReadTcpHeader(packedHttp, &tcpHeader);
-            // uint32_t httpResponseSize = sizeof(demoPage) - 1;
-            // unsigned char httpHeaderSent = 0;
-            //unsigned char *demoPagePtr = demoPage;
             unsigned short demoPageLength = sizeof(demoPage);
-            //unsigned char *demoHeaderPtr = demoResponseHeader;
             unsigned short demoHeaderLength = sizeof(demoResponseHeader);
             static struct EthernetBuffer txBuffer;
             static unsigned char txBufferStorage[1536];
@@ -52,60 +48,15 @@ void StartProcessing(struct EthernetBuffer* packedHttp)
 
             memcpy(&responseData[demoHeaderLength], demoPage, MAX_TCP_TX_DATA_SIZE - demoHeaderLength);
             InsertDynamicValues(responseData,  MAX_TCP_TX_DATA_SIZE);                   // exchange some strings...
-/*            for(unsigned short counter = 0; counter <MAX_TCP_TX_DATA_SIZE/4; counter++)
-            {
-                uint32_t* ptr = &txBufferStorage[counter];
-                *ptr = htonl(*ptr);
-            }*/
             BuildTcpDataFrame(&tcpHeader, &txBuffer, httpServerConfig, responseData, MAX_TCP_TX_DATA_SIZE);
             SendTcpData(httpServerConfig, &txBuffer, MAX_TCP_TX_DATA_SIZE);
 
-            memcpy(responseData, &demoPage[MAX_TCP_TX_DATA_SIZE], demoPageLength - MAX_TCP_TX_DATA_SIZE);
-            InsertDynamicValues(responseData, demoPageLength - MAX_TCP_TX_DATA_SIZE);                   // exchange some strings...
-/*            for(unsigned short counter = 0; counter < (demoPageLength - MAX_TCP_TX_DATA_SIZE)/4; counter++)
-            {
-                uint32_t* ptr = &txBufferStorage[counter];
-                *ptr = htonl(*ptr);
-            }*/
-            BuildTcpDataFrame(&tcpHeader, &txBuffer, httpServerConfig, responseData, demoPageLength - MAX_TCP_TX_DATA_SIZE);
-            SendTcpData(httpServerConfig, &txBuffer, demoPageLength - MAX_TCP_TX_DATA_SIZE);
-/*    unsigned short length = 0;
-    //if(httpResponseSize > MAX_TCP_TX_DATA_SIZE)
-    //{
-    //if(!httpHeaderSent)
-    //{
-    memcpy(txBufferStorage, demoResponseHeader, sizeof(demoResponseHeader) - 1);
-    length += sizeof(demoResponseHeader) - 1;
-    memcpy(txBufferStorage + sizeof(demoResponseHeader) - 1, dataPtr, MAX_TCP_TX_DATA_SIZE - sizeof(demoResponseHeader) + 1);
-    length += MAX_TCP_TX_DATA_SIZE - sizeof(demoResponseHeader) + 1;
-    //httpResponseSize -= MAX_TCP_TX_DATA_SIZE - sizeof(demoResponseHeader) + 1;
-    dataPtr += MAX_TCP_TX_DATA_SIZE - sizeof(demoResponseHeader) + 1;
-    //}
-    //else
-    //{
-    //memcpy(txBufferStorage, dataPtr, MAX_TCP_TX_DATA_SIZE);
-    //httpResponseSize -= MAX_TCP_TX_DATA_SIZE;
-    //dataPtr += MAX_TCP_TX_DATA_SIZE;
-    //}
+            unsigned short remainBytes = demoPageLength - MAX_TCP_TX_DATA_SIZE;
 
-    InsertDynamicValues(txBufferStorage, length);                   // exchange some strings...
-    BuildTcpDataFrame(&tcpHeader, &txBuffer, httpServerConfig, txBufferStorage,  length);
-    //TransmitData(&txBuffer);                   // xfer buffer
-    SendTcpData(httpServerConfig, &txBuffer, length);
-    //httpServerConfig->_context._unAcknowledgedSequenceNumber += length;
-    //if(httpResponseSize)                  // transmit leftover bytes
-    //{
-    length = sizeof(demoPage) - length;
-    memcpy(txBufferStorage, dataPtr, length);
-    BuildTcpDataFrame(&tcpHeader, &txBuffer, httpServerConfig, txBufferStorage, length);
-    InsertDynamicValues(txBufferStorage, length);                   // exchange some strings...
-    SendTcpData(httpServerConfig, &txBuffer, length);                   // send last segment
-    //httpServerConfig->_context._unAcknowledgedSequenceNumber += sizeof(demoPage) - length;
-            //TCPClose();                              // and close connection
-    //httpResponseSize = 0;                     // all data sent
-    //}
-    //}
-*/
+            memcpy(responseData, &demoPage[MAX_TCP_TX_DATA_SIZE], remainBytes);
+            InsertDynamicValues(responseData, remainBytes);                   // exchange some strings...
+            BuildTcpDataFrame(&tcpHeader, &txBuffer, httpServerConfig, responseData, remainBytes);
+            SendTcpData(httpServerConfig, &txBuffer, remainBytes);
         }
     }
 }

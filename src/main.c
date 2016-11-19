@@ -3,7 +3,7 @@
 #include <string.h>
 #include "driverConfig.h"
 
-#define extern        // WTF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (make this nice!!!!!!)
+#define extern        // WTF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (make this right)
 #include "hal.h"
 #include "networkManager.h"
 #include "networkService.h"
