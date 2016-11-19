@@ -1,6 +1,8 @@
 #ifndef TCPSERVICE_H
 #define TCPSERVICE_H
+#include "tcp.h"
 #include "networkService.h"
+#include "networkApplicationConfig.h"
 
 #define TCP_ACTIVE_OPEN                                 0x01
 #define TCP_TIMER_RUNNING                               0x04
@@ -26,4 +28,5 @@
 
 unsigned char HandleTcpPacket(struct EthernetBuffer* buffer);
 void HandleTcpServiceClockTick();
+void SendTcpData(struct NetworkApplicationConfig* application, struct EthernetBuffer* txBuffer, unsigned short tcpDataLength);
 #endif

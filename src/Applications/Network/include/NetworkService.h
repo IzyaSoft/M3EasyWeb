@@ -17,7 +17,7 @@ void HandleBrodcastPacket(struct EthernetBuffer* buffer);
 void HandleIndividualAddressPacket(struct EthernetBuffer* buffer);
 void HandleNetworkServiceClockTick(uint32_t clockValue);
 void TransmitData(struct EthernetBuffer* buffer);
-unsigned char HasApplicationData();   // todo: umv: to do return as signed if non successfully -1 and app number if successfully....
+// unsigned char HasApplicationData();   // todo: umv: to do return as signed if non successfully -1 and app number if successfully....
 struct EthernetBuffer* GetEthernetBuffer();
 
 #define IP_VER_IHL           0x4500              // IPv4, Header Length = 5x32 bit

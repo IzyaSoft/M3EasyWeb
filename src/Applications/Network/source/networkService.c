@@ -164,7 +164,7 @@ void HandleIndividualAddressPacket(struct EthernetBuffer* buffer)
     }
 }
 
-unsigned char HasApplicationData()
+/*unsigned char HasApplicationData()
 {
     if(hasData)
     {
@@ -172,7 +172,7 @@ unsigned char HasApplicationData()
         return 1;
     }
     return 0;
-}
+}*/
 
 struct EthernetBuffer* GetEthernetBuffer()
 {

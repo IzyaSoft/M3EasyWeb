@@ -25,10 +25,15 @@ void OpenServer(struct NetworkApplicationConfig* config)
 
 void StartProcessing(struct EthernetBuffer* packedHttp)
 {
-    printf("HTTP Request received!\r\n");
-    // 1. HTTP data parsing ...
-    // 2. Find Handler ....
-    // 3. Return result ....
+    if(httpServerConfig->_socketStatus & SOCK_DATA_AVAILABLE)
+    {
+        printf("HTTP Request received!\r\n");
+        httpServerConfig->_socketStatus &= ~SOCK_DATA_AVAILABLE;
+        if(httpServerConfig->_socketStatus & SOCK_TX_BUF_RELEASED)     // todo: umv create 1 flag to application
+        {
+        // 1. HTTP data parsing ...
+        // 2. Find Handler ....
+        // 3. Return result ....
     struct TcpHeader tcpHeader;
     ReadTcpHeader(packedHttp, &tcpHeader);
     uint32_t httpResponseSize = sizeof(demoPage) - 1;
@@ -61,19 +66,24 @@ void StartProcessing(struct EthernetBuffer* packedHttp)
 
     InsertDynamicValues(txBufferStorage, length);                   // exchange some strings...
     BuildTcpDataFrame(&tcpHeader, &txBuffer, httpServerConfig, txBufferStorage,  length);
-    TransmitData(&txBuffer);                   // xfer buffer
-    httpServerConfig->_context._unAcknowledgedSequenceNumber += length;
+    //TransmitData(&txBuffer);                   // xfer buffer
+    SendTcpData(httpServerConfig, &txBuffer, length);
+    //httpServerConfig->_context._unAcknowledgedSequenceNumber += length;
     //if(httpResponseSize)                  // transmit leftover bytes
     //{
-    memcpy(txBufferStorage, dataPtr, sizeof(demoPage) - length);
-    BuildTcpDataFrame(&tcpHeader, &txBuffer, httpServerConfig, txBufferStorage, sizeof(demoPage) - length);
-    InsertDynamicValues(txBufferStorage, sizeof(demoPage) - length);                   // exchange some strings...
-    TransmitData(&txBuffer);                   // send last segment
+    length = sizeof(demoPage) - length;
+    memcpy(txBufferStorage, dataPtr, length);
+    BuildTcpDataFrame(&tcpHeader, &txBuffer, httpServerConfig, txBufferStorage, length);
+    InsertDynamicValues(txBufferStorage, length);                   // exchange some strings...
+    SendTcpData(httpServerConfig, &txBuffer, length);                   // send last segment
     //httpServerConfig->_context._unAcknowledgedSequenceNumber += sizeof(demoPage) - length;
             //TCPClose();                              // and close connection
     //httpResponseSize = 0;                     // all data sent
     //}
     //}
+
+        }
+    }
 }
 
 void InsertDynamicValues(unsigned char* buffer, unsigned short length)

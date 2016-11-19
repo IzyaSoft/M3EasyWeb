@@ -3,7 +3,7 @@
 
 #include "ArpEntry.h"
 
-#define ARP_CACHE_SIZE 4
+#define ARP_CACHE_SIZE 10
 
 struct ArpCache
 {
