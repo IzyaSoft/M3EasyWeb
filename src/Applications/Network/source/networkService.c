@@ -54,7 +54,6 @@ void InitializeNetwork(struct EthernetConfiguration* ethernetConfiguration)
 {
     InitializeEthrernet(ethernetConfiguration);
     InitArpCache(50);
-    //M3ArpCache._arpCacheUpdateTime = 50;
 }
 
 // Network Packet Routing
@@ -121,8 +120,6 @@ void HandleIndividualAddressPacket(struct EthernetBuffer* buffer)
             struct ArpEntry entry;
             memcpy(entry._macAddress, &buffer->_buffer[ARP_SENDER_MAC_INDEX], MAC_ADDRESS_LENGTH);
             memcpy(entry._ipAddress, &buffer->_buffer[ARP_SENDER_IP_INDEX], IPV4_LENGTH);
-            //entry._isEntryInited = 1;
-            //entry._entryCreationTimestamp = tickValue;
 
             //printf("Arp reply for ip: %d.%d.%d.%d received \r\n", buffer->_buffer[ARP_SENDER_IP_INDEX],buffer->_buffer[ARP_SENDER_IP_INDEX + 1],
             //buffer->_buffer[ARP_SENDER_IP_INDEX + 2], buffer->_buffer[ARP_SENDER_IP_INDEX + 3]);

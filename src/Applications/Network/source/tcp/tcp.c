@@ -39,7 +39,7 @@ void ReadTcpHeader(struct EthernetBuffer* buffer, struct TcpHeader* tcpHeader)
     tcpHeader->_sourcePort = GetWord(buffer, TCP_SOURCE_PORT_INDEX);
     tcpHeader->_destinationPort = GetWord(buffer, TCP_DESTINATION_PORT_INDEX);
     tcpHeader->_sequenceNumber = GetDoubleWord(buffer, TCP_SEQUENCE_NUMBER_INDEX);
-    tcpHeader->_acknowledgementNumber =GetDoubleWord(buffer, TCP_ACKNOWLEDGEMENT_NUMBER_INDEX);
+    tcpHeader->_acknowledgementNumber = GetDoubleWord(buffer, TCP_ACKNOWLEDGEMENT_NUMBER_INDEX);
     tcpHeader->_windowsSize = GetWord(buffer, TCP_WINDOW_INDEX);
     tcpHeader->_urgency = GetWord(buffer, TCP_URGENCY_INDEX);
     tcpHeader->_checkSum = GetWord(buffer, TCP_CHECKSUM_INDEX);
@@ -47,7 +47,7 @@ void ReadTcpHeader(struct EthernetBuffer* buffer, struct TcpHeader* tcpHeader)
     tcpHeader->_flags = (unsigned char)flagsCode;//);
     tcpHeader->_headerSize = ((flagsCode & 0xF000) >> 12) * 4;
     tcpHeader->_dataIndex = tcpHeader->_headerSize - 1;
-    // PrintTcpHeader(tcpHeader);
+    PrintTcpHeader(tcpHeader);
 }
 
 void BuildTcpFrame(struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer, unsigned short tcpCode, struct NetworkApplicationConfig* application)
@@ -63,7 +63,7 @@ void BuildTcpFrame(struct TcpHeader* tcpHeader, struct EthernetBuffer* buffer, u
     InsertIpHeader(buffer, IPV4_VERSION | IP_TOS_D, length, 0, 0, (TTL << 8) | TCP_PROTOCOL, networkConfiguration._ipAddress, application->_client._ipAddress);
     // TCP
     SetWord(application->_applicationPort, buffer, TCP_SOURCE_PORT_INDEX);
-    SetWord(tcpHeader->_sourcePort,buffer, TCP_DESTINATION_PORT_INDEX);
+    SetWord(application->_client._tcpPort, buffer, TCP_DESTINATION_PORT_INDEX);
     SetDoubleWord(application->_context._sequenceNumber, buffer, TCP_SEQUENCE_NUMBER_INDEX);
     SetDoubleWord(application->_context._acknowledgementNumber, buffer, TCP_ACKNOWLEDGEMENT_NUMBER_INDEX);
 
@@ -96,7 +96,7 @@ void BuildTcpDataFrame(struct TcpHeader* tcpHeader, struct EthernetBuffer* buffe
     InsertIpHeader(buffer, IPV4_VERSION | IP_TOS_D, length, 0, 0, (TTL << 8) | TCP_PROTOCOL, networkConfiguration._ipAddress, application->_client._ipAddress);
     // TCP
     SetWord(application->_applicationPort, buffer, TCP_SOURCE_PORT_INDEX);
-    SetWord(tcpHeader->_sourcePort,buffer, TCP_SOURCE_PORT_INDEX);
+    SetWord(application->_client._tcpPort, buffer, TCP_DESTINATION_PORT_INDEX);
     SetDoubleWord(application->_context._sequenceNumber, buffer, TCP_SEQUENCE_NUMBER_INDEX);
     SetDoubleWord(application->_context._acknowledgementNumber, buffer, TCP_ACKNOWLEDGEMENT_NUMBER_INDEX);
 

@@ -21,6 +21,9 @@ void OpenServer(struct NetworkApplicationConfig* config)
         config->_tcpState = LISTENING;
         config->_socketStatus = SOCK_ACTIVE;                  // reset, socket now active
     }
+    httpServerConfig->_context._sequenceNumber = 0;
+    httpServerConfig->_context._acknowledgementNumber = 0;
+    httpServerConfig->_context._unAcknowledgedSequenceNumber = 0;
 }
 
 void StartProcessing(struct EthernetBuffer* packedHttp)

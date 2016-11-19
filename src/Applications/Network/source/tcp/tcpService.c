@@ -104,6 +104,7 @@ static unsigned char HandleApplicationTcpState(struct NetworkApplicationConfig* 
                  //printf ("closed case \r\n");
                  memcpy(application->_client._ipAddress, &buffer->_buffer[IP_PACKET_HEADER_SOURCE_IP_INDEX], IPV4_LENGTH);
                  memcpy(application->_client._macAddress, &buffer->_buffer[ETHERNET_SOURCE_ADDRESS_INDEX], MAC_ADDRESS_LENGTH);
+                 application->_client._tcpPort = tcpHeader->_sourcePort;
                  if(CheckEntryIsPresent(application->_client._ipAddress)  == fail)
                  {
 
@@ -112,7 +113,7 @@ static unsigned char HandleApplicationTcpState(struct NetworkApplicationConfig* 
                     memcpy(entry._macAddress, &buffer->_buffer[ETHERNET_SOURCE_ADDRESS_INDEX], MAC_ADDRESS_LENGTH);
                     AddEntry(&entry, tcpServiceClock / 10);
                     SendArpRequest(application->_client._ipAddress);
-                    break;
+                    //break;
                  }
                  //printf ("in closed state\r\n");
 
@@ -124,7 +125,11 @@ static unsigned char HandleApplicationTcpState(struct NetworkApplicationConfig* 
                  else
                  {
                      application->_context._sequenceNumber = 0;
-                     tcpHeader->_acknowledgementNumber = tcpHeader->_sequenceNumber + GetWord(buffer, IP_PACKET_SIZE_INDEX) - IP_HEADER_SIZE - tcpHeader->_headerSize;
+                     application->_context._acknowledgementNumber = tcpHeader->_sequenceNumber + GetWord(buffer, IP_PACKET_SIZE_INDEX) - IP_HEADER_SIZE - tcpHeader->_headerSize;
+                     printf("[cl]ack number in tcp header: %d\r\n", tcpHeader->_acknowledgementNumber);
+                     printf("[cl]seq number in tcp header: %d\r\n", tcpHeader->_sequenceNumber);
+                     printf("[cl]ack number in app: %d\r\n", application->_context._acknowledgementNumber);
+                     printf("[cl]seq number in tcp header: %d\r\n", application->_context._sequenceNumber);
                      if(tcpHeader->_flags & (TCP_CODE_SYN | TCP_CODE_FIN))
                          application->_context._acknowledgementNumber++;
                      tcpCode = TCP_CODE_RST | TCP_CODE_ACK;
@@ -140,14 +145,15 @@ static unsigned char HandleApplicationTcpState(struct NetworkApplicationConfig* 
              {
                  memcpy(application->_client._ipAddress, &buffer->_buffer[IP_PACKET_HEADER_SOURCE_IP_INDEX], IPV4_LENGTH);
                  memcpy(application->_client._macAddress, &buffer->_buffer[ETHERNET_SOURCE_ADDRESS_INDEX], MAC_ADDRESS_LENGTH);
+                 application->_client._tcpPort = tcpHeader->_sourcePort;
                  if(CheckEntryIsPresent(application->_client._ipAddress)  == fail)
                  {
                      SendArpRequest(application->_client._ipAddress);
-                     //struct ArpEntry entry;
-                     //memcpy(entry._ipAddress, &buffer->_buffer[IP_PACKET_HEADER_SOURCE_IP_INDEX], IPV4_LENGTH);
-                     //memcpy(entry._macAddress, &buffer->_buffer[ETHERNET_SOURCE_ADDRESS_INDEX], MAC_ADDRESS_LENGTH);
-                     //AddEntry(&entry, tcpServiceClock / 10);
-                     break;
+                     struct ArpEntry entry;
+                     memcpy(entry._ipAddress, &buffer->_buffer[IP_PACKET_HEADER_SOURCE_IP_INDEX], IPV4_LENGTH);
+                     memcpy(entry._macAddress, &buffer->_buffer[ETHERNET_SOURCE_ADDRESS_INDEX], MAC_ADDRESS_LENGTH);
+                     AddEntry(&entry, tcpServiceClock / 10);
+                     //break;
                  }
                  if(tcpHeader->_flags & TCP_CODE_ACK)
                  {
@@ -157,7 +163,7 @@ static unsigned char HandleApplicationTcpState(struct NetworkApplicationConfig* 
                  else if(tcpHeader->_flags & TCP_CODE_SYN)
                  {
                      tcpCode = TCP_CODE_SYN | TCP_CODE_ACK;
-                     application->_context._acknowledgementNumber = tcpHeader->_sequenceNumber + 1;
+                     application->_context._acknowledgementNumber =  tcpHeader->_sequenceNumber + 1;
                      application->_context._sequenceNumber = ((unsigned long)sequenceNumberUpperWord << 16) | (GetTimerCountValue(0) & 0xFFFF);
                      application->_context._unAcknowledgedSequenceNumber = application->_context._sequenceNumber + 1;
                      ReloadRetransmissionClocks(application);
@@ -165,6 +171,10 @@ static unsigned char HandleApplicationTcpState(struct NetworkApplicationConfig* 
                  }
                  else break;
                  //printf ("sending response from listening state \r\n");
+                 printf("[li]ack number in tcp header: %d\r\n", tcpHeader->_acknowledgementNumber);
+                 printf("[li]seq number in tcp header: %d\r\n", tcpHeader->_sequenceNumber);
+                 printf("[li]ack number in app: %d\r\n", application->_context._acknowledgementNumber);
+                 printf("[li]seq number in tcp header: %d\r\n", application->_context._sequenceNumber);
                  BuildTcpFrame(tcpHeader, buffer, tcpCode, application);
                  TransmitData(buffer);
              }

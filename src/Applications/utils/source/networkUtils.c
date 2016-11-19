@@ -14,7 +14,7 @@ unsigned short GetWord(struct EthernetBuffer* buffer, uint32_t index)
 
 uint32_t GetDoubleWord(struct EthernetBuffer* buffer, uint32_t index)
 {
-    return (((uint32_t) (buffer->_buffer[index])) << 24) + (((uint32_t) buffer->_buffer[index + 1]) << 16) +
+    return (((uint32_t) buffer->_buffer[index]) << 24) + (((uint32_t) buffer->_buffer[index + 1]) << 16) +
            (((uint32_t) buffer->_buffer[index + 2]) << 8) + buffer->_buffer[index + 3];
 }
 
