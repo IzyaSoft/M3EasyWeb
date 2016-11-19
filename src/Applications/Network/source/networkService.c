@@ -9,7 +9,6 @@
 
 
 extern struct NetworkConfiguration networkConfiguration;
-unsigned char hasData;
 static struct EthernetBuffer rxBuffer;
 uint32_t tickValue = 0;
 extern struct ArpCache* M3ArpCachePtr;
@@ -37,12 +36,8 @@ static void ReadData(struct EthernetBuffer* rxBuffer, unsigned char debugPrintEn
 
 void SendArpRequest(unsigned char* ipAddress)
 {
-    struct EthernetBuffer arpRequestBuffer;
-    unsigned char arpBuffer[60];
-    arpRequestBuffer._buffer = arpBuffer;
-    arpRequestBuffer._bufferCapacity = 60;
-    BuildArpRequest(&arpRequestBuffer, ipAddress);
-    WriteData(&arpRequestBuffer, 0);
+    struct EthernetBuffer* txBuffer = BuildArpRequest(ipAddress);
+    WriteData(txBuffer, 0);
 }
 
 void TransmitData(struct EthernetBuffer* buffer)
@@ -62,22 +57,9 @@ void HandleNetworkEvents()
     if(CheckIsDataAvailable())
     {
         uint32_t dataSize = CheckAvailableDataSize();
-        // unsigned char localBuffer[MAX_LOCAL_BUFFER_SIZE_LIMIT] = {};  // todo: umv possibly do malloc + free
-        // struct EthernetBuffer rxBuffer;
         rxBuffer._buffer = ethernetBuffer;
         rxBuffer._bufferCapacity = MAX_ETH_FRAME_SIZE;
         rxBuffer._storedBytes = 0;
-/*        if(dataSize <= MAX_LOCAL_BUFFER_SIZE_LIMIT)
-        {
-            // local buffer usage
-            rxBuffer._buffer = localBuffer;
-            rxBuffer._bufferCapacity = MAX_LOCAL_BUFFER_SIZE_LIMIT;
-        }
-        else
-        {
-            rxBuffer._buffer = ethernetBuffer;
-            rxBuffer._bufferCapacity = MAX_ETH_FRAME_SIZE;
-        }*/
 
         ReadData(&rxBuffer, 0);
         if(CheckIsPacketBrodcast(&rxBuffer))
@@ -85,10 +67,7 @@ void HandleNetworkEvents()
             HandleBrodcastPacket(&rxBuffer);
         }
         else
-        {
             HandleIndividualAddressPacket(&rxBuffer);
-        }
-
     }
 }
 
@@ -105,8 +84,8 @@ void HandleBrodcastPacket(struct EthernetBuffer* buffer)
     unsigned short etherType = GetEtherType(buffer);
     if(etherType == ARP_ETHERTYPE)
     {
-        BuildArpReply(buffer);
-        WriteData(buffer, 0);
+        struct EthernetBuffer* txBuffer = BuildArpReply(buffer);
+        WriteData(txBuffer, 0);
     }
 }
 
@@ -120,7 +99,6 @@ void HandleIndividualAddressPacket(struct EthernetBuffer* buffer)
             struct ArpEntry entry;
             memcpy(entry._macAddress, &buffer->_buffer[ARP_SENDER_MAC_INDEX], MAC_ADDRESS_LENGTH);
             memcpy(entry._ipAddress, &buffer->_buffer[ARP_SENDER_IP_INDEX], IPV4_LENGTH);
-
             //printf("Arp reply for ip: %d.%d.%d.%d received \r\n", buffer->_buffer[ARP_SENDER_IP_INDEX],buffer->_buffer[ARP_SENDER_IP_INDEX + 1],
             //buffer->_buffer[ARP_SENDER_IP_INDEX + 2], buffer->_buffer[ARP_SENDER_IP_INDEX + 3]);
             //printf("Arp reply ip copy: %d.%d.%d.%d received \r\n", entry._ipAddress[0],entry._ipAddress[1], entry._ipAddress[2], entry._ipAddress[3]);
@@ -151,7 +129,7 @@ void HandleIndividualAddressPacket(struct EthernetBuffer* buffer)
                          }
                          break;
                     case TCP_PROTOCOL:
-                         hasData = HandleTcpPacket(buffer);
+                         HandleTcpPacket(buffer);
                          break;
                     case UDP_PROTOCOL:
                          break;
@@ -160,16 +138,6 @@ void HandleIndividualAddressPacket(struct EthernetBuffer* buffer)
         }
     }
 }
-
-/*unsigned char HasApplicationData()
-{
-    if(hasData)
-    {
-        hasData = 0;
-        return 1;
-    }
-    return 0;
-}*/
 
 struct EthernetBuffer* GetEthernetBuffer()
 {

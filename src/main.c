@@ -55,7 +55,6 @@ int main()
         HandleNetworkEvents();
         if(!(httpConfig._socketStatus & SOCK_ACTIVE))
             OpenServer(&httpConfig);
-        //if(HasApplicationData())
         StartProcessing(GetEthernetBuffer());
     }
 }

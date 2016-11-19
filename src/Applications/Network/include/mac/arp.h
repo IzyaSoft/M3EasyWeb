@@ -24,8 +24,7 @@
 #define ARP_REQUEST_OPERATION                 1
 #define ARP_REPLY_OPERATION                   2
 
-void BuildArpReply(struct EthernetBuffer* buffer);
-void BuildArpRequest(struct EthernetBuffer* buffer, unsigned char* destinationIpAddress);
-// unsigned char CheckIsMacInCache();
+struct EthernetBuffer* BuildArpReply(struct EthernetBuffer* buffer);
+struct EthernetBuffer* BuildArpRequest(unsigned char* destinationIpAddress);
 
 #endif

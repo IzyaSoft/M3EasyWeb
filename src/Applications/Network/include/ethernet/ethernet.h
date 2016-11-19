@@ -6,6 +6,7 @@
 #include "networkUtils.h"
 
 #define MAX_ETH_FRAME_SIZE                              1536
+#define SMALL_FRAME_SIZE                                72
 #define MAC_ADDRESS_LENGTH                              6
 #define ETHER_TYPE_LENGTH                               2
 #define IPV4_LENGTH                                     4
