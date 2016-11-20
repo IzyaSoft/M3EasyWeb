@@ -129,7 +129,7 @@ void HandleIndividualAddressPacket(struct EthernetBuffer* buffer)
                          }
                          break;
                     case TCP_PROTOCOL:
-                         HandleTcpPacket(buffer);
+                         ProcessTcpPacket(buffer);
                          break;
                     case UDP_PROTOCOL:
                          break;

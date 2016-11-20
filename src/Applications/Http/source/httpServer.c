@@ -32,11 +32,12 @@ void OpenServer(struct NetworkApplicationConfig* config)
 
 void StartProcessing(struct EthernetBuffer* packedHttp)
 {
-    if(httpServerConfig->_socketStatus & SOCK_DATA_AVAILABLE)
-    {
+    //if(httpServerConfig->_socketStatus & SOCK_DATA_AVAILABLE)
+    //{
         //printf("HTTP Request received!\r\n");
         httpServerConfig->_socketStatus &= ~SOCK_DATA_AVAILABLE;
-        if(httpServerConfig->_socketStatus & SOCK_TX_BUF_RELEASED)     // todo: umv create 1 flag to application
+        if(httpServerConfig->_client[0]._hasData)
+        		//_socketStatus & SOCK_TX_BUF_RELEASED)     // todo: umv create 1 flag to application
         {
             // 1. HTTP data parsing ...
             // 2. Find Handler ....
@@ -58,6 +59,7 @@ void StartProcessing(struct EthernetBuffer* packedHttp)
             BuildTcpDataFrame(&txBuffer, httpServerConfig->_applicationPort, &httpServerConfig->_client[0], responseData, MAX_TCP_TX_DATA_SIZE);
             SendTcpData(httpServerConfig, &txBuffer, MAX_TCP_TX_DATA_SIZE);
             firstPartSent = 1;
+            return;
             }
             else
             {
@@ -68,9 +70,11 @@ void StartProcessing(struct EthernetBuffer* packedHttp)
             BuildTcpDataFrame(&txBuffer, httpServerConfig->_applicationPort, &httpServerConfig->_client[0], responseData, remainBytes);
             SendTcpData(httpServerConfig, &txBuffer, remainBytes);
             firstPartSent = 0;
+            httpServerConfig->_client[0]._hasData = 0;
+            return;
             }
         }
-    }
+    //}
 }
 
 void InsertDynamicValues(unsigned char* buffer, unsigned short length)

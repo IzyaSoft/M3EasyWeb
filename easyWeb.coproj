@@ -92,7 +92,6 @@
     <File name="src" path="" type="2"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_libcfg_default.h" path="src/HAL/source/Drivers/Chips/lpc17xx/include/lpc17xx_libcfg_default.h" type="1"/>
     <File name="src/debugTools/sh_cmd.s" path="src/debugTools/semihosting/sh_cmd.s" type="1"/>
-    <File name="src/Applications/Network/source/tcp/tcpService.c" path="src/Applications/Network/source/tcp/tcpService.c" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_libcfg_default.c" path="src/HAL/source/Drivers/Chips/lpc17xx/source/lpc17xx_libcfg_default.c" type="1"/>
     <File name="src/HAL/source/Drivers/Chips/common" path="" type="2"/>
     <File name="src/Applications/utils" path="" type="2"/>
@@ -136,7 +135,6 @@
     <File name="src/Applications/Http/source/httpServer.c" path="src/Applications/Http/source/httpServer.c" type="1"/>
     <File name="src/HAL/source/Drivers/Boards/LandTiger2/source/adcDriver.c" path="src/HAL/source/Drivers/Boards/landtiger2/source/adcDriver.c" type="1"/>
     <File name="src/BusinessLogic/managers/include/networkManager.h" path="src/BusinessLogic/managers/include/networkManager.h" type="1"/>
-    <File name="src/Applications/Network/include/tcp/tcpService.h" path="src/Applications/Network/include/tcp/tcpService.h" type="1"/>
     <File name="src/Applications/Network/source/ip/ip.c" path="src/Applications/Network/source/ip/ip.c" type="1"/>
     <File name="src/HAL" path="" type="2"/>
     <File name="src/Applications/Network/source/networkService.c" path="src/Applications/Network/source/networkService.c" type="1"/>

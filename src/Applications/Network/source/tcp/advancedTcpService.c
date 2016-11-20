@@ -39,6 +39,18 @@ void ProcessTcpPacket(struct EthernetBuffer* rxBuffer)
     }
 }
 
+void SendTcpData(struct NetworkApplicationConfig* application, struct EthernetBuffer* appBuffer, unsigned short tcpDataLength)
+{
+    //if(application->_socketStatus & SOCK_TX_BUF_RELEASED)
+    //{
+        //application->_socketStatus &= ~SOCK_TX_BUF_RELEASED;                      // occupy tx-buffer
+        //application->_client[0]._handshakeInfo._unAcknowledgedSequenceNumber += tcpDataLength;     // advance UNA
+        //application->_client[0]._handshakeInfo._sequenceNumber += tcpDataLength;       // todo: umv: custom SHIT, hack (wrong) // we shoul received ack here ! or retransmit buofer
+        //StartTimer(application);
+        TransmitData(appBuffer);
+    //}
+}
+
 static void ProcessTcpClient(struct NetworkApplicationClient* client, struct TcpHeader* tcpHeader, struct EthernetBuffer* rxBuffer)
 {
     unsigned char tcpCode;

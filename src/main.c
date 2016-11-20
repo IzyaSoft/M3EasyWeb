@@ -8,7 +8,7 @@
 #include "networkManager.h"
 #include "networkService.h"
 #include "networkApplicationConfig.h"
-#include "tcpService.h"
+#include "advancedTcpService.h"
 #include "httpServer.h"
 
 #include "main.h"     // for remove!
@@ -53,7 +53,7 @@ int main()
     while (1)
     {
         HandleNetworkEvents();
-        if(!(httpConfig._socketStatus & SOCK_ACTIVE))
+        if(!(httpConfig._isEnabled))
             OpenServer(&httpConfig);
         StartProcessing(GetEthernetBuffer());
     }
