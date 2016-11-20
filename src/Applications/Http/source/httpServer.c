@@ -15,6 +15,10 @@ struct NetworkApplicationConfig* httpServerConfig;
 void OpenServer(struct NetworkApplicationConfig* config)
 {
     httpServerConfig = config;
+    httpServerConfig->_isEnabled = 1;
+    for(unsigned char clientCounter = 0; clientCounter < MAX_CLIENTS_NUMBER; clientCounter++)
+        httpServerConfig->_client[clientCounter]._tcpState = LISTENING;
+    //remove lines below
     if(config->_tcpState == CLOSED)
     {
         config->_tcpFlags &= ~TCP_ACTIVE_OPEN;

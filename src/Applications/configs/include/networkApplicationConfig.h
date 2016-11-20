@@ -11,12 +11,13 @@ struct NetworkApplicationConfig
 {
     unsigned char _isTcpApplication;            // otherwise UDP
     unsigned short _applicationPort;
-    unsigned char _tcpState;
+    unsigned char _tcpState;       // todo : umv: 4 remove
     void (*_applicationHandler) (struct EthernetBuffer*);
     struct NetworkApplicationClient _client[MAX_CLIENTS_NUMBER];
-    unsigned char _tcpFlags;                   // make sense when _isTcpApplication is 1
-    unsigned char _retryCounter;
-    unsigned char _socketStatus;
+    unsigned char _tcpFlags;       // todo : umv: 4 remove
+    unsigned char _retryCounter;   // todo : umv: 4 remove
+    unsigned char _socketStatus;   // todo : umv: 4 remove
+    unsigned char _isEnabled;
 };
 
 #endif
