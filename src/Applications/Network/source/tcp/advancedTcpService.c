@@ -13,7 +13,7 @@ extern unsigned char localBuffer[SMALL_FRAME_SIZE];
 
 static struct NetworkApplicationConfig* GetApplication(struct TcpHeader* tcpHeader);
 static struct NetworkApplicationClient* GetClient(struct NetworkApplicationConfig* application, unsigned char* macAddress, unsigned short clientPort);
-static void ProcessTcpClient(struct NetworkApplicationClient* client, struct TcpHeader* tcpHeader);
+static void ProcessTcpClient(struct NetworkApplicationClient* client, struct TcpHeader* tcpHeader, struct EthernetBuffer* rxBuffer);
 static void TransmitTcpFrame(struct NetworkApplicationClient* client, unsigned short applicationPort, unsigned short tcpCode, unsigned char useRetransmission);
 
 void ProcessTcpPacket(struct EthernetBuffer* rxBuffer)
@@ -34,11 +34,12 @@ void ProcessTcpPacket(struct EthernetBuffer* rxBuffer)
             memcpy(client->_ipAddress, &rxBuffer->_buffer[IP_PACKET_HEADER_SOURCE_IP_INDEX], IPV4_LENGTH);
             memcpy(client->_macAddress, &rxBuffer->_buffer[ETHERNET_SOURCE_ADDRESS_INDEX], MAC_ADDRESS_LENGTH);
             client->_tcpPort = tcpHeader._sourcePort;
+            ProcessTcpClient(client, &tcpHeader, rxBuffer);
         }
     }
 }
 
-static void ProcessTcpClient(struct NetworkApplicationClient* client, struct TcpHeader* tcpHeader)
+static void ProcessTcpClient(struct NetworkApplicationClient* client, struct TcpHeader* tcpHeader, struct EthernetBuffer* rxBuffer)
 {
     unsigned char tcpCode;
     txBuffer._buffer = localBuffer;
@@ -90,6 +91,7 @@ static void ProcessTcpClient(struct NetworkApplicationClient* client, struct Tcp
          case SYN_RECD:
               if(tcpHeader->_flags & TCP_CODE_ACK)
               {
+                  client->_handshakeInfo._sequenceNumber = tcpHeader->_acknowledgementNumber;
                   nextState = ESTABLISHED;
                   client->_socketStatus = SOCKET_CONNECTED;
               }
@@ -104,7 +106,13 @@ static void ProcessTcpClient(struct NetworkApplicationClient* client, struct Tcp
               }
               else
               {
-                  // check for data
+                  unsigned short payload = GetWord(rxBuffer, IP_PACKET_SIZE_INDEX);
+                  client->_handshakeInfo._sequenceNumber = tcpHeader->_acknowledgementNumber;
+                  client->_handshakeInfo._acknowledgementNumber = tcpHeader->_sequenceNumber + payload;
+                  client->_hasData = 1;
+                  client->_dataLength = payload;
+                  tcpCode = TCP_CODE_ACK;
+                  sendBack = 1;
                   // send FIN if we should drop connect (by timeout or something else)
               }
               break;
@@ -115,6 +123,8 @@ static void ProcessTcpClient(struct NetworkApplicationClient* client, struct Tcp
                   tcpCode = TCP_CODE_ACK;
                   nextState = CLOSING;
                   sendBack = 1;
+                  client->_handshakeInfo._sequenceNumber = tcpHeader->_acknowledgementNumber;
+                  client->_handshakeInfo._acknowledgementNumber = tcpHeader->_sequenceNumber;
               }
               else if(tcpHeader->_flags & TCP_CODE_ACK)
               {
@@ -127,6 +137,8 @@ static void ProcessTcpClient(struct NetworkApplicationClient* client, struct Tcp
                   tcpCode = TCP_CODE_ACK;
                   nextState = TIME_WAIT;
                   sendBack = 1;
+                  client->_handshakeInfo._sequenceNumber = tcpHeader->_acknowledgementNumber;
+                  client->_handshakeInfo._acknowledgementNumber = tcpHeader->_sequenceNumber;
               }
               break;
          case CLOSE_WAIT:
@@ -135,6 +147,8 @@ static void ProcessTcpClient(struct NetworkApplicationClient* client, struct Tcp
                   tcpCode = TCP_CODE_FIN;
                   nextState = LAST_ACK;
                   sendBack = 1;
+                  client->_handshakeInfo._sequenceNumber = tcpHeader->_acknowledgementNumber;
+                  client->_handshakeInfo._acknowledgementNumber = tcpHeader->_sequenceNumber;
               }
               break;
          case TIME_WAIT:
@@ -188,5 +202,13 @@ static struct NetworkApplicationClient* GetClient(struct NetworkApplicationConfi
 
 static void TransmitTcpFrame(struct NetworkApplicationClient* client, unsigned short applicationPort, unsigned short tcpCode, unsigned char useRetransmission)
 {
+    //todo: handle retransmission
+    BuildTcpFrame(&txBuffer, tcpCode, applicationPort, client);
+    TransmitData(&txBuffer);
+}
 
+void HandleTcpServiceClockTick()
+{
+    sequenceNumberUpperWord++;
+    tcpServiceClock++;
 }
