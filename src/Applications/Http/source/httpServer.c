@@ -21,9 +21,9 @@ void OpenServer(struct NetworkApplicationConfig* config)
         config->_tcpState = LISTENING;
         config->_socketStatus = SOCK_ACTIVE;
     }
-    httpServerConfig->_context._sequenceNumber = 0;
-    httpServerConfig->_context._acknowledgementNumber = 0;
-    httpServerConfig->_context._unAcknowledgedSequenceNumber = 0;
+    //httpServerConfig->_client._handshakeInfo._sequenceNumber = 0;
+    //httpServerConfig->_client._handshakeInfo._acknowledgementNumber = 0;
+    //httpServerConfig->_client._handshakeInfo._unAcknowledgedSequenceNumber = 0;
 }
 
 void StartProcessing(struct EthernetBuffer* packedHttp)
@@ -37,6 +37,7 @@ void StartProcessing(struct EthernetBuffer* packedHttp)
             // 1. HTTP data parsing ...
             // 2. Find Handler ....
             // 3. Return result ....
+            static unsigned char firstPartSent = 0;
             unsigned short demoPageLength = sizeof(demoPage) - 1;
             unsigned short demoHeaderLength = sizeof(demoResponseHeader) - 1;
             static struct EthernetBuffer txBuffer;
@@ -45,20 +46,25 @@ void StartProcessing(struct EthernetBuffer* packedHttp)
             txBuffer._bufferCapacity = 1536;
             static unsigned char responseData[MAX_TCP_TX_DATA_SIZE];
 
-            printf("total length: %D\r\n", demoHeaderLength + demoPageLength);
-
+            if(!firstPartSent)
+            {
             memcpy(responseData, demoResponseHeader, demoHeaderLength);
             memcpy(&responseData[demoHeaderLength], demoPage, MAX_TCP_TX_DATA_SIZE - demoHeaderLength);
             InsertDynamicValues(responseData,  MAX_TCP_TX_DATA_SIZE);
-            BuildTcpDataFrame(&txBuffer, httpServerConfig, responseData, MAX_TCP_TX_DATA_SIZE);
+            BuildTcpDataFrame(&txBuffer, httpServerConfig->_applicationPort, &httpServerConfig->_client[0], responseData, MAX_TCP_TX_DATA_SIZE);
             SendTcpData(httpServerConfig, &txBuffer, MAX_TCP_TX_DATA_SIZE);
-
+            firstPartSent = 1;
+            }
+            else
+            {
             unsigned short remainBytes = demoPageLength - MAX_TCP_TX_DATA_SIZE;
 
             memcpy(responseData, &demoPage[MAX_TCP_TX_DATA_SIZE], remainBytes);
             InsertDynamicValues(responseData, remainBytes);
-            BuildTcpDataFrame(&txBuffer, httpServerConfig, responseData, remainBytes);
+            BuildTcpDataFrame(&txBuffer, httpServerConfig->_applicationPort, &httpServerConfig->_client[0], responseData, remainBytes);
             SendTcpData(httpServerConfig, &txBuffer, remainBytes);
+            firstPartSent = 0;
+            }
         }
     }
 }
