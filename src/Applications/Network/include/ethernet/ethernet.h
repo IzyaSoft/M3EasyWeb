@@ -24,7 +24,7 @@
 
 #define IPV4_VERSION                                    0x4500     // 5 - FOR IP HEADER SIZE
 
-#define TTL                                             641
+#define TTL                                             64
 
 void InsertEthernetHeader(struct EthernetBuffer* buffer, unsigned char* sourceMac, unsigned char* destinationMac, unsigned short etherType);
 void InsertEthernetHeader2(struct EthernetBuffer* buffer, struct EthernetHeader* header);

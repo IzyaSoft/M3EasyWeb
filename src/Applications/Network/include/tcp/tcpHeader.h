@@ -5,6 +5,7 @@
 
 struct TcpHeader
 {
+    // TCP Header Fields
     unsigned short _sourcePort;
     unsigned short _destinationPort;
     unsigned char _headerSize;
@@ -15,6 +16,12 @@ struct TcpHeader
     uint32_t _sequenceNumber;
     uint32_t _acknowledgementNumber;
     uint32_t _dataIndex;
+    // IP header fields
+    unsigned char _sourceIpAddress[IPV4_LENGTH];
+    unsigned char _destinationIpAddress[IPV4_LENGTH];
+    // Ethernet header fields
+    unsigned char _sourceMacAddress[MAC_ADDRESS_LENGTH];
+    unsigned char _destinationMacAddress[MAC_ADDRESS_LENGTH];
 };
 
 #endif

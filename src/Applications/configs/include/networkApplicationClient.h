@@ -10,7 +10,8 @@ enum SocketStatus
     SOCKET_CLOSED = 0,
     SOCKET_OPENED = 1,
     SOCKET_CONNECTED = 2,
-    SOCKET_CLOSING = 3
+    SOCKET_CLOSING = 3,
+    SOCKET_ACTIVE = 4
 };
 
 struct NetworkApplicationClient

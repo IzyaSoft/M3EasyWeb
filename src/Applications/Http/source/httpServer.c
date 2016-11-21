@@ -1,8 +1,9 @@
 #include "hal.h"
 #include "tcp.h"
 #include "tcpHeader.h"
-#include "tcpService.h"
+#include "advancedTcpService.h"
 #include "httpServer.h"
+#include "networkConfiguration.h"
 
 #include "demopage.h"
 #include "demoheader.h"
@@ -11,6 +12,7 @@ unsigned int pagecounter = 100;
 unsigned int adcValue = 0;
 
 struct NetworkApplicationConfig* httpServerConfig;
+extern struct NetworkConfiguration networkConfiguration;
 
 void OpenServer(struct NetworkApplicationConfig* config)
 {
@@ -19,12 +21,12 @@ void OpenServer(struct NetworkApplicationConfig* config)
     for(unsigned char clientCounter = 0; clientCounter < MAX_CLIENTS_NUMBER; clientCounter++)
         httpServerConfig->_client[clientCounter]._tcpState = LISTENING;
     //remove lines below
-    if(config->_tcpState == CLOSED)
+/*    if(config->_tcpState == CLOSED)
     {
         config->_tcpFlags &= ~TCP_ACTIVE_OPEN;
         config->_tcpState = LISTENING;
         config->_socketStatus = SOCK_ACTIVE;
-    }
+    }*/
     //httpServerConfig->_client._handshakeInfo._sequenceNumber = 0;
     //httpServerConfig->_client._handshakeInfo._acknowledgementNumber = 0;
     //httpServerConfig->_client._handshakeInfo._unAcknowledgedSequenceNumber = 0;
@@ -35,7 +37,7 @@ void StartProcessing(struct EthernetBuffer* packedHttp)
     //if(httpServerConfig->_socketStatus & SOCK_DATA_AVAILABLE)
     //{
         //printf("HTTP Request received!\r\n");
-        httpServerConfig->_socketStatus &= ~SOCK_DATA_AVAILABLE;
+        //httpServerConfig->_socketStatus &= ~SOCK_DATA_AVAILABLE;
         if(httpServerConfig->_client[0]._hasData)
         		//_socketStatus & SOCK_TX_BUF_RELEASED)     // todo: umv create 1 flag to application
         {
@@ -50,28 +52,68 @@ void StartProcessing(struct EthernetBuffer* packedHttp)
             txBuffer._buffer = txBufferStorage;
             txBuffer._bufferCapacity = 1536;
             static unsigned char responseData[MAX_TCP_TX_DATA_SIZE];
-
+            struct TcpHeader txHeader;
             if(!firstPartSent)
             {
             memcpy(responseData, demoResponseHeader, demoHeaderLength);
             memcpy(&responseData[demoHeaderLength], demoPage, MAX_TCP_TX_DATA_SIZE - demoHeaderLength);
+
+            httpServerConfig->_client[0]._handshakeInfo._acknowledgementNumber -= httpServerConfig->_client[0]._dataLength;
             InsertDynamicValues(responseData,  MAX_TCP_TX_DATA_SIZE);
-            BuildTcpDataFrame(&txBuffer, httpServerConfig->_applicationPort, &httpServerConfig->_client[0], responseData, MAX_TCP_TX_DATA_SIZE);
-            SendTcpData(httpServerConfig, &txBuffer, MAX_TCP_TX_DATA_SIZE);
+
+            txHeader._sourcePort = httpServerConfig->_applicationPort;
+            txHeader._destinationPort = httpServerConfig->_client[0]._tcpPort;
+            txHeader._sequenceNumber = httpServerConfig->_client[0]._handshakeInfo._sequenceNumber;// + MAX_TCP_TX_DATA_SIZE;
+            txHeader._acknowledgementNumber = httpServerConfig->_client[0]._handshakeInfo._acknowledgementNumber;//._unAcknowledgedSequenceNumber;
+            //httpServerConfig->_client[0]._handshakeInfo._acknowledgementNumber += httpServerConfig->_client[0]._dataLength;
+            txHeader._windowsSize = MAX_TCP_TX_DATA_SIZE;
+            txHeader._urgency = 0;
+            txHeader._flags = TCP_CODE_ACK;
+            memcpy(txHeader._destinationIpAddress, httpServerConfig->_client[0]._ipAddress, IPV4_LENGTH);
+            memcpy(txHeader._destinationMacAddress, httpServerConfig->_client[0]._macAddress, MAC_ADDRESS_LENGTH);
+            memcpy(txHeader._sourceIpAddress, networkConfiguration._ipAddress, IPV4_LENGTH);
+            memcpy(txHeader._sourceMacAddress, networkConfiguration._macAddress, MAC_ADDRESS_LENGTH);
+            httpServerConfig->_client[0]._handshakeInfo._unAcknowledgedSequenceNumber = httpServerConfig->_client[0]._handshakeInfo._sequenceNumber;
+            //BuildTcpDataFrame(&txBuffer, httpServerConfig->_applicationPort, &httpServerConfig->_client[0], responseData, MAX_TCP_TX_DATA_SIZE);
+            BuildTcpPacket(&txBuffer, &txHeader, responseData, MAX_TCP_TX_DATA_SIZE);
+            printf("HTTP send data %d\r\n", (int)MAX_TCP_TX_DATA_SIZE);
+            SendTcpData(&txBuffer);
             firstPartSent = 1;
+            //httpServerConfig->_client[0]._handshakeInfo._sequenceNumber += MAX_TCP_TX_DATA_SIZE;
             return;
             }
             else
             {
+            //if(httpServerConfig->_client[0]._handshakeInfo._acknowledgementNumber < httpServerConfig->_client[0]._handshakeInfo._unAcknowledgedSequenceNumber)
+              //  return;
             unsigned short remainBytes = demoPageLength - MAX_TCP_TX_DATA_SIZE;
 
             memcpy(responseData, &demoPage[MAX_TCP_TX_DATA_SIZE], remainBytes);
             InsertDynamicValues(responseData, remainBytes);
-            BuildTcpDataFrame(&txBuffer, httpServerConfig->_applicationPort, &httpServerConfig->_client[0], responseData, remainBytes);
-            SendTcpData(httpServerConfig, &txBuffer, remainBytes);
+            printf("HTTP send data %d\r\n", (int)remainBytes);
+            //httpServerConfig->_client[0]._handshakeInfo._acknowledgementNumber +=remainBytes;
+            txHeader._sourcePort = httpServerConfig->_applicationPort;
+            txHeader._destinationPort = httpServerConfig->_client[0]._tcpPort;
+            txHeader._sequenceNumber = httpServerConfig->_client[0]._handshakeInfo._sequenceNumber;
+            txHeader._acknowledgementNumber = httpServerConfig->_client[0]._handshakeInfo._acknowledgementNumber;
+            httpServerConfig->_client[0]._handshakeInfo._unAcknowledgedSequenceNumber = httpServerConfig->_client[0]._handshakeInfo._sequenceNumber;
+            txHeader._windowsSize = MAX_TCP_TX_DATA_SIZE;
+            txHeader._urgency = 0;
+            txHeader._flags = TCP_CODE_ACK;;
+            memcpy(txHeader._destinationIpAddress, httpServerConfig->_client[0]._ipAddress, IPV4_LENGTH);
+            memcpy(txHeader._destinationMacAddress, httpServerConfig->_client[0]._macAddress, MAC_ADDRESS_LENGTH);
+            memcpy(txHeader._sourceIpAddress, networkConfiguration._ipAddress, IPV4_LENGTH);
+            memcpy(txHeader._sourceMacAddress, networkConfiguration._macAddress, MAC_ADDRESS_LENGTH);
+            //= httpServerConfig->_client[0]._handshakeInfo._sequenceNumber;
+            //BuildTcpDataFrame(&txBuffer, httpServerConfig->_applicationPort, &httpServerConfig->_client[0], responseData, remainBytes);
+            BuildTcpPacket(&txBuffer, &txHeader, responseData, remainBytes);
+            SendTcpData(&txBuffer);
+            		//httpServerConfig, &txBuffer, remainBytes, 1);
             firstPartSent = 0;
             httpServerConfig->_client[0]._hasData = 0;
+            httpServerConfig->_client[0]._socketStatus = SOCKET_CLOSING;
             return;
+            //httpServerConfig->_client[0]._handshakeInfo._sequenceNumber += remainBytes;
             }
         }
     //}

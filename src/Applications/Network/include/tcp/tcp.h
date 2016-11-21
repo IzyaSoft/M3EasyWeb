@@ -57,5 +57,6 @@ enum TcpState                                                                   
 struct TcpHeader ReadTcpHeader(struct EthernetBuffer* buffer);
 void BuildTcpFrame(struct EthernetBuffer* buffer, unsigned short tcpCode, unsigned short applicationPort, struct NetworkApplicationClient* client);
 void BuildTcpDataFrame(struct EthernetBuffer* buffer, unsigned short applicationPort, struct NetworkApplicationClient* client, unsigned char* tcpData, unsigned short tcpDataLength);
+void BuildTcpPacket(struct EthernetBuffer* txBuffer, struct TcpHeader* tcpHeader, unsigned char* tcpData, unsigned short tcpDataLength);
 
 #endif
